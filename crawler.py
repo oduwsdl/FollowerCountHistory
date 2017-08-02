@@ -10,21 +10,27 @@ print(uname)
 print(archivelink)
 r = requests.get(archivelink)
 linkslist = []
+writefile = uname + ".csv"
+w = open (writefile, "a")
+w.write('date,count'+'\n')
+lastline = ''
 for line in r.iter_lines(): #on each line if rel="memento" doesn't exist, ignore. If it does get the link and add it to the list of links
 	#print(line)
 	if ('rel="memento"' in line):
-		linkslist.append(line[1:line.find('>;')])
-		print(line[1:line.find('>')])
-print(len(linkslist))
+		if (line != lastline):
+			lastline = line
+			linkslist.append(line[1:line.find('>;')])
+			#print(line[1:line.find('>')])
+print(str(len(linkslist)) + " archive points found")
 
 with open("test.txt", "r") as f:
-	for line in linkslist:
+	for line in f:
 		dateloc = line.find("/web/")
 		date = line[dateloc+5:dateloc+19] #[27:41]
 		print(date)
 		res = urllib.urlopen(line)
 		html = res.read()
-		soup = BeautifulSoup(html, "html.parser")
+		soup = BeautifulSoup(html, "lxml")#html.parser -> lxml
 		#get rid of scripts(javascript especially)
 		for elem in soup.findAll(['script', 'style']):
 			elem.extract()
@@ -32,7 +38,6 @@ with open("test.txt", "r") as f:
 			#print(int(date)) < 0120700000000
 			continue
 		else:
-			#w = open ("test.json", "a")
 			try:
 				result = soup.select(".ProfileNav-item--followers")[0]
 				try:
@@ -72,11 +77,12 @@ with open("test.txt", "r") as f:
 		# result = result.replace(",", "")
 		# result = result.replace(".", "")
 		try:
-			result = "{:,d}".format(int(result))
+			#result = "{:,d}".format(int(result))
 			print(result)
+			w.write(date + ',' + result + '\n')
 		except:
 			print("Number not latin")
 			continue
-		#w.write(date + '\t' + result + '\n')
+		
 											
-		#w.close()
+w.close()
