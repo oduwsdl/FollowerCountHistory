@@ -6,17 +6,14 @@ dates = as.character(data$date)
 #max_date <- max(data$date)
 min_count <- min(data$count)
 max_count <- max(data$count)
+mar.default <- c(5,2,4,2) + 0.01
+par(mar = mar.default + c(0, 4, 0, 0)) 
 plot(data$count, type="o", col="red", ylim=c(min_count,max_count), axes=FALSE, ann=FALSE)
 box()
 title(main="Megyn Kelly Follower Count over Time", col.main="red", font.main=4)
 # Label the x and y axes with dark green text
 #title(xlab="Dates", col.lab=rgb(0,0.5,0))
-title(ylab="Follower Count", col.lab=rgb(0,0.5,0))
-#daterange=range(dates)
-#axis(1, las=2, at=daterange[1]:daterange[2])
-#axis(2, las=1, at=min_count:max_count)
-#axis(1, las=2, at=5*get(data$date):get(data$date))
+#title(ylab="Follower Count", col.lab=rgb(0,0.5,0))
 axis(1, at=data$date[1:70], labels = FALSE)
-da = dates[seq(1, 70,5)]
-da2 = data$date[seq(1,70,5)]
-axis(1, las=2, at=da2, labels = da)
+axis(1, las=2, at=data$date[seq(1,70,5)], labels = dates[seq(1,70,5)])
+axis(2, las=1, at=seq(min_count,max_count,200000), labels=prettyNum(seq(min_count,max_count,200000),big.mark=",",scientific=FALSE))
