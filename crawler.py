@@ -11,7 +11,7 @@ print(archivelink)
 r = requests.get(archivelink)
 linkslist = []
 writefile = uname + ".csv"
-w = open (writefile, "a")
+w = open (writefile, "a+")
 w.write('date,count'+'\n')
 lastline = ''
 for line in r.iter_lines(): #on each line if rel="memento" doesn't exist, ignore. If it does get the link and add it to the list of links
@@ -23,14 +23,18 @@ for line in r.iter_lines(): #on each line if rel="memento" doesn't exist, ignore
 			#print(line[1:line.find('>')])
 print(str(len(linkslist)) + " archive points found")
 
+lastdate = ''
 with open("test.txt", "r") as f:
-	for line in f:
+	for line in linkslist:
 		dateloc = line.find("/web/")
 		date = line[dateloc+5:dateloc+19] #[27:41]
+		#get one entry per month
+		if (date[:6] == lastdate): #if new month is the same as previous, skip
+			continue			
 		print(date)
 		res = urllib.urlopen(line)
 		html = res.read()
-		soup = BeautifulSoup(html, "lxml")#html.parser -> lxml
+		soup = BeautifulSoup(html, "lxml") #html.parser -> lxml
 		#get rid of scripts(javascript especially)
 		for elem in soup.findAll(['script', 'style']):
 			elem.extract()
@@ -67,6 +71,8 @@ with open("test.txt", "r") as f:
 										print("Couldn't figure it out")
 										continue
 		result = re.sub(r'\D', '', result)
+		if (result == ''):
+			continue
 		#print(result)
 		# #result = result.split(' ',1)[0].encode("utf-8").strip()
 		# print(result)
@@ -80,9 +86,8 @@ with open("test.txt", "r") as f:
 			#result = "{:,d}".format(int(result))
 			print(result)
 			w.write(date + ',' + result + '\n')
+			lastdate = date[:6]
 		except:
 			print("Number not latin")
-			continue
-		
-											
+			continue						
 w.close()
