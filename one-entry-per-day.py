@@ -1,6 +1,10 @@
+from sys import argv
+uname = argv[1]
 lastday = ''
-with open("michelleobama.csv", "rt") as f:
-	with open("michelleobama-last.csv", "wt") as w:
+with open('./' + uname + '/' + uname + ".csv", "rt") as f:
+	with open('./' + uname + '/' + uname + "-last.csv", "wt") as w:
+		next(f) #skip first line 
+		w.write('date,count\n')
 		for line in f:
 			parts = line.split(',',1)
 			date = parts[0]

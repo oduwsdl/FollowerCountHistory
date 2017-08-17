@@ -1,5 +1,7 @@
+#!/usr/bin/env Rscript
+args <- commandArgs(TRUE)
 wd <- '~/Desktop/FollowerCountHistory/'
-uname <- 'megynkelly'
+uname <- 'trevornoah'
 setwd(paste(wd,uname, sep = ''))
 datafile <- paste(uname,'-last.csv', sep='')
 today = as.POSIXct(Sys.Date())
@@ -19,4 +21,4 @@ box()
 titletext <- paste(uname,' Follower Count over Time', sep='')
 title(main=titletext, col.main="red", font.main=4)
 axis(1, las=1, at=seq(twitterbegin, today, "12 mon"), labels = format(seq(twitterbegin, today, "12 mon"), "%Y"))
-axis(2, las=1, at=seq(0,max_count+(signif(max_count/15,1)-1),signif(max_count/15,1)), labels=prettyNum(seq(0,max_count+(signif(max_count/15,1)-1),signif(max_count/15,1)),big.mark=",",scientific=FALSE))
+axis(2, las=1, at=seq(0,max_count+(signif(max_count/15,2)-1),signif(max_count/15,2)), labels=prettyNum(seq(0,max_count+(signif(max_count/15,2)-1),signif(max_count/15,2)),big.mark=",",scientific=FALSE))

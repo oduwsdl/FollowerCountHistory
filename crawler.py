@@ -3,6 +3,7 @@
 from bs4 import BeautifulSoup
 from sys import argv
 import urllib, requests, re
+import os, errno
 
 uname = argv[1]
 archivelink = 'http://web.archive.org/web/timemap/link/http://twitter.com/' + uname
@@ -10,7 +11,12 @@ print(uname)
 print(archivelink)
 r = requests.get(archivelink)
 linkslist = []
-writefile = uname + ".csv"
+try:
+    os.makedirs('./' + uname)
+except OSError as e:
+    if e.errno != errno.EEXIST:
+        raise
+writefile = './' + uname + '/' + uname + ".csv"
 w = open (writefile, "a+")
 w.write('date,count'+'\n')
 lastline = ''
@@ -68,8 +74,11 @@ with open("test.txt", "r") as f:
 										result = soup.select(".user-stats-followers")[0].text
 										#result = result[:result.find("Followers")]
 									except:
-										print("Couldn't figure it out")
-										continue
+										try:
+											result = soup.select(".stats_count")[1].text
+										except:
+											print("Couldn't figure it out")
+											continue
 		result = re.sub(r'\D', '', result)
 		if (result == ''):
 			continue
