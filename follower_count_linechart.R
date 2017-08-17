@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 args <- commandArgs(TRUE)
 wd <- '~/Desktop/FollowerCountHistory/'
-uname <- 'hillaryclinton'
+uname <- 'megynkelly'
 setwd(paste(wd,uname, sep = ''))
 datafile <- paste(uname,'-last.csv', sep='')
 today = as.POSIXct(Sys.Date())
