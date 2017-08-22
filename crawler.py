@@ -94,9 +94,7 @@ with open("test.txt", "r") as f:
 		try:
 			#result = "{:,d}".format(int(result))
 			print(result)
-			day = date[:6]
-			day = '-'.join([day[:4], day[4:6]])
-			day = day + '-01'
+			day = '-'.join([date[:4], date[4:6], date[6:8]])
 			w.write(day + ',' + result + '\n')
 			lastdate = date[:6]
 		except:
