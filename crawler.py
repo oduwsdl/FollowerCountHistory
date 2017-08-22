@@ -94,7 +94,10 @@ with open("test.txt", "r") as f:
 		try:
 			#result = "{:,d}".format(int(result))
 			print(result)
-			w.write(date + ',' + result + '\n')
+			day = date[:6]
+			day = '-'.join([day[:4], day[4:6]])
+			day = day + '-01'
+			w.write(day + ',' + result + '\n')
 			lastdate = date[:6]
 		except:
 			print("Number not latin")

@@ -4,7 +4,7 @@ args <- commandArgs(TRUE)
 wd <- '~/Desktop/FollowerCountHistory/'
 uname <- args[1]
 setwd(paste(wd,uname, sep = ''))
-datafile <- paste(uname,'-last.csv', sep='')
+datafile <- paste(uname,'.csv', sep='')
 today = as.POSIXct(Sys.Date())
 twitterbegin <- as.POSIXct('2006-07-15')
 data <- read.csv(datafile)
