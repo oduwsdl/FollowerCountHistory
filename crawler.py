@@ -2,7 +2,7 @@
 
 from bs4 import BeautifulSoup
 from sys import argv
-import urllib, requests, re
+import urllib, requests, re, subprocess
 import os, errno
 
 uname = argv[1]
@@ -103,3 +103,6 @@ with open("test.txt", "r") as f:
 			print("Number not latin")
 			continue						
 w.close()
+
+Rcall = "Rscript --vanilla follower_count_linechart.r " + uname
+subprocess.call(Rcall, shell=True)
