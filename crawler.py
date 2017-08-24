@@ -32,7 +32,7 @@ lastdate = ''
 #with open("test.txt", "r") as f: 
 for line in linkslist:
 	dateloc = line.find("/web/")
-	date = line[dateloc+5:dateloc+19] #[27:41]
+	date = line[dateloc+5:dateloc+19] #get the timestamp from the link
 	#get one entry per month
 	if (date[:6] == lastdate): #if new month is the same as previous, skip
 		continue			
