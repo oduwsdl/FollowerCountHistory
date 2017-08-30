@@ -5,7 +5,7 @@ from sys import argv
 import urllib, requests, re, subprocess
 import os, errno
 
-uname = argv[1]
+uname = argv[1] #get twitter username from 
 archivelink = 'http://web.archive.org/web/timemap/link/http://twitter.com/' + uname
 print(uname)
 print(archivelink)
@@ -46,7 +46,7 @@ for line in linkslist:
 	if int(date) < 10120700000000:
 		continue
 	else:
-		#try excepts that find the follower counts for different versions of Twitter since its beginning
+		#try excepts that find the follower counts for different versions of Twitter since its 2008
 		try:
 			result = soup.select(".ProfileNav-item--followers")[0]
 			try:
