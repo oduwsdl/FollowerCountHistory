@@ -2,7 +2,7 @@
 This is a Python script that collects follower counts from the Internet Archives, given a Twitter username. This script grabs the follower counts by identifying various CSS Selectors that match the follower count element on the historical Twitter pages for almost every major overhaul their page layout has gone through.
 
 ## Installation and Usage
-'''unix
+'''shell
 $ git clone https://github.com/okrand/FollowerCountHistory.git
 $ cd FollowerCountHistory
 $ python main.py <twitter-handle-without-@>
