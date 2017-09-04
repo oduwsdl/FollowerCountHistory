@@ -87,9 +87,12 @@ for line in linkslist:
 		w.write(day + ',' + result + '\n')
 		lastdate = date[:6]
 	except:
-		print("Number not latin")
+		print("Number not Arabic numeral")
 		continue
 w.close()
-#Call the Rscript to create a linechart with the numbers collected
-Rcall = "Rscript --vanilla follower_count_linechart.r " + uname
-subprocess.call(Rcall, shell=True)
+
+wantR = raw_input("To get the line graph for this account, enter Y. To exit, enter anything else \n")
+if (wantR == 'Y'):
+	#Call the Rscript to create a linechart with the numbers collected
+	Rcall = "Rscript --vanilla follower_count_linechart.r " + uname
+	subprocess.call(Rcall, shell=True)
