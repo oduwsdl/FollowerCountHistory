@@ -6,7 +6,7 @@ Make sure you have Python and R installed on your computer.
 ```shell	
 $ git clone https://github.com/okrand/FollowerCountHistory.git
 $ cd FollowerCountHistory
-$ python main.py <twitter-handle-without-@>
+$ python main.py <twitter-handle-without-@> <create R graph [0|1]>
 ```
 This will create a new folder with the name: <twitter-handle-without-@> and create two files in this folder.
 * A .csv file that contains the data collected with associated timestamps

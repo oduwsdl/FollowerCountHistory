@@ -2,10 +2,14 @@
 
 from bs4 import BeautifulSoup
 from sys import argv
-import urllib, requests, re, subprocess
+import urllib.request as urllib, requests, re, subprocess
 import os, errno
 
-uname = argv[1] #get twitter username from 
+uname = argv[1] #get twitter username from first argument
+if len(argv) > 2:
+    wantR = argv[2] #Should a graph be created from the R script [0|1]
+else:
+    wantR = 1 #defaults to true
 archivelink = 'http://web.archive.org/web/timemap/link/http://twitter.com/' + uname
 print(uname)
 print(archivelink)
@@ -22,15 +26,16 @@ w.write('date,count'+'\n')
 lastline = ''
 for line in r.iter_lines(): #on each line if rel="memento" doesn't exist, ignore. If it does get the link and add it to the list of links
 	#print(line)
-	if ('rel="memento"' in line):
+	if ('rel="memento"'.encode('utf-8') in line):
 		if (line != lastline):
 			lastline = line
-			linkslist.append(line[1:line.find('>;')])
+			linkslist.append(line[1:line.find('>;'.encode('utf-8'))])
 print(str(len(linkslist)) + " archive points found") 
 
 lastdate = ''
 #with open("test.txt", "r") as f: 
 for line in linkslist:
+	line = line.decode('utf-8')
 	dateloc = line.find("/web/")
 	date = line[dateloc+5:dateloc+19] #get the timestamp from the link
 	#get one entry per month
@@ -91,8 +96,7 @@ for line in linkslist:
 		continue
 w.close()
 
-wantR = raw_input("To get the line graph for this account, enter Y. To exit, enter anything else \n")
-if (wantR == 'Y'):
+if (wantR == '1'):
 	#Call the Rscript to create a linechart with the numbers collected
-	Rcall = "Rscript --vanilla follower_count_linechart.r " + uname
+	Rcall = "Rscript --vanilla follower_count_linechart.R " + uname
 	subprocess.call(Rcall, shell=True)
