@@ -22,7 +22,18 @@ except OSError as e:
         raise
 writefile = './' + uname + '/' + uname + ".csv"
 w = open (writefile, "a+")
-w.write('date,count'+'\n')
+olddates =[]
+if (os.stat(writefile).st_size==0):
+	#ensure header line does not get re written
+	w.write('date,count'+'\n')
+else:
+	w.seek(0)
+	#read in old data points
+	for line in w.readlines():
+		row = line.split(",")
+		if(row[0] != "date"):
+			olddates.append( row[0].replace("-","")[:6])
+	#reset to the end
 lastline = ''
 for line in r.iter_lines(): #on each line if rel="memento" doesn't exist, ignore. If it does get the link and add it to the list of links
 	#print(line)
@@ -40,6 +51,8 @@ for line in linkslist:
 	date = line[dateloc+5:dateloc+19] #get the timestamp from the link
 	#get one entry per month
 	if (date[:6] == lastdate): #if new month is the same as previous, skip
+		continue
+	if (date[:6] in olddates): #if date is in old data, skip
 		continue			
 	print(date)
 	res = urllib.urlopen(line)
