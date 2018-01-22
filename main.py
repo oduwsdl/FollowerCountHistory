@@ -5,10 +5,10 @@ from sys import argv
 import urllib.request as urllib, requests, re, subprocess
 import os, errno
 if(argv[1]== "-g"):
-	wantR = 1
+	wantR = True
 	uname = argv[2]
 else:
-	wantR = 0
+	wantR = False
 	uname = argv[1]
 
 archivelink = 'http://web.archive.org/web/timemap/link/http://twitter.com/' + uname
@@ -110,7 +110,7 @@ for line in linkslist:
 		continue
 w.close()
 
-if (wantR == '1'):
+if (wantR):
 	#Call the Rscript to create a linechart with the numbers collected
 	Rcall = "Rscript --vanilla follower_count_linechart.R " + uname
 	subprocess.call(Rcall, shell=True)
