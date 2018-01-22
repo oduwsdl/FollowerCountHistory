@@ -4,12 +4,13 @@ from bs4 import BeautifulSoup
 from sys import argv
 import urllib.request as urllib, requests, re, subprocess
 import os, errno
-
-uname = argv[1] #get twitter username from first argument
-if len(argv) > 2:
-    wantR = argv[2] #Should a graph be created from the R script [0|1]
+if(argv[1]== "-g"):
+	wantR = 1
+	uname = argv[2]
 else:
-    wantR = 1 #defaults to true
+	wantR = 0
+	uname = argv[1]
+
 archivelink = 'http://web.archive.org/web/timemap/link/http://twitter.com/' + uname
 print(uname)
 print(archivelink)
