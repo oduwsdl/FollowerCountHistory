@@ -101,7 +101,7 @@ for line in linkslist:
 	if (result == ''):
 		continue
 	try:
-		print(result)
+		print(str(int(result)))#Make sure a number
 		day = '-'.join([date[:4], date[4:6], date[6:8]])
 		w.write(day + ',' + result + '\n')
 		lastdate = date[:6]
