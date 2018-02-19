@@ -3,12 +3,12 @@ This is a Python script that collects follower counts from the Internet Archives
 
 ## Installation and Usage
 ### Dependencies
-*Python 3
-*R* (to create graph)
-*bs4 
-*urllib
-*archivenow* (push to archive)
-*datetime* (push to archive)
+* Python 3
+* R* (to create graph)
+* bs4 
+* urllib
+* archivenow* (push to archive)
+* datetime* (push to archive)
 
 *optional
  
@@ -31,7 +31,7 @@ The R script is called from within the Python script so no additional action is 
 
 ### Options
 
->-g	Create graph.
->-p	Push to internet archive. Will only push if last memento is not within current month. Need additional dependencies datetime and archivenow.
+* -g	  Create graph.
+* -p	  Push to internet archive. Will only push if last memento is not within current month. Need additional dependencies datetime and archivenow.
 
 
