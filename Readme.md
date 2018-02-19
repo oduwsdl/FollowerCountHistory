@@ -6,8 +6,14 @@ Make sure you have Python and R installed on your computer.
 ```shell	
 $ git clone https://github.com/okrand/FollowerCountHistory.git
 $ cd FollowerCountHistory
-$ python main.py [-g create graph] <twitter-handle-without-@> 
+$ python main.py [-g create graph] [-p push to internet archive] <twitter-handle-without-@> 
 ```
+
+Options
+
+-g	Create graph.
+-p	Push to internet archive. Will only push if last memento is not within current month. Need additional dependencies datetime and archivenow.
+
 To just create the graph from a csv file
 ```shell	
 $ git clone https://github.com/okrand/FollowerCountHistory.git

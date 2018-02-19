@@ -4,12 +4,25 @@ from bs4 import BeautifulSoup
 from sys import argv
 import urllib.request as urllib, requests, re, subprocess
 import os, errno
-if(argv[1]== "-g"):
-	wantR = True
-	uname = argv[2]
+
+wantR = False
+wantP = False
+if len(argv) < 2:
+	print("Usage: main.py [-g] [-p] <twitter-handle-without-@>")
+	quit()
+if len(argv) > 2:
+	if(argv[1]== "-g" or argv[2]== "-g"):
+		wantR = True
+	if(argv[1]== "-p" or argv[2]== "-p"):
+		wantP = True
+	uname = argv[len(argv)-1]
 else:
-	wantR = False
 	uname = argv[1]
+
+#Dependencies Optional	
+if wantP:
+	from archivenow import archivenow
+	import datetime
 
 archivelink = 'http://web.archive.org/web/timemap/link/http://twitter.com/' + uname
 print(uname)
@@ -121,9 +134,18 @@ for line in linkslist:
 		lastdate = date[:6]
 	except:
 		print("Number not Arabic numeral")
-		continue
+		continue		
 w.close()
 
+if wantP:
+	#Send to archive
+	now = datetime.datetime.now().strftime("%Y%m")
+
+	if( int(date[:6]) < int(now)):
+		print("Pushing to internet archive")
+		archivenow.push("http://twitter.com/" + uname,"ia")
+	else:
+		print("Not Pushing to Archive. Last Memento Within Current Month.")
 if (wantR):
 	#Call the Rscript to create a linechart with the numbers collected
 	Rcall = "Rscript --vanilla follower_count_linechart.R " + uname
