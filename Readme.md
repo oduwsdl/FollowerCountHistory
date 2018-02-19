@@ -30,8 +30,10 @@ This will create a new folder with the name: <twitter-handle-without-@> and crea
 The R script is called from within the Python script so no additional action is required. 
 
 ### Options
-
-* -g	  Create graph.
-* -p	  Push to internet archive. Will only push if last memento is not within current month. Need additional dependencies datetime and archivenow.
+.. code-block:: bash
+ python main.py [-g] [-p] <twitter-handle-without-@> 
+  
+	-g	  Create graph.
+	-p	  Push to internet archive. Will only push if last memento is not within current month. Need additional dependencies 	datetime and archivenow.
 
 
