@@ -39,7 +39,7 @@ w = open (writefile, "a+")
 olddates =[]
 if (os.stat(writefile).st_size==0):
 	#ensure header line does not get re written
-	w.write('date,count'+'\n')
+	w.write('date,count,URL-M'+'\n')
 else:
 	w.seek(0)
 	#read in old data points
@@ -82,7 +82,7 @@ for line in linkslist:
 	realdateloc = realURL.find("/web/")
 	realdate = realURL[dateloc+5:dateloc+19] #get the timestamp from the link
 	if(date != realdate):
-		print("Redirect")
+		print("Ignoring Redirect")
 		continue
 	
 	
@@ -131,7 +131,7 @@ for line in linkslist:
 		result = str(int(result)) #Make sure a number. Also translates other languages if possible.
 		print(result)
 		day = '-'.join([date[:4], date[4:6], date[6:8]])
-		w.write(day + ',' + result + '\n')
+		w.write(day + ',' + result + ',' + realURL + '\n')
 		lastdate = date[:6]
 	except:
 		print("Number not Arabic numeral")
