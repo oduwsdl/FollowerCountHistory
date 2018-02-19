@@ -7,7 +7,7 @@ This is a Python script that collects follower counts from the Internet Archives
 * R* (to create graph)
 * bs4 
 * urllib
-* archivenow* (push to archive)
+* [archivenow](https://github.com/oduwsdl/archivenow)* (push to archive) 
 * datetime* (push to archive)
 
 *optional
