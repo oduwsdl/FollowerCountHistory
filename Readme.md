@@ -54,6 +54,7 @@ In FollowerHist.py the line
 	archivenow.push("http://twitter.com/" + uname,"ia")
 
 is interacting with archivenow to push to the interent archive. If you wish to push to all archives available through archivenow then you must change the parameter "ia" to "all".
+
 	archivenow.push("http://twitter.com/" + uname,"all")
 	
 If you wish to push to a single different archive then see the options listed in [archivenow](https://github.com/oduwsdl/archivenow). However, realize that this program will only collect data from the Internet Archive.
