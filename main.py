@@ -38,7 +38,7 @@ else:
 lastline = ''
 for line in r.iter_lines(): #on each line if rel="memento" doesn't exist, ignore. If it does get the link and add it to the list of links
 	#print(line)
-	if ('rel="memento"'.encode('utf-8') in line):
+	if ('rel="memento"'.encode('utf-8') in line or 'rel="first memento"'.encode('utf-8') in line):
 		if (line != lastline):
 			lastline = line
 			linkslist.append(line[1:line.find('>;'.encode('utf-8'))])
@@ -95,13 +95,17 @@ for line in linkslist:
 									try:
 										result = soup.select(".stats_count")[1].text
 									except:
-										print("Couldn't figure it out")
-										continue
+										try:
+											result = soup.select("follower_stats")
+										except:
+											print("Couldn't figure it out")
+											continue
 	result = re.sub(r'\D', '', result) #remove everything that's not a number
 	if (result == ''):
 		continue
 	try:
-		print(str(int(result)))#Make sure a number
+		result = str(int(result)) #Make sure a number. Also translates other languages if possible.
+		print(result)
 		day = '-'.join([date[:4], date[4:6], date[6:8]])
 		w.write(day + ',' + result + '\n')
 		lastdate = date[:6]
