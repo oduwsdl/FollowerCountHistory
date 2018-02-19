@@ -62,6 +62,16 @@ for line in linkslist:
 	#get rid of scripts(javascript especially)
 	for elem in soup.findAll(['script', 'style']):
 		elem.extract()
+		
+	#Make sure this isn't a redirected Momento
+	realURL = res.geturl()
+	realdateloc = realURL.find("/web/")
+	realdate = realURL[dateloc+5:dateloc+19] #get the timestamp from the link
+	if(date != realdate):
+		print("Redirect")
+		continue
+	
+	
 	if int(date) < 10120700000000:
 		continue
 	else:
