@@ -16,7 +16,7 @@ This is a Python script that collects follower counts from the Internet Archives
 ```shell	
 $ git clone https://github.com/okrand/FollowerCountHistory.git
 $ cd FollowerCountHistory
-$ python main.py [-g] [-p] <twitter-handle-without-@> 
+$ python FollowerHist.py [-g] [-p] <twitter-handle-without-@> 
 ```
 To just create the graph from a csv file
 ```shell	
@@ -31,7 +31,8 @@ The R script is called from within the Python script so no additional action is 
 
 ### Options
 .. code-block:: bash
- python main.py [-g] [-p] <twitter-handle-without-@> 
+
+ python FollowerHist.py [-g] [-p] <twitter-handle-without-@> 
   
 	-g	  Create graph.
 	-p	  Push to internet archive. Will only push if last memento is not within current month. Need additional dependencies 	datetime and archivenow.
