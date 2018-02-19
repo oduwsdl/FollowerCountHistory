@@ -58,6 +58,7 @@ for line in r.iter_lines(): #on each line if rel="memento" doesn't exist, ignore
 print(str(len(linkslist)) + " archive points found") 
 
 lastdate = ''
+date = '0'
 #with open("test.txt", "r") as f: 
 for line in linkslist:
 	line = line.decode('utf-8')
@@ -123,7 +124,7 @@ for line in linkslist:
 										except:
 											print("Couldn't figure it out")
 											continue
-	result = re.sub(r'\D', '', result) #remove everything that's not a number
+	result = re.sub(r'\D', '', str(result)) #remove everything that's not a number
 	if (result == ''):
 		continue
 	try:

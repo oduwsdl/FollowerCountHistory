@@ -11,6 +11,13 @@ today = as.POSIXct(Sys.Date())
 twitterbegin <- as.POSIXct('2006-07-15')
 data <- read.csv(datafile)
 data <- data[order(as.Date(data$date, format="%Y-%m-%d")),]
+
+#Make sure isn't an empty table
+if(nrow(data) == 0){
+    print("Data file is empty. No graph created.")
+    stopifnot(nrow(data) != 0)
+}
+    
 dates <- as.POSIXct(data$date, format="%Y-%m-%d")
 #dates = as.character(data$date)
 #min_date <- as.POSIXct('2007-10-01')
@@ -19,6 +26,7 @@ max_date <- max(dates)
 #min_count <- min(data$count)
 min_count = 0
 max_count <- max(data$count)
+
 png(paste(uname,'-line.png',sep=''), height=460, width=665)
 mar.default <- c(5,2,4,2) + 0.01
 
