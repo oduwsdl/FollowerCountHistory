@@ -19,7 +19,7 @@ if len(argv) > 2:
 else:
 	uname = argv[1]
 
-#Dependencies Optional	
+#Dependencies Optional
 if wantP:
 	from archivenow import archivenow
 	import datetime
@@ -35,7 +35,9 @@ except OSError as e:
     if e.errno != errno.EEXIST:
         raise
 writefile = './' + uname + '/' + uname + ".csv"
+errorfile = './' + uname + '/' + uname + "Error.csv"
 w = open (writefile, "a+")
+e = open (errorfile, "a+")
 olddates =[]
 if (os.stat(writefile).st_size==0):
 	#ensure header line does not get re written
@@ -55,20 +57,21 @@ for line in r.iter_lines(): #on each line if rel="memento" doesn't exist, ignore
 		if (line != lastline):
 			lastline = line
 			linkslist.append(line[1:line.find('>;'.encode('utf-8'))])
-print(str(len(linkslist)) + " archive points found") 
+print(str(len(linkslist)) + " archive points found")
 
 lastdate = ''
 date = '0'
-#with open("test.txt", "r") as f: 
+#with open("test.txt", "r") as f:
 for line in linkslist:
 	line = line.decode('utf-8')
 	dateloc = line.find("/web/")
 	date = line[dateloc+5:dateloc+19] #get the timestamp from the link
 	#get one entry per month
 	if (date[:6] == lastdate): #if new month is the same as previous, skip
+		e.write(date+",duplicate month,"+ line + "\n")
 		continue
 	if (date[:6] in olddates): #if date is in old data, skip
-		continue			
+		continue
 	print(date)
 	res = urllib.urlopen(line)
 	html = res.read()
@@ -76,17 +79,19 @@ for line in linkslist:
 	#get rid of scripts(javascript especially)
 	for elem in soup.findAll(['script', 'style']):
 		elem.extract()
-		
+
 	#Make sure this isn't a redirected Momento
 	realURL = res.geturl()
 	realdateloc = realURL.find("/web/")
 	realdate = realURL[dateloc+5:dateloc+19] #get the timestamp from the link
 	if(date != realdate):
 		print("Ignoring Redirect")
+		e.write(date+",redirect,"+ line + "\n")
 		continue
-	
-	
+	day = '-'.join([date[:4], date[4:6], date[6:8]])
+
 	if int(date) < 10120700000000:
+		e.write(day+",before 10120700000000,"+ line + "\n")
 		continue
 	else:
 		#try excepts that find the follower counts for different versions of Twitter since its 2008
@@ -121,21 +126,27 @@ for line in linkslist:
 									except:
 										try:
 											result = soup.select("follower_stats")
+											if not result:
+												raise ValueError('Empty')
 										except:
+											e.write(day+",followers not found,"+ line + "\n")
 											print("Couldn't figure it out")
 											continue
+
 	result = re.sub(r'\D', '', str(result)) #remove everything that's not a number
 	if (result == ''):
+		e.write(day+",followers not numbers,"+ line + "\n")
 		continue
 	try:
 		result = str(int(result)) #Make sure a number. Also translates other languages if possible.
 		print(result)
-		day = '-'.join([date[:4], date[4:6], date[6:8]])
+
 		w.write(day + ',' + result + ',' + realURL + '\n')
 		lastdate = date[:6]
 	except:
+		e.write(day+",followers not arabic numerals,"+ line + "\n")
 		print("Number not Arabic numeral")
-		continue		
+		continue
 w.close()
 
 if wantP:
