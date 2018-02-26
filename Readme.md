@@ -23,13 +23,13 @@ The program will assume any previously avaiable csv file of the proper name cont
  
 ### Usage
 ```shell	
-$ git clone https://github.com/Miranda-C-Smith/FollowerCountHistory.git
+$ git clone https://github.com/oduwsdl/FollowerCountHistory.git
 $ cd FollowerCountHistory
 $ python FollowerHist.py [-g] [-p] <twitter-handle-without-@> 
 ```
 To just create the graph from a csv file
 ```shell	
-$ git clone https://github.com/Miranda-C-Smith/FollowerCountHistory.git
+$ git clone https://github.com/oduwsdl/FollowerCountHistory.git
 $ cd FollowerCountHistory
 $ Rscript --vanilla follower_count_linechart.R <twitter-handle-without-@> 
 ```
