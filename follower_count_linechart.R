@@ -1,5 +1,7 @@
 #!/usr/bin/env Rscript
 # Rscript follower_count_linechart.R uname
+
+
 args <- commandArgs(TRUE)
 mround <- function(number, multiple){ multiple * round(number/multiple) }
 wd <- function(directory)
@@ -16,12 +18,11 @@ data <- data[order(as.Date(data$date, format="%Y-%m-%d")),]
 if(nrow(data) == 0){
     print("Data file is empty. No graph created.")
 }else{
-    
+
 	dates <- as.POSIXct(data$date, format="%Y-%m-%d")
-	#dates = as.character(data$date)
 	#min_date <- as.POSIXct('2007-10-01')
-	min_date <- min(dates)
-	max_date <- max(dates)
+	min_date <- as.Date(min(dates))
+	max_date <- as.Date(max(dates))
 	#min_count <- min(data$count)
 	min_count = 0
 	max_count <- max(data$count)
@@ -34,15 +35,15 @@ if(nrow(data) == 0){
 	labelmarginoffset = c(0, 4, 0, 0)
 	labelOffset=3
 	if(max_count > 999){
-	
+
 		labelmarginoffset = c(0, 5, 0, 0)
 		labelOffset=5
 		if(max_count > 999999){
-		
+
 			labelmarginoffset = c(0, 6, 0, 0)
 			labelOffset=6
 			if(max_count > 999999999){
-			
+
 				labelmarginoffset = c(0, 8, 0, 0)
 				labelOffset=8
 				if(max_count > 999999999999){
@@ -51,18 +52,23 @@ if(nrow(data) == 0){
 				}
 			}
 		}
-	} 
-	par(mar = mar.default + labelmarginoffset, mgp = textmargin) 
+	}
+	par(mar = mar.default + labelmarginoffset, mgp = textmargin)
 
-	unixdata <- data.frame(date=as.numeric(as.POSIXct(data$date)), count=data$count)
-	plot(unixdata, type="o", ylim=c(min_count,max_count), xlim=c(min_date,max_date), axes=FALSE, ann=FALSE) #, xlim=c(as.numeric(min_date),as.numeric(max_date))
+	unixdata <- data.frame(date=as.Date(data$date), count=data$count)
+
+  prettyYaxis <- pretty(c(min_count:max_count),n=10)
+  prettyXaxis <- pretty(as.Date(c(min_date,max_date)), n=10)
+
+	plot(unixdata, type="o", ylim=c(min_count,max_count), axes=FALSE, ann=FALSE) #, xlim=c(as.numeric(min_date),as.numeric(max_date))
+
 	box()
 	titletext <- paste('@',uname,' Follower Count Over Time', sep='')
 	title(main=titletext, font.main=4, xlab="Year", ylab ="")
 	mtext('Followers',side=2,line=labelOffset)
 
-	axis(1, las=1, at=seq(min_date, max_date, "12 mon"), labels = format(seq(min_date, max_date, "12 mon"), "%Y"))
-	axis(2, las=1, at=seq(0,max_count+(signif(max_count/15,2)-1),mround(signif(max_count/15,2),5)), labels=prettyNum(seq(0,max_count+(signif(max_count/15,2)-1),mround(signif(max_count/15,2),5)),big.mark=",",scientific=FALSE))
+  axis.Date(1, at=prettyXaxis, labels=prettyXaxis)
+  axis(2, las=1, at=prettyYaxis, labels=format(prettyYaxis,scientific=FALSE) )
 	dev.off()
 
 }
