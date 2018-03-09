@@ -25,7 +25,7 @@ The program will assume any previously available csv file of the proper name con
 ```shell
 $ git clone https://github.com/oduwsdl/FollowerCountHistory.git
 $ cd FollowerCountHistory
-$ ./FollowerHist.py [-g] [-p] <twitter-handle-without-@>
+$ ./FollowerHist.py [-h] [-g] [-e] [-p | -P] <twitter-handle-without-@>
 ```
 To just create the graph from a csv file
 ```shell
@@ -39,11 +39,13 @@ This will create a new folder with the name: <twitter-handle-without-@> and crea
 The R script is called from within the Python script so no additional action is required.
 
 ### Options
-
- 	FollowerHist.py [-h] [-g] [-e] [-p | -P] <twitter-handle-without-@>
-
-  	-h    help
-	-g	  Create graph.
-	-p	  Push to Internet Archive. Will only push if last memento is not within current month. Need additional dependencies 	datetime and archivenow.
-  	-P    Push to all archives available through archivenow. Will only push if last memento in Internet Archive is not within current month. Need additional dependencies datetime and archivenow.
-  	-e    Collect follower count from every memento, not just once per month.
+```
+-h	Help
+-g	Create graph.
+-p	Push to Internet Archive. Will only push if last memento is not within current month. 
+ 	Need additional dependencies datetime and archivenow.	
+-P    	Push to all archives available through archivenow. 
+ 	Will only push if last memento in Internet Archive is not within current month. 
+ 	Need additional dependencies datetime and archivenow.	
+-e    	Collect follower count from every memento, not just once per month.
+```
