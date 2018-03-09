@@ -40,10 +40,10 @@ The R script is called from within the Python script so no additional action is 
 
 ### Options
 
- 	python FollowerHist.py [-h] [-g] [-e] [-p | -P] <twitter-handle-without-@>
+ 	FollowerHist.py [-h] [-g] [-e] [-p | -P] <twitter-handle-without-@>
 
-  -h    help
+  	-h    help
 	-g	  Create graph.
 	-p	  Push to Internet Archive. Will only push if last memento is not within current month. Need additional dependencies 	datetime and archivenow.
-  -P    Push to all archives available through archivenow. Will only push if last memento in Internet Archive is not within current month. Need additional dependencies datetime and archivenow.
-  -e    Collect follower count from every memento, not just once per month.
+  	-P    Push to all archives available through archivenow. Will only push if last memento in Internet Archive is not within current month. Need additional dependencies datetime and archivenow.
+  	-e    Collect follower count from every memento, not just once per month.
