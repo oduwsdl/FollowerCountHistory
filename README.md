@@ -25,15 +25,15 @@ The program will assume any previously available csv file of the proper name con
 ```shell
 $ git clone https://github.com/oduwsdl/FollowerCountHistory.git
 $ cd FollowerCountHistory
-$ ./FollowerHist.py [-h] [-g] [-e] [-p | -P] <twitter-handle-without-@>
+$ ./FollowerHist.py [-h] [-g] [-e] [-p | -P] <twitter-username-without-@>
 ```
 To just create the graph from a csv file
 ```shell
 $ git clone https://github.com/oduwsdl/FollowerCountHistory.git
 $ cd FollowerCountHistory
-$ Rscript --vanilla follower_count_linechart.R <twitter-handle-without-@>
+$ Rscript --vanilla follower_count_linechart.R <twitter-username-without-@>
 ```
-This will create a new folder with the name: <twitter-handle-without-@> and create two files in this folder.
+This will create a new folder with the name: <twitter-username-without-@> and create two files in this folder.
 * A .csv file that contains the data collected with associated timestamps
 * A .png file that contains a line chart of the data collected with X axis representing time
 The R script is called from within the Python script so no additional action is required.

@@ -8,11 +8,11 @@ import argparse
 import unicodedata2 as unicodedata
 
 def main():
-	parser = argparse.ArgumentParser(description='Follower Count History. Given a Twitter handle collect follower counts from the Internet Archive.')
+	parser = argparse.ArgumentParser(description='Follower Count History. Given a Twitter username, collect follower counts from the Internet Archive.')
 
 	parser.add_argument('-g', dest='graph', action='store_true', help='Generate a graph with data points')
 	parser.add_argument('-e', dest='allMemento', action='store_false', help='Collect every memento, not just one per month')
-	parser.add_argument('uname', help='Twitter handle without @')
+	parser.add_argument('uname', help='Twitter username without @')
 	group = parser.add_mutually_exclusive_group()
 	group.add_argument('-p', dest='push', action='store_true', help='Push to Internet Archive')
 	group.add_argument('-P', dest='pushAll', action='store_true', help='Push to all Archives available through ArchiveNow')
