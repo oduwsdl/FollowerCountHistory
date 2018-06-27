@@ -6,6 +6,7 @@ import urllib.request as urllib, requests, re, subprocess
 import os, errno
 import argparse
 import unicodedata2 as unicodedata
+from http.client import IncompleteRead
 
 def main():
 	parser = argparse.ArgumentParser(description='Follower Count History. Given a Twitter username, collect follower counts from the Internet Archive.')
@@ -106,7 +107,12 @@ def main():
 			e.write(day+",URI-M not loaded,"+ line + "\n")
 			continue
 
-		html = res.read()
+		try:
+			html = res.read()
+		except IncompleteRead as err:
+			e.write(date+",partial read,"+ line + "\n")
+			continue
+
 		soup = BeautifulSoup(html, "lxml") #html.parser -> lxml
 		#get rid of scripts(javascript especially)
 		for elem in soup.findAll(['script', 'style']):
