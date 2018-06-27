@@ -2,8 +2,8 @@
 This is a Python script that collects follower counts from the Internet Archives, given a Twitter user name. This script grabs the follower counts by identifying various CSS Selectors that match the follower count element on the historical Twitter pages for almost every major overhaul their page layout has gone through. The program only collects one data point per month by default.
 
 ## Output
-A csv file noting the date of the archived twitter page, the follower count for that date, and a link to the memento.
-A csv file noting the date of the archived twitter page, the reason follower count was not collected, and a link to the memento.
+A csv file noting the date of the archived Twitter page, the follower count for that date, and a link to the memento.
+A csv file noting the date of the archived Twitter page, the reason follower count was not collected, and a link to the memento.
 Optional: A line graph displaying the collected data.
 
 The program will print to the console the date it is currently processing 'YYYYMMDDHHMMSS' and the action taken to show it's progress.
