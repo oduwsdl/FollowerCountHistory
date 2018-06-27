@@ -25,6 +25,7 @@ The program will assume any previously available csv file of the proper name con
 ```shell
 $ git clone https://github.com/oduwsdl/FollowerCountHistory.git
 $ cd FollowerCountHistory
+$ pip install -r requirements.txt
 $ ./FollowerHist.py [-h] [-g] [-e] [-p | -P] <twitter-username-without-@>
 ```
 
