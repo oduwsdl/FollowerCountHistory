@@ -43,14 +43,22 @@ $ cd FollowerCountHistory
 $ Rscript --vanilla follower_count_linechart.R <twitter-username-without-@>
 ```
 
+### Docker
+
+We have published a docker image at `oduwsdl/fch` which can be used to run this tool as following:
+
+```
+$ docker container run --rm -it -v </PATH/TO/OUTPUT/FOLDER>:/app oduwsdl/fch [OPTIONS] <twitter-username-without-@>
+```
+
 ### Options
 ```
 -h	Help
 -g	Create graph.
 -p	Push to Internet Archive. Will only push if last memento is not within current month. 
- 	Need additional dependencies datetime and archivenow.	
--P    	Push to all archives available through archivenow. 
- 	Will only push if last memento in Internet Archive is not within current month. 
- 	Need additional dependencies datetime and archivenow.	
--e    	Collect follower count from every memento, not just once per month.
+        Need additional dependencies datetime and archivenow.	
+-P      Push to all archives available through archivenow. 
+        Will only push if last memento in Internet Archive is not within current month. 
+        Need additional dependencies datetime and archivenow.	
+-e      Collect follower count from every memento, not just once per month.
 ```
