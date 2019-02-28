@@ -48,7 +48,7 @@ $ Rscript --vanilla follower_count_linechart.R <twitter-username-without-@>
 We have published a docker image at [oduwsdl/fch](https://hub.docker.com/r/oduwsdl/fch), which can be used to run this tool as following:
 
 ```
-$ docker container run --rm -it -v </PATH/TO/OUTPUT/FOLDER>:/app/<twitter-handle> oduwsdl/fch [OPTIONS] <twitter-handle>
+$ docker container run --rm -it -v </OUTPUT/DIR>:/app/<TWITTER_HANDLE> oduwsdl/fch [OPTIONS] <TWITTER_HANDLE>
 ```
 
 ### Options
