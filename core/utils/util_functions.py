@@ -181,7 +181,7 @@ class Utils:
         flag = True
         try:
             archive_list = ["perma.cc", "archive.is"]
-            input = ast.literal_eval(args[0])
+            input = ast.literal_eval(str(args[0]))
             murl = input["uri"]
             for archive in archive_list:
                 if archive in murl:

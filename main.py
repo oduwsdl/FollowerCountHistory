@@ -11,10 +11,7 @@ from core.utils.constants import Constants
 from core.datamanager import DataManager
 from core.utils.util_functions import Utils
 
-from deletedtweets.deletedtweetfinder import TweetDeletionFinder
 from follower.followercount import FollowerCount
-from tests.simulator import Simulator
-
 
 def init(log_type, **kwargs):
 
@@ -39,22 +36,6 @@ def check_mtime_format(mtime):
     else:
         return False
 
-
-def run_deleted(**kw):
-    '''
-    Function to deleted tweets
-    :param kw:
-    :return:
-    '''
-    if kw["mode, _m"] == 1 and check_mtime_format(str(kw["st"])) and check_mtime_format(str(kw["et"])):
-        dmanager, config_reader, constants, logger = init(log_type="deleted", **kw)
-        tfinder = TweetDeletionFinder(kw["thandle"], config_reader, constants, dmanager, logger)
-        print("Going to find deleted tweets: " + kw["thandle"])
-        tfinder.find_deleted_tweets()
-    else:
-        print("Enter valid Memento DateTime in 14 digits format (yyyymmddHHMMSS)")
-
-
 def run_follower(**kw):
     if check_mtime_format(str(kw["st"])) and check_mtime_format(str(kw["et"])):
         print("Twitter Handle: " + kw["thandle"])
@@ -68,31 +49,10 @@ def run_follower(**kw):
     else:
         print("Enter valid Memento DateTime in 14 digits format (yyyymmddHHMMSS)")
 
-
-def run_tests(**kw):
-    dmanager, config_reader, constants, logger = init(log_type="tests")
-    sim = Simulator(dmanager, config_reader, constants, logger)
-    if kw["mdtparser"]:
-        sim.test_dt_memento_parser(kw["mdtparser"])
-
-
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description="Twitter Archival Analysis (taa)", prog="taa")
+    parser = argparse.ArgumentParser(description="Follower Count History (taa)", prog="fch")
     subparsers = parser.add_subparsers()
-
-    deleted_parser = subparsers.add_parser("deleted",
-                                            help="Generate a JSON file of deleted tweets for a Twitter handle")
-    deleted_parser.add_argument("thandle", help="Enter a Twitter handle")
-    deleted_parser.add_argument("--out, -o", metavar="", default="/data/Nauman/MementoDump", help="Output Directory")
-    deleted_parser.add_argument("--mode, -m", type=int, metavar="", default=1, help="Mode 0: Recent 3200 tweets, 1:"
-                                                                                   "Timerange-based")
-    deleted_parser.add_argument("--can, -c", type=bool, metavar="", default=False, help="Url Cononicalization")
-    deleted_parser.add_argument("--st", type=int, metavar="", default=20190101000000, help="Start timestamp (in "
-                                                                                            "Memento datetime format)")
-    deleted_parser.add_argument("--et", type=int, metavar="", default=20190813235959, help="End timestamp (in "
-                                                                                            "Memento datetime format)")
-    deleted_parser.set_defaults(func=run_deleted)
 
     follower_parser = subparsers.add_parser("follower", help="Get follower count for a Twitter handle")
     follower_parser.add_argument("thandle", help="Enter a Twitter handle")
@@ -103,10 +63,6 @@ if __name__ == "__main__":
     follower_parser.add_argument("--analysis", action='store_true', default=False, help="Follower Count analysis")
     follower_parser.add_argument("--count", action='store_true', default=False, help="Get Follower Count")
     follower_parser.set_defaults(func=run_follower)
-
-    tests_parser = subparsers.add_parser("tests", help="Run tests for follower count and deleted tweets code")
-    tests_parser.add_argument("-mdtparser", metavar="", help="Enter a URIM to tests the memento parser")
-    tests_parser.set_defaults(func=run_tests)
 
     args = parser.parse_args()
     try:

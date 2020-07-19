@@ -53,8 +53,20 @@ class DataManager:
         """
         self.__logger.error_logger.debug(message)
 
-    def __write_debug_logs(self, message):
-        self.__logger.debug_logger.debug(message)
+    def __write_logs(self, message):
+        if self.__logger.debug_log is not None:
+            self.__logger.debug_log.debug(message)
+
+    def set_twitter_handle(self, thandle):
+        """
+            Function to set Twitter handle
+            
+            Parameters:
+                thandle (str): Twitter handle
+
+            Returns:
+        """
+        self.__thandle = thandle
 
     def write_memento(self, murl=None):
         """
@@ -66,10 +78,10 @@ class DataManager:
         Returns:
             (bool): True on Success and False on Failure
         """
-        if self.lookup_memento(murl):
+        if self.lookup_memento(murl, self.__thandle):
             return True
         else:
-            response = Utils.get_murl_info(murl)
+            response = Utils.get_murl_info(murl, self.__thandle)
             mpath = self.__memento_dir
             if not os.path.exists(mpath):
                 os.mkdir(mpath)
@@ -150,7 +162,7 @@ class DataManager:
         Returns:
             (str): Path of Memento on Success and None on Failure
         """
-        response = Utils.get_murl_info(murl)
+        response = Utils.get_murl_info(murl, self.__thandle)
         mpath = os.path.join(self.__memento_dir, response["handle"].lower(), response["domain"], response["archive"],
                              response["wrep"], response["lang"], response["timestamp"] + self.__constants.WARC_EXT)
         if os.path.exists(mpath) and os.stat(mpath).st_size > 0:
@@ -239,190 +251,6 @@ class DataManager:
         tmpath = os.path.join(tmpath, tresponse["domain"], tresponse["wrep"] + tresponse["lang"])
         if os.path.exists(tmpath) and len(os.listdir(tmpath)) > 0:
             return True
-        return False
-
-    def write_parsed_memento(self, murl=None, pmcontent=""):
-        """
-        This is function to write Parsed Memento Content.
-
-        Parameters:
-            murl (str): URI-M
-            pmcontent (str): Parsed Memento Content
-        Returns:
-            (bool): True on Success and False on Failure
-        """
-        if self.lookup_parsed_memento(murl):
-            return True
-        else:
-            response = Utils.get_murl_info(murl)
-            pm_path = self.__pmemento_dir
-            if not os.path.exists(pm_path):
-                os.mkdir(pm_path)
-            pm_path = os.path.join(pm_path, response["handle"].lower())
-            if not os.path.exists(pm_path):
-                os.mkdir(pm_path)
-            pm_path = os.path.join(pm_path, response["domain"])
-            if not os.path.exists(pm_path):
-                os.mkdir(pm_path)
-            pm_path = os.path.join(pm_path, response["archive"])
-            if not os.path.exists(pm_path):
-                os.mkdir(pm_path)
-            pm_path = os.path.join(pm_path, response["wrep"] + response["lang"])
-            if not os.path.exists(pm_path):
-                os.mkdir(pm_path)
-            try:
-                pm_path = os.path.join(pm_path, response["timestamp"] + self.__constants.PARSE_MEM_EXT)
-                with open(pm_path, "w") as pm_ofile:
-                    pm_ofile.write(pmcontent)
-                return True
-            except Exception as e:
-                self.__write_error_logs("Parsed Memento Write Error: " + str(e))
-        return False
-
-    def read_parsed_memento(self, murl=None):
-        """
-        This function is for reading Parsed Memento.
-
-        Parameters:
-            murl (str): URI-M
-
-        Returns:
-            (str): Content on Success and None on Failure
-        """
-        if self.lookup_parsed_memento(murl):
-            try:
-                response = Utils.get_murl_info(murl)
-                pm_path = os.path.join(self.__pmemento_dir, response["handle"].lower(), response["domain"],
-                                       response["archive"], response["wrep"] + response["lang"], response["timestamp"]
-                                       + self.__constants.PARSE_MEM_EXT)
-                with open(pm_path, "r") as pm_ofile:
-                    pcontent = []
-                    for line in pm_ofile:
-                        pcontent.append(line.rstrip())
-                return pcontent
-            except Exception as e:
-                self.__write_error_logs("Parsed Memento Read Error: " + str(e))
-        return None
-
-    def lookup_parsed_memento(self, murl=None):
-        """
-        This function looks up for Parsed Memento.
-
-        Parameters:
-            murl (str): URI-M
-
-        Returns:
-            (bool): True on Success and False on Failure
-        """
-        response = Utils.get_murl_info(murl)
-        pm_path = os.path.join(self.__pmemento_dir, response["handle"].lower(), response["domain"], response["archive"],
-                               response["wrep"] + response["lang"], response["timestamp"]
-                               + self.__constants.PARSE_MEM_EXT)
-        if os.path.exists(pm_path):
-            return True
-        else:
-            return False
-
-    def write_json_outputs(self, thandle,  fname=None, fcontent=None):
-        """
-        This is function to write JSON Content.
-
-        Parameters:
-            thandle (str): Twitter Handle
-            fname (str): File Name
-            fcontent (str): File Content
-        Returns:
-            (bool): True on Success and False on Failure
-        """
-        try:
-
-            json_path = self.__json_dir
-            if not os.path.exists(json_path):
-                os.mkdir(json_path)
-            json_path = os.path.join(json_path, thandle + self.__constants.USCORE + fname + self.__constants.JSON_EXT)
-            with open(json_path, "w") as ofile:
-                json.dump(fcontent, ofile)
-            return True
-        except Exception as e:
-            self.__write_error_logs("write_json_outputs: " + str(e))
-        return False
-
-    def read_json_outputs(self, thandle, fname):
-        """
-        This function is for reading JSON file Content.
-
-        Parameters:
-            thandle (str): Twitter Handle
-            fname (str): File Name
-
-        Returns:
-            (str): Content on Success and None on Failure
-        """
-        json_path = os.path.join(self.__json_dir, thandle + self.__constants.USCORE + fname + self.__constants.JSON_EXT)
-        if os.path.exists(json_path):
-            with open(json_path) as ofile:
-                return json.load(ofile)
-        return None
-
-    '''
-    Function to lookup Deleted Tweets Json entry
-    '''
-    def lookup_deleted_tweets(self, thandle="john", tid=None):
-        """
-        This function looks up for a tweet ID in Deleted Tweets file.
-
-        Parameters:
-            thandle (str): Twitter Handle
-            tid (str): Twitter ID
-
-        Returns:
-            (bool): True on Success and False on Failure
-        """
-        dt_path = os.path.join(self.__dtweet_dir, thandle.lower() + self.__constants.DT_EXT)
-        if os.path.exists(dt_path):
-            with open(dt_path, "r") as ofile:
-                dtweet_content = json.load(ofile)
-                for entry in dtweet_content:
-                    if entry["TweetId"] == tid:
-                        return True
-        return False
-
-    '''
-    Function to write Deleted Tweets Json entry
-    '''
-    def write_deleted_tweets(self, thandle="john", dtweet_json=None):
-        """
-        This is function to write Deleted Tweets Content.
-
-        Parameters:
-            thandle (str): Twitter Handle
-            dtweet_json (str): File Content
-        Returns:
-            (bool): True on Success and False on Failure
-        """
-        try:
-            dt_path = self.__dtweet_dir
-            if not os.path.exists(dt_path):
-                os.mkdir(dt_path)
-            dt_path = os.path.join(dt_path, thandle.lower() + self.__constants.DT_EXT)
-            if os.path.exists(dt_path):
-                with open(dt_path, "r") as ofile:
-                    dt_content = json.load(ofile)
-                if isinstance(dt_content, list):
-                    for entry in dt_content:
-                        dt_content.append(entry)
-                else:
-                    dt_content.append(dtweet_json)
-            else:
-                if not isinstance(dtweet_json, list):
-                    dt_content = [dtweet_json]
-                else:
-                    dt_content = dtweet_json
-            with open(dt_path, "w") as ofile:
-                json.dump(dt_content, ofile)
-            return True
-        except Exception as e:
-            self.__write_error_logs("write_deleted_tweets: " + str(e))
         return False
 
     def write_follower_count(self, thandle="john", fcontent=None):
