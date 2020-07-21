@@ -2,12 +2,24 @@ import datetime
 import twitter
 import ast
 import re
+import bs4
+import os
 
 
 class Utils:
     """
     This is a class for Utility Functions.
     """
+
+    @staticmethod
+    def check_memento(dmanager, memento):
+        mcontent = dmanager.read_memento(memento)
+        if mcontent is not None:
+            soup = bs4.BeautifulSoup(mcontent, "html.parser")
+            if soup.find("html") is None or not soup.find("html").has_attr("lang"):
+                return False
+            else:
+                return True
 
     @staticmethod
     def memento_to_epochtime(mtime):
@@ -118,7 +130,7 @@ class Utils:
         return api
 
     @staticmethod
-    def parse_timemap(dmanager, constants, turl, stime=None, etime=None):
+    def parse_timemap(dmanager, constants, turl, config_reader=None, stime=None, etime=None):
         """
         This function is for parsing the timemap between the start and end time and getting URI-Ms
 
@@ -130,20 +142,57 @@ class Utils:
             etime (int): End Time
 
         Returns:
-             lurims (list): List of URI-Ms
+             lurims (list: List of URI-Ms
         """
+        if os.path.exists(os.path.join(os.getcwd(), "follower", "data", "mementos.txt")):
+            lurims = []
+            with open(os.path.join(os.getcwd(), "follower", "data", "mementos.txt"), "r") as fobj:
+                for line in fobj:
+                    lurims.append(ast.literal_eval(line.rstrip()))
+            return lurims
+
         timemap_content = dmanager.read_timemap(turl)
         if timemap_content:
             lurims = []
+            srange = Utils.memento_to_epochtime(str(stime))
+            erange = Utils.memento_to_epochtime(str(stime)) + int(config_reader.frequency)
             for line in timemap_content:
                 if constants.ERROR404 in line:
                     return None
                 elif not line.startswith("@") and line.rstrip():
-                    line_split = line.split(" ", 1)
+                    print(line.rstrip())
+                    line_split = line.rstrip().split(" ", 1)
                     memento = ast.literal_eval(line_split[1])
-                    mtime = line_split[0]
-                    if stime <= int(mtime) <= etime:
-                        lurims.append(memento)
+                    if memento["uri"].split("/")[2]  not in ["archive.is", "archive.today", "perma.cc", "webarchive.loc.gov"]:
+                        mtime = line_split[0]
+                        print("stime: " + str(stime) + "  mtime: " + str(mtime) + "  etime:  " + str(etime))
+                        if stime <= int(mtime) <= etime:
+                            print("Memento in range: " + str(mtime))
+                            if config_reader.frequency == "all":
+                                lurims.append(memento)
+                            else:
+                                mtime = Utils.memento_to_epochtime(mtime)
+                                print("mtime: " + str(mtime) + " srange: " + str(srange) + "  erange: " + str(erange))
+                                if srange <= mtime <= erange:
+                                    # if Utils.check_memento(dmanager, memento):
+                                    srange = erange
+                                    erange += int(config_reader.frequency) 
+                                    lurims.append(memento)
+                                    print("If: " + str(memento))
+                                elif mtime > erange:
+                                    # if Utils.check_memento(dmanager, memento):
+                                    lurims.append(memento)
+                                    while srange <= mtime:
+                                        srange = erange
+                                        erange += int(config_reader.frequency)
+                                    print("Elif: " + str(memento))
+                                elif Utils.memento_to_epochtime(str(etime)) < mtime:
+                                    break
+                                else:
+                                    print("Else mtime: " + str(mtime) + " etime: " + str(Utils.memento_to_epochtime(str(etime))))
+            with open(os.path.join(os.getcwd(), "follower", "data", "mementos.txt"), "w") as fobj:
+                for urim in lurims:
+                    fobj.write(str(urim) + "\n")
             return lurims
         return None
 

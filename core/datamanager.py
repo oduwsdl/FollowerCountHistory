@@ -78,7 +78,7 @@ class DataManager:
         Returns:
             (bool): True on Success and False on Failure
         """
-        if self.lookup_memento(murl, self.__thandle):
+        if self.lookup_memento(murl):
             return True
         else:
             response = Utils.get_murl_info(murl, self.__thandle)
@@ -264,6 +264,8 @@ class DataManager:
             (bool): True on Success and False on Failure
         """
         try:
+            print(fcontent["URI-M"])
+            print(self.lookup_follower_count(thandle, fcontent["URI-M"]))
             if not self.lookup_follower_count(thandle, fcontent["URI-M"]):
                 fpath = self.__fcount_dir
                 if not os.path.exists(fpath):

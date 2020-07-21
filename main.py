@@ -46,24 +46,27 @@ def run_follower(**kw):
         if kw["count"]:
             fcount.get_follower_count()
             print("follower count successfully completed for : " + kw["thandle"])
+        if kw["graph"]:
+            fcount.plot_graph()
+            print("Plot R Graph Done")
     else:
         print("Enter valid Memento DateTime in 14 digits format (yyyymmddHHMMSS)")
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description="Follower Count History (taa)", prog="fch")
-    subparsers = parser.add_subparsers()
+    parser = argparse.ArgumentParser(description="Follower Count History (fch)", prog="fch")
 
-    follower_parser = subparsers.add_parser("follower", help="Get follower count for a Twitter handle")
-    follower_parser.add_argument("thandle", help="Enter a Twitter handle")
-    follower_parser.add_argument("--st", type=int, metavar="", default=20190101000000, help="Start timestamp (in "
+    # follower_parser = subparsers.add_parser("follower", help="Get follower count for a Twitter handle")
+    parser.add_argument("thandle", help="Enter a Twitter handle")
+    parser.add_argument("--st", type=int, metavar="", default=20190101000000, help="Start timestamp (in "
                                                                                             "Memento datetime format)")
-    follower_parser.add_argument("--et", type=int, metavar="", default=20200419235959, help="End timestamp (in "
+    parser.add_argument("--et", type=int, metavar="", default=20200419235959, help="End timestamp (in "
                                                                                             "Memento datetime format)")
-    follower_parser.add_argument("--analysis", action='store_true', default=False, help="Follower Count analysis")
-    follower_parser.add_argument("--count", action='store_true', default=False, help="Get Follower Count")
-    follower_parser.set_defaults(func=run_follower)
-
+    parser.add_argument("--analysis", action='store_true', default=False, help="Follower Count analysis")
+    parser.add_argument("--count", action='store_true', default=False, help="Get Follower Count")
+    parser.add_argument("--frequency", metavar="", default="all", help="Frequency (in seconds)")
+    parser.add_argument("--graph", action='store_true', default=False, help="Plot R Graphs")
+    parser.set_defaults(func=run_follower)
     args = parser.parse_args()
     try:
         args.func(**vars(args))

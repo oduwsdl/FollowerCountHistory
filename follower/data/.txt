@@ -1,0 +1,7 @@
+Non parsed due to selector problem: http://wayback.archive-it.org/all/20100901200512/http://twitter.com/TimKaine
+Non parsed due to selector problem: http://web.archive.org/web/20101009004440/http://twitter.com:80/timkaine
+Non parsed due to selector problem: http://wayback.archive-it.org/all/20101024003807/https://twitter.com/TimKaine
+Non parsed due to selector problem: http://web.archive.org/web/20110220073301/http://twitter.com/timkaine
+Non parsed due to selector problem: http://wayback.archive-it.org/all/20110331052219/http://twitter.com/timkaine
+Non parsed due to language: http://web.archive.org/web/20120122210227/http://twitter.com/TimKaine
+Non parsed due to language: http://wayback.archive-it.org/all/20120214150441/https://twitter.com/timkaine
