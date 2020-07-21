@@ -7,20 +7,12 @@ from follower.followerparser import FollowerParser
 
 
 class MementoDownloader:
-    def __init__(self, thandle, turl, constants, dmanager, logger):
+    def __init__(self, thandle, turl, constants, dmanager):
         self.__thandle = thandle
         self.__turl = turl
         self.__dmanager = dmanager
-        self.__logger = logger
         self.__constants = constants
-        self.__parse_memento = FollowerParser(thandle, constants, dmanager, logger)
-
-    '''
-    Function to write debug logs
-    '''
-    def __write_debug_log(self, message):
-        if self.__logger.debug_log:
-            self.__logger.debug_log.debug(message)
+        self.__parse_memento = FollowerParser(thandle, constants, dmanager)
 
     '''
     Function gets URIMs and fetches mementos using concurrent threads and writes to database
@@ -28,14 +20,14 @@ class MementoDownloader:
 
     def get_memento(self, config):
         todo_frontier = self.__parse_timemap(config)
-        self.__write_debug_log("fetch_mementos:  Frontier: " + str(todo_frontier))
+        print("fetch_mementos:  Frontier: " + str(todo_frontier))
         if todo_frontier:
             with concurrent.futures.ThreadPoolExecutor(max_workers=len(todo_frontier)) as executor:
                 for frontier_list in todo_frontier:
                     future_result = {executor.submit(self.__download_memento, url):
                                          url for url in frontier_list["urims"]}
                     for future in concurrent.futures.as_completed(future_result):
-                        self.__write_debug_log("fetch_mementos: result: " + str(future.result()))
+                        print("fetch_mementos: result: " + str(future.result()))
                         
     '''
     Parses the CDXJ format of memento list and downloads only the mementos above the timestamp of the 3200 recent tweets
@@ -54,10 +46,10 @@ class MementoDownloader:
         '''
         mcount = [0, 0, 0]
         mintime, maxtime = Utils.get_timerange(self.__constants, config)
-        self.__write_debug_log("fetch_mementos:  Minimum Live Timestamp: {} Maximum Live Timestamp: {}".format
+        print("fetch_mementos:  Minimum Live Timestamp: {} Maximum Live Timestamp: {}".format
                                (mintime, maxtime))
         timemap_content = Utils.parse_timemap(self.__dmanager, self.__constants, self.__turl, config, mintime, maxtime)
-        self.__write_debug_log("fetch_mementos: " + str(timemap_content))
+        print("fetch_mementos: " + str(timemap_content))
         for memento in timemap_content:
             response = Utils.get_murl_info(memento["uri"], self.__thandle)
             # If archive.is mementos then skip it, as we do not parse them
@@ -84,11 +76,11 @@ class MementoDownloader:
                                                "urims": [memento["uri"]]}
                                 todo_frontier.append(json_object)
         # Write logs for each user
-        self.__write_debug_log("fetch_mementos: Twitter Handle: " + self.__thandle)
-        self.__write_debug_log("fetch_mementos: Date-Time: " + str(time.strftime("%b %d %Y %H:%M:%S", time.gmtime())))
-        self.__write_debug_log("fetch_mementos: Total Memento URLs: " + str(mcount[0]))
-        self.__write_debug_log("fetch_mementos: Number of Mementos already downloaded: " + str(mcount[1]))
-        self.__write_debug_log("fetch_mementos: Number of Mementos for consideration: " + str(mcount[2]))
+        print("fetch_mementos: Twitter Handle: " + self.__thandle)
+        print("fetch_mementos: Date-Time: " + str(time.strftime("%b %d %Y %H:%M:%S", time.gmtime())))
+        print("fetch_mementos: Total Memento URLs: " + str(mcount[0]))
+        print("fetch_mementos: Number of Mementos already downloaded: " + str(mcount[1]))
+        print("fetch_mementos: Number of Mementos for consideration: " + str(mcount[2]))
         return todo_frontier
 
     '''
@@ -100,6 +92,6 @@ class MementoDownloader:
         try:
             self.__dmanager.write_memento(murl)
         except requests.exceptions.ConnectionError as err:
-            self.__logger.error_log.debug("make_network_request: ConnectionError: " + murl + " " + str(err))
+            print("make_network_request: ConnectionError: " + murl + " " + str(err))
         except Exception as err:
-            self.__logger.error_log.debug("make_network_request: " + murl + " " + str(err))
+            print("make_network_request: " + murl + " " + str(err))

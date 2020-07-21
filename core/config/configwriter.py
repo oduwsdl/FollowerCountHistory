@@ -27,7 +27,7 @@ class ConfigurationWriter:
         self.__conf_record = dict(Start_Timestamp=kwargs.get('st', int(self.__config['SETUP']['START_TIMESTAMP'])),
                                   End_Timestamp=kwargs.get('et', int(self.__config['SETUP']['END_TIMESTAMP'])),
                                   Mode=kwargs.get('mode', int(self.__config['SETUP']['MODE'])),
-                                  Output_Dir=kwargs.get('out_dir', self.__config['SETUP']['OUTPUT_DIR']),
+                                  Output_Dir=kwargs.get('out', self.__config['SETUP']['OUTPUT_DIR']),
                                   Log_Dir=kwargs.get('log_dir', self.__config['SETUP']['LOG_DIR']),
                                   Frequency=kwargs.get('frequency', self.__config['SETUP']['FREQUENCY']),
                                   Database=kwargs.get("db_conf", "followercount"),

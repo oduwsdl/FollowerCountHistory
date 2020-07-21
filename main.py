@@ -4,7 +4,8 @@ import argparse
 import os
 import sys
 
-from core.logger import Logger
+
+
 from core.config.configreader import ConfigurationReader
 from core.config.configwriter import ConfigurationWriter
 from core.utils.constants import Constants
@@ -13,15 +14,13 @@ from core.utils.util_functions import Utils
 
 from follower.followercount import FollowerCount
 
-def init(log_type, **kwargs):
+def init(**kwargs):
 
     ConfigurationWriter(**kwargs)
     config_reader = ConfigurationReader()
     constants = Constants()
-    logger = Logger(config_reader)
-    logger.create_logging_instances(log_type)
-    dmanager = DataManager(config_reader, constants, logger)
-    return dmanager, config_reader, constants, logger
+    dmanager = DataManager(config_reader, constants)
+    return dmanager, config_reader, constants
 
 
 def check_mtime_format(mtime):
@@ -39,8 +38,8 @@ def check_mtime_format(mtime):
 def run_follower(**kw):
     if check_mtime_format(str(kw["st"])) and check_mtime_format(str(kw["et"])):
         print("Twitter Handle: " + kw["thandle"])
-        dmanager, config_reader, constants, logger = init(log_type="follower", **kw)
-        fcount = FollowerCount(kw["thandle"], config_reader, constants, dmanager, logger)
+        dmanager, config_reader, constants = init(**kw)
+        fcount = FollowerCount(kw["thandle"], config_reader, constants, dmanager)
         if kw["analysis"]:
             fcount.get_follower_analysis()
         if kw["count"]:

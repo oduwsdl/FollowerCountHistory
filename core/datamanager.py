@@ -25,18 +25,16 @@ class DataManager:
             __fcount_dir (str): Follower Count Directory
 
     """
-    def __init__(self, config, constants, logger):
+    def __init__(self, config, constants):
         """
             The constructor of DataManager class.
 
             Parameters:
                 config (ConfigurationReader): Configuration object
                 constants (Constants): For constants
-                logger (Logger): Logger Object
         """
         self.__config = config
         self.__data_dir = config.out_dir
-        self.__logger = logger
         self.__constants = constants
         self.__memento_dir = os.path.join(self.__data_dir, "Mementos")
         self.__timemap_dir = os.path.join(self.__data_dir, "TimeMap")
@@ -44,18 +42,6 @@ class DataManager:
         self.__dtweet_dir = os.path.join(self.__data_dir, "DeletedTweets")
         self.__json_dir = os.path.join(self.__data_dir, "JsonOutputs")
         self.__fcount_dir = os.path.join(self.__data_dir, "FollowerCount")
-
-    def __write_error_logs(self, message):
-        """
-        This function is to write error logs
-        :param message:
-        :return:
-        """
-        self.__logger.error_logger.debug(message)
-
-    def __write_logs(self, message):
-        if self.__logger.debug_log is not None:
-            self.__logger.debug_log.debug(message)
 
     def set_twitter_handle(self, thandle):
         """
@@ -121,7 +107,7 @@ class DataManager:
                 with open("/home/msiddique/WSDL_Work/CongressionalTweetsAnalysis/TooMany.txt", "a+") as fobj:
                     fobj.write(murl + "\n")
             except Exception as e:
-                self.__write_error_logs("Memento Write Error: " + str(e) + "URL:" + murl)
+                print("Memento Write Error: " + str(e) + "URL:" + murl)
         return False
 
     def read_memento(self, murl=None):
@@ -149,7 +135,7 @@ class DataManager:
                     with open(mpath, "r") as stream:
                         return stream.read()
                 except Exception as e:
-                    self.__write_error_logs("Memento Read Error: " + str(e))
+                    print("Memento Read Error: " + str(e))
         return None
 
     def lookup_memento(self, murl=None):
@@ -204,7 +190,7 @@ class DataManager:
                 tm_ofile.write(tm_content)
             return True
         except Exception as e:
-            self.__write_error_logs("TimeMap Write Error: " + str(e))
+            print("TimeMap Write Error: " + str(e))
         return False
 
     def read_timemap(self, turl=None):
@@ -232,7 +218,7 @@ class DataManager:
                                     urims.append(line)
                 return urims
             except Exception as e:
-                self.__write_error_logs("TimeMap Read Error: " + str(e))
+                print("TimeMap Read Error: " + str(e))
         return None
 
     def lookup_timemap(self, turl=None):
@@ -283,7 +269,7 @@ class DataManager:
                 csv_file.close()
             return True
         except Exception as e:
-            self.__write_error_logs("write_follower_count: " + str(e))
+            print("write_follower_count: " + str(e))
         return False
 
     def lookup_follower_count(self, thandle="john", urim=None):
