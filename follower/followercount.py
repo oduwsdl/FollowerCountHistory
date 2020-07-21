@@ -1,6 +1,5 @@
 from core.timemapdownloader import TimeMapDownloader
 from core.mementodownloader import MementoDownloader
-from follower.twitterurlcanonicalization import TwitterUrls
 from follower.followeranalysis import FollowerAnalysis
 from follower.followerparser import FollowerParser
 
