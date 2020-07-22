@@ -7,6 +7,7 @@ import json
 import csv
 from core.utils.util_functions import Utils
 import time
+import sys
 
 
 class DataManager:
@@ -103,11 +104,11 @@ class DataManager:
                 with open("/home/msiddique/WSDL_Work/CongressionalTweetsAnalysis/TooMany.txt", "a+") as fobj:
                     fobj.write(murl + "\n")
             except requests.exceptions.ConnectTimeout as err:
-                print(murl + "Connection Timeout")
+                sys.stderr.write(murl + "Connection Timeout" + "\n")
                 with open("/home/msiddique/WSDL_Work/CongressionalTweetsAnalysis/TooMany.txt", "a+") as fobj:
                     fobj.write(murl + "\n")
             except Exception as e:
-                print("Memento Write Error: " + str(e) + "URL:" + murl)
+                sys.stderr.write("Memento Write Error: " + str(e) + "URL:" + murl + "\n")
         return False
 
     def read_memento(self, murl=None):
@@ -129,13 +130,13 @@ class DataManager:
                             if record.rec_type == 'response':
                                 return record.content_stream().read()
                 except Exception as e:
-                    self.__write_error_logs("Memento Read Error: " + str(e))
+                    sys.stderr.write("Memento Read Error: " + str(e) + "\n")
             elif ".html" in mpath:
                 try:
                     with open(mpath, "r") as stream:
                         return stream.read()
                 except Exception as e:
-                    print("Memento Read Error: " + str(e))
+                    sys.stderr.write("Memento Read Error: " + str(e) + "\n")
         return None
 
     def lookup_memento(self, murl=None):
@@ -190,7 +191,7 @@ class DataManager:
                 tm_ofile.write(tm_content)
             return True
         except Exception as e:
-            print("TimeMap Write Error: " + str(e))
+            sys.stderr.write("TimeMap Write Error: " + str(e) + "\n")
         return False
 
     def read_timemap(self, turl=None):
@@ -218,7 +219,7 @@ class DataManager:
                                     urims.append(line)
                 return urims
             except Exception as e:
-                print("TimeMap Read Error: " + str(e))
+                sys.stderr.write("TimeMap Read Error: " + str(e) + "\n")
         return None
 
     def lookup_timemap(self, turl=None):
@@ -250,8 +251,6 @@ class DataManager:
             (bool): True on Success and False on Failure
         """
         try:
-            print(fcontent["URI-M"])
-            print(self.lookup_follower_count(thandle, fcontent["URI-M"]))
             if not self.lookup_follower_count(thandle, fcontent["URI-M"]):
                 fpath = self.__fcount_dir
                 if not os.path.exists(fpath):
@@ -269,7 +268,7 @@ class DataManager:
                 csv_file.close()
             return True
         except Exception as e:
-            print("write_follower_count: " + str(e))
+            sys.stderr.write("write_follower_count: " + str(e) + "\n")
         return False
 
     def lookup_follower_count(self, thandle="john", urim=None):

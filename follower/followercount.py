@@ -4,6 +4,7 @@ from follower.followeranalysis import FollowerAnalysis
 from follower.followerparser import FollowerParser
 
 import os
+import sys
 import subprocess
 
 class FollowerCount:
@@ -16,18 +17,18 @@ class FollowerCount:
     def get_follower_count(self):
         self.__cleanup_files()
         turl  = self.__constants.TWITTER_URL + self.__thandle
-        print("Start: (main)" + turl)
+        if self.__conf_reader.debug: sys.stdout.write("Start: (main)" + turl + "\n")
         self.__dmanager.set_twitter_handle(self.__thandle)
-        tm_object = TimeMapDownloader(self.__thandle, self.__constants, self.__dmanager)
+        tm_object = TimeMapDownloader(self.__thandle, self.__constants, self.__dmanager, self.__conf_reader)
         tm_status = tm_object.fetch_timemap(turl)
-        print("Start: (main): Fetching timemap done: " + turl)
+        if self.__conf_reader.debug: sys.stdout.write("Start: (main): Fetching timemap done: " + turl + "\n")
         if tm_status:
-            mobject = MementoDownloader(self.__thandle, turl, self.__constants, self.__dmanager)
-            mobject.get_memento(self.__conf_reader)
-            print("Start: (main): Fetching mementos")
-            fparser = FollowerParser(self.__thandle, self.__constants, self.__dmanager)
-            fparser.parse_mementos(self.__conf_reader, turl)
-            print("Start: (main): Parsing mementos")
+            mobject = MementoDownloader(self.__thandle, turl, self.__constants, self.__dmanager, self.__conf_reader)
+            mobject.get_memento()
+            if self.__conf_reader.debug: sys.stdout.write("Start: (main): Fetching mementos" + "\n")
+            fparser = FollowerParser(self.__thandle, self.__constants, self.__dmanager, self.__conf_reader)
+            fparser.parse_mementos(turl)
+            if self.__conf_reader.debug: sys.stdout.write("Start: (main): Parsing mementos" + "\n")
 
 
     def get_follower_analysis(self):

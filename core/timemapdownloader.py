@@ -1,5 +1,5 @@
 import requests
-
+import sys
 
 class TimeMapDownloader:
     """
@@ -15,9 +15,10 @@ class TimeMapDownloader:
             __thandle (str): Twitter Handle
             __constants (Constants): For constants
             __dmanager (DataManager): Allows Data Management
+            __conf_reader (ConfigReader): ConfigReader object
 
     """
-    def __init__(self, thandle, constants, dmanager):
+    def __init__(self, thandle, constants, dmanager, config_reader):
         """
         This is constructor for TimeMapDownloader class.
 
@@ -25,11 +26,13 @@ class TimeMapDownloader:
             thandle (str): Twitter Handle
             constants (Constants): For constants
             dmanager (DataManager): Allows Data Management
+            config_reader (ConfigReader): ConfigReader object
 
         """
         self.__thandle = thandle
         self.__constants = constants
         self.__dmanager = dmanager
+        self.__conf_reader = config_reader
 
     def fetch_timemap(self, turl):
         """
@@ -43,11 +46,11 @@ class TimeMapDownloader:
             response = requests.get(command)
             if response.status_code == 200:
                 self.__dmanager.write_timemap(turl, response.content.decode('ascii'))
-                print("fetch_timemap: " + str(response.status_code))
+                if self.__conf_reader.debug: sys.stdout.write("fetch_timemap: " + str(response.status_code) + "\n")
                 return True
             else:
-                print("fetch_timemap: " + str(response.status_code))
-                print("fetch_timemap: No timemap found: " + turl)
+                if self.__conf_reader.debug: sys.stdout.write("fetch_timemap: " + str(response.status_code) + "\n")
+                if self.__conf_reader.debug: sys.stdout.write("fetch_timemap: No timemap found: " + turl + "\n")
         except Exception as err:
-            print("Fetch Timemap: Error: " + str(err))
+            sys.stderr.write("Fetch Timemap: Error: "+ turl + "   " + str(err) + "\n")
         return False

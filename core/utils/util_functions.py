@@ -38,8 +38,7 @@ class Utils:
             mepoch = int((mdate - epoch).total_seconds())
             return mepoch
         except Exception as e:
-            print("memento_to_epochtime: " + str(e))
-            print("memento_to_epochtime: " + str(mtime))
+            sys.stderr.write("memento_to_epochtime: " + str(mtime) + "   " + str(e) + "\n")
         return None
 
     @staticmethod
@@ -74,7 +73,7 @@ class Utils:
             mtime += str(mdate.second)
             return mtime
         except Exception as e:
-            print("epochtime_to_memento: " + str(e))
+            sys.stderr.write("epochtime_to_memento: " + str(e) + "\n")
         return None
 
     @staticmethod
@@ -160,36 +159,28 @@ class Utils:
                 if constants.ERROR404 in line:
                     return None
                 elif not line.startswith("@") and line.rstrip():
-                    print(line.rstrip())
                     line_split = line.rstrip().split(" ", 1)
                     memento = ast.literal_eval(line_split[1])
                     if memento["uri"].split("/")[2]  not in ["archive.is", "archive.today", "perma.cc", "webarchive.loc.gov"]:
                         mtime = line_split[0]
-                        print("stime: " + str(stime) + "  mtime: " + str(mtime) + "  etime:  " + str(etime))
                         if stime <= int(mtime) <= etime:
-                            print("Memento in range: " + str(mtime))
                             if config_reader.frequency == "all":
                                 lurims.append(memento)
                             else:
                                 mtime = Utils.memento_to_epochtime(mtime)
-                                print("mtime: " + str(mtime) + " srange: " + str(srange) + "  erange: " + str(erange))
                                 if srange <= mtime <= erange:
                                     # if Utils.check_memento(dmanager, memento):
                                     srange = erange
                                     erange += int(config_reader.frequency) 
                                     lurims.append(memento)
-                                    print("If: " + str(memento))
                                 elif mtime > erange:
                                     # if Utils.check_memento(dmanager, memento):
                                     lurims.append(memento)
                                     while srange <= mtime:
                                         srange = erange
                                         erange += int(config_reader.frequency)
-                                    print("Elif: " + str(memento))
                                 elif Utils.memento_to_epochtime(str(etime)) < mtime:
                                     break
-                                else:
-                                    print("Else mtime: " + str(mtime) + " etime: " + str(Utils.memento_to_epochtime(str(etime))))
             with open(os.path.join(os.getcwd(), "follower", "data", "mementos.txt"), "w") as fobj:
                 for urim in lurims:
                     fobj.write(str(urim) + "\n")

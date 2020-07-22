@@ -4,8 +4,6 @@ import argparse
 import os
 import sys
 
-
-
 from core.config.configreader import ConfigurationReader
 from core.config.configwriter import ConfigurationWriter
 from core.utils.constants import Constants
@@ -37,19 +35,19 @@ def check_mtime_format(mtime):
 
 def run_follower(**kw):
     if check_mtime_format(str(kw["st"])) and check_mtime_format(str(kw["et"])):
-        print("Twitter Handle: " + kw["thandle"])
         dmanager, config_reader, constants = init(**kw)
+        if config_reader.debug: sys.stdout.write("Twitter Handle: " + kw["thandle"] + "\n")
         fcount = FollowerCount(kw["thandle"], config_reader, constants, dmanager)
         if kw["analysis"]:
             fcount.get_follower_analysis()
         if kw["count"]:
             fcount.get_follower_count()
-            print("follower count successfully completed for : " + kw["thandle"])
+            if config_reader.debug: sys.stdout.write("follower count successfully completed for : " + kw["thandle"] + "\n")
         if kw["graph"]:
             fcount.plot_graph()
-            print("Plot R Graph Done")
+            if config_reader.debug: sys.stdout.write("Plot R Graph Done" + "\n")
     else:
-        print("Enter valid Memento DateTime in 14 digits format (yyyymmddHHMMSS)")
+        if config_reader.debug: sys.stdout.write("Enter valid Memento DateTime in 14 digits format (yyyymmddHHMMSS)" + "\n")
 
 if __name__ == "__main__":
 
@@ -65,6 +63,7 @@ if __name__ == "__main__":
     parser.add_argument("--count", action='store_true', default=False, help="Get Follower Count")
     parser.add_argument("--frequency", metavar="", default="all", help="Frequency (in seconds)")
     parser.add_argument("--graph", action='store_true', default=False, help="Plot R Graphs")
+    parser.add_argument("--debug", action='store_true', default=False, help="Debug Mode")
     parser.set_defaults(func=run_follower)
     args = parser.parse_args()
     try:
