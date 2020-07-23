@@ -52,8 +52,7 @@ if __name__ == "__main__":
                                                                                             "Memento datetime format)")
     parser.add_argument("--et", type=int, metavar="", default=20200419235959, help="End timestamp (in "
                                                                                             "Memento datetime format)")
-    parser.add_argument("--frequency", metavar="", default="all", help="Frequency (in seconds)")
-    parser.add_argument("--graph", action='store_true', default=False, help="Plot R Graphs")
+    parser.add_argument("--freq", metavar="", default="all", help="Sampling frequency of mementos(in seconds)")
     parser.add_argument("--debug", action='store_true', default=False, help="Debug Mode")
     # parser.add_argument("--out", action='store_true', default=False, help="Returns csv file output")
     parser.set_defaults(func=run_follower)

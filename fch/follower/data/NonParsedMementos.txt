@@ -1,0 +1,10 @@
+Non parsed due to selector problem: http://web.archive.org/web/20070616134936/http://twitter.com:80/joebiden
+Non parsed due to selector problem: http://web.archive.org/web/20070816193824/http://twitter.com:80/JoeBiden
+Non parsed due to selector problem: http://web.archive.org/web/20070916095340/http://twitter.com:80/JoeBiden
+Non parsed due to selector problem: http://web.archive.org/web/20071002092421/http://twitter.com:80/joebiden
+Non parsed due to language: http://wayback.archive-it.org/all/20071030201109/http://twitter.com/joebiden
+Non parsed due to selector problem: http://web.archive.org/web/20071213082949/http://twitter.com:80/joebiden
+Non parsed due to selector problem: http://web.archive.org/web/20080907044907/http://www.twitter.com/joebiden
+Non parsed due to language: http://web.archive.org/web/20120118014448/http://twitter.com/joebiden
+Non parsed due to selector problem: https://web.archive.org/web/20200222003030/https://twitter.com/joebiden
+Non parsed due to language: https://wayback.archive-it.org/all/20200323080646/https://twitter.com/JoeBiden
