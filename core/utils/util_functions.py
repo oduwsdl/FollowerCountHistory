@@ -1,9 +1,9 @@
 import datetime
-import twitter
 import ast
 import re
 import bs4
 import os
+import sys
 
 
 class Utils:
@@ -114,21 +114,6 @@ class Utils:
         return int(min_time), int(max_time)
 
     @staticmethod
-    def create_twitter_instance():
-        """
-        Create Twitter Instance. All the fields can be collected from the developer site of Twitter
-
-        Returns:
-            api (TwitterAPI): Twitter API Object
-        """
-        api = twitter.Api(consumer_key='5Q3CFnvq02nKj6kI9gRpGNHXH',
-                          consumer_secret='4OBnuBjedjwZUZmtslwzzPmWxeQtN7LHUeYHf4jsqZjQkEyW4v',
-                          access_token_key='907341293717737473-for4ikiKhPAHxD54pnRqhJSPpr1QmNB',
-                          access_token_secret='jV6TplxXfCQOu8C8zArB2wzlwGisq2Y0kRHUtrvuKYQNr',
-                          sleep_on_rate_limit=True)
-        return api
-
-    @staticmethod
     def parse_timemap(dmanager, constants, turl, config_reader=None, stime=None, etime=None):
         """
         This function is for parsing the timemap between the start and end time and getting URI-Ms
@@ -163,6 +148,8 @@ class Utils:
                     memento = ast.literal_eval(line_split[1])
                     if memento["uri"].split("/")[2]  not in ["archive.is", "archive.today", "perma.cc", "webarchive.loc.gov"]:
                         mtime = line_split[0]
+                        if config_reader.debug: sys.stdout.write("parse_timemap: " + str(memento) + "\n")
+                        if config_reader.debug: sys.stdout.write("parse_timemap: " + str(mtime) + "\n")
                         if stime <= int(mtime) <= etime:
                             if config_reader.frequency == "all":
                                 lurims.append(memento)
@@ -179,9 +166,10 @@ class Utils:
                                     while srange <= mtime:
                                         srange = erange
                                         erange += int(config_reader.frequency)
-                                elif Utils.memento_to_epochtime(str(etime)) < mtime:
-                                    break
+                        elif Utils.memento_to_epochtime(str(etime)) < Utils.memento_to_epochtime(mtime):
+                            break
             with open(os.path.join(os.getcwd(), "follower", "data", "mementos.txt"), "w") as fobj:
+                if config_reader.debug: sys.stdout.write("parse_timemap: Going to write memento.txt file" + "\n")
                 for urim in lurims:
                     fobj.write(str(urim) + "\n")
             return lurims

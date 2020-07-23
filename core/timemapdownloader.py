@@ -1,5 +1,6 @@
 import requests
 import sys
+import subprocess
 
 class TimeMapDownloader:
     """
@@ -41,9 +42,11 @@ class TimeMapDownloader:
         Returns:
             (bool): True on Success and False on Failure
         """
-        command = self.__constants.MEMGATOR_URL + self.__constants.MEMGATOR_FORMAT + self.__constants.FSLASH + turl
+        # command = self.__constants.MEMGATOR_URL + self.__constants.MEMGATOR_FORMAT + self.__constants.FSLASH + turl
+        command = "https://memgator.cs.odu.edu/timemap/cdxj/" + turl
         try:
             response = requests.get(command)
+            # result = subprocess.run("docker container run -it --rm oduwsdl/memgator --format=cdxj --contact=msidd003@odu.edu --contimeout=10s https://twitter.com/m_nsiddique", shell=True, stdout=subprocess.PIPE, universal_newlines=True)
             if response.status_code == 200:
                 self.__dmanager.write_timemap(turl, response.content.decode('ascii'))
                 if self.__conf_reader.debug: sys.stdout.write("fetch_timemap: " + str(response.status_code) + "\n")

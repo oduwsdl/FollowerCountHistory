@@ -1,4 +1,3 @@
 beautifulsoup4
 requests
 warcio
-python-twitter
