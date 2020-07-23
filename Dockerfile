@@ -9,4 +9,4 @@ RUN        pip install -r requirements.txt
 COPY       . ./
 RUN        chmod +x *.py
 
-ENTRYPOINT ["./main.py"]
+ENTRYPOINT ["./followerscript.sh"]

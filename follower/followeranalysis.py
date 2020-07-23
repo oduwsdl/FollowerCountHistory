@@ -1,15 +1,15 @@
 import ast
 import csv
 import os
+import sys
 from datetime import datetime
 from core.utils.util_functions import Utils
 
 
 class FollowerAnalysis:
-    def __init__(self, thandle, conf_reader, constants, dmanager, logger):
+    def __init__(self, thandle, conf_reader, constants, dmanager):
         self.__thandle = thandle.lower()
         self.__constants = constants
-        self.__logger = logger
         self.__dmanager = dmanager
         self.__conf_reader = conf_reader
     
@@ -78,16 +78,16 @@ class FollowerAnalysis:
     def relative_analysis(self):
         lrows = []
         mtimestamp = []
-        with open(os.path.join(self.__conf_reader.out_dir, "FollowerCount", self.__thandle + ".csv"), "r") as csv_file:
+        with open(os.path.join(self.__conf_reader.out_dir, self.__thandle + ".csv"), "r") as csv_file:
             reader = csv.DictReader(csv_file)
             for entry in reader:
                 lrows.append(entry)
 
         lrows = sorted(lrows, key=lambda i: i['MementoTimestamp'])
-        print("Relative Analysis: CSV File Read")
+        if self.__conf_reader.debug: sys.stdout.write("Relative Analysis: CSV File Read" + "\n")
         fieldnames = ["MementoTimestamp", "URI-M", "FollowerCount", "DateTime", "AbsRelative", "AbsPrevRelative",
                       "PerRelative", "PerPrevRelative", "RateRelative", "RatePrevRelative"]
-        with open(os.path.join(self.__conf_reader.out_dir, "FollowerCount", self.__thandle + "_analysis.csv"), "w") as \
+        with open(os.path.join(self.__conf_reader.out_dir, self.__thandle + "_analysis.csv"), "w") as \
                 csv_file:
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             writer.writeheader()
@@ -97,18 +97,12 @@ class FollowerAnalysis:
                    "RateRelative": 0, "RatePrevRelative": 0}
             writer.writerow(row)
             for i in range(1, len(lrows)):
-                print(lrows[i])
                 tpdiff = int(datetime.strptime(lrows[i]["DateTime"], "%Y-%m-%d %H:%M:%S").timestamp() -
                              datetime.strptime(lrows[i - 1]["DateTime"], "%Y-%m-%d %H:%M:%S").timestamp())
                 tdiff = int(datetime.strptime(lrows[i]["DateTime"], "%Y-%m-%d %H:%M:%S").timestamp() -
                             datetime.strptime(lrows[0]["DateTime"], "%Y-%m-%d %H:%M:%S").timestamp())
-                print("Relative Analysis: CSV File Computation progess")
-                print("Follower: " + str(lrows[i]["FollowerCount"]))
                 rabs = int(lrows[i]["FollowerCount"]) - int(lrows[0]["FollowerCount"])
-                print(rabs)
                 rpabs = int(lrows[i]["FollowerCount"]) - int(lrows[i - 1]["FollowerCount"])
-                print(rpabs)
-                print("Relative Analysis: CSV File Computation progess Step 2")
                 row = {"MementoTimestamp": lrows[i]["MementoTimestamp"], "URI-M": lrows[i]["URI-M"],
                        "FollowerCount": lrows[i]["FollowerCount"], "DateTime": lrows[i]["DateTime"],
                        "AbsRelative": rabs, "AbsPrevRelative": rpabs,
@@ -116,4 +110,3 @@ class FollowerAnalysis:
                        "PerPrevRelative": round((rpabs / int(lrows[i - 1]["FollowerCount"])) * 100, 2),
                        "RateRelative": round(rabs / tdiff, 5), "RatePrevRelative": round(rpabs / tpdiff, 5)}
                 writer.writerow(row)
-                print("Relative Analysis: CSV File Written")

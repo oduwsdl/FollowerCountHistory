@@ -29,16 +29,9 @@ class FollowerCount:
             fparser = FollowerParser(self.__thandle, self.__constants, self.__dmanager, self.__conf_reader)
             fparser.parse_mementos(turl)
             if self.__conf_reader.debug: sys.stdout.write("Start: (main): Parsing mementos" + "\n")
-
-
-    def get_follower_analysis(self):
-        fanalysis = FollowerAnalysis(self.__thandle, self.__conf_reader, self.__constants, self.__dmanager)
-        fanalysis.relative_analysis()
-
-    def plot_graph(self):
-        Rcall = "Rscript --vanilla ../followerCount.R " + self.__thandle + "_analysis"
-        subprocess.call("docker container run -it --rm -u $(id -u):$(id -g) -v $PWD:$PWD -w $PWD r-base bash", shell=True)
-        subprocess.call(Rcall, shell=True)
+            fanalysis = FollowerAnalysis(self.__thandle, self.__conf_reader, self.__constants, self.__dmanager)
+            fanalysis.relative_analysis()
+            if self.__conf_reader.debug: sys.stdout.write("Start: (main): Follower Analysis" + "\n")
 
     def __cleanup_files(self):
         if os.path.exists(os.path.join(os.getcwd(), "follower", "data", "NonParsedMementos.txt")):

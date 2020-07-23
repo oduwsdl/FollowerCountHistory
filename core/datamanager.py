@@ -42,7 +42,6 @@ class DataManager:
         self.__pmemento_dir = os.path.join(self.__data_dir, "ParsedMementos")
         self.__dtweet_dir = os.path.join(self.__data_dir, "DeletedTweets")
         self.__json_dir = os.path.join(self.__data_dir, "JsonOutputs")
-        self.__fcount_dir = os.path.join(self.__data_dir, "FollowerCount")
 
     def set_twitter_handle(self, thandle):
         """
@@ -214,7 +213,7 @@ class DataManager:
                 for time_map in os.listdir(tmpath):
                     with open(os.path.join(tmpath, time_map), "r") as tm_ofile:
                         for line in tm_ofile:
-                            if not line.startswith("@"):
+                            if not (line.startswith("@") or line.startswith("!")):
                                 if line not in urims:
                                     urims.append(line)
                 return urims
@@ -252,15 +251,15 @@ class DataManager:
         """
         try:
             if not self.lookup_follower_count(thandle, fcontent["URI-M"]):
-                fpath = self.__fcount_dir
+                fpath = self.__data_dir
                 if not os.path.exists(fpath):
                     os.mkdir(fpath)
-                if os.path.exists(os.path.join(self.__fcount_dir, thandle + ".csv")):
-                    csv_file = open(os.path.join(self.__fcount_dir, thandle + ".csv"), "a+")
+                if os.path.exists(os.path.join(self.__data_dir, thandle + ".csv")):
+                    csv_file = open(os.path.join(self.__data_dir, thandle + ".csv"), "a+")
                     fieldnames = ["MementoTimestamp", "URI-M", "FollowerCount", "DateTime"]
                     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
                 else:
-                    csv_file = open(os.path.join(self.__fcount_dir, thandle + ".csv"), "w")
+                    csv_file = open(os.path.join(self.__data_dir, thandle + ".csv"), "w")
                     fieldnames = ["MementoTimestamp", "URI-M", "FollowerCount", "DateTime"]
                     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
                     writer.writeheader()
@@ -282,8 +281,8 @@ class DataManager:
         Returns:
             (bool): Dictionary of Follower Count on Success and None on Failure
         """
-        if os.path.exists(os.path.join(self.__fcount_dir, thandle + ".csv")):
-            with open(os.path.join(self.__fcount_dir, thandle + ".csv"), "r") as csv_file:
+        if os.path.exists(os.path.join(self.__data_dir, thandle + ".csv")):
+            with open(os.path.join(self.__data_dir, thandle + ".csv"), "r") as csv_file:
                 reader = csv.DictReader(csv_file)
                 for row in reader:
                     if row["URI-M"] == urim:

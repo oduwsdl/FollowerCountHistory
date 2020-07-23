@@ -143,12 +143,12 @@ class Utils:
             for line in timemap_content:
                 if constants.ERROR404 in line:
                     return None
-                elif not line.startswith("@") and line.rstrip():
+                elif not (line.startswith("!") or line.startswith("@")) and line.rstrip():
                     line_split = line.rstrip().split(" ", 1)
                     memento = ast.literal_eval(line_split[1])
+                    if config_reader.debug: sys.stdout.write("parse_timemap: " + str(memento) + "\n")
                     if memento["uri"].split("/")[2]  not in ["archive.is", "archive.today", "perma.cc", "webarchive.loc.gov"]:
                         mtime = line_split[0]
-                        if config_reader.debug: sys.stdout.write("parse_timemap: " + str(memento) + "\n")
                         if config_reader.debug: sys.stdout.write("parse_timemap: " + str(mtime) + "\n")
                         if stime <= int(mtime) <= etime:
                             if config_reader.frequency == "all":

@@ -7,8 +7,8 @@ if (length(args)==0) {
   args[2] = "out.csv"
 }
 
-strsplit(args[1], "/")[[1]][[2]]
-thandle <- strsplit(strsplit(args[1], "/")[[1]][[2]], "_(?=[^_]+$)", perl=TRUE)[[1]][[1]]
+strsplit(args[1], "/")[[1]][[3]]
+thandle <- strsplit(strsplit(args[1], "/")[[1]][[3]], "_(?=[^_]+$)", perl=TRUE)[[1]][[1]]
 
 f2si2 <- function (number, rounding=F, sep=" ") {
   sign = ""
