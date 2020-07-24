@@ -91,6 +91,6 @@ class Constants:
         self.MEMGATOR_FORMAT = "cdxj"
         self.TWITTER_URL = "http://twitter.com/"
         self.MOBILE_TWITTER_URL = "https://mobile.twitter.com"
-        self.TWITTER_FOUND_DATE = "20160321120000"
+        self.TWITTER_FOUND_DATE = "20060321120000"
         self.PRE_SNOWFLAKE_BEGIN_TID = 20
         self.PRE_SNOWFLAKE_END_TID = 29700859247

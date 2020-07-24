@@ -33,14 +33,12 @@ def check_mtime_format(mtime):
         return False
 
 def run_follower(**kw):
-    if check_mtime_format(str(kw["st"])) and check_mtime_format(str(kw["et"])):
-        dmanager, config_reader, constants = init(**kw)
-        if config_reader.debug: sys.stdout.write("Twitter Handle: " + kw["thandle"] + "\n")
-        fcount = FollowerCount(kw["thandle"], config_reader, constants, dmanager)
-        fcount.get_follower_count()
-        if config_reader.debug: sys.stdout.write("follower count successfully completed for : " + kw["thandle"] + "\n")
-    else:
-        if config_reader.debug: sys.stdout.write("Enter valid Memento Datetime in 14 digits format (yyyymmddHHMMSS)" + "\n")
+    dmanager, config_reader, constants = init(**kw)
+    if config_reader.debug: sys.stdout.write("Twitter Handle: " + kw["thandle"] + "\n")
+    fcount = FollowerCount(kw["thandle"], config_reader, constants, dmanager)
+    fcount.get_follower_count()
+    if config_reader.debug: sys.stdout.write("follower count successfully completed for : " + kw["thandle"] + "\n")
+
 
 if __name__ == "__main__":
 
