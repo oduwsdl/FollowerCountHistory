@@ -7,8 +7,7 @@ if (length(args)==0) {
   args[2] = "out.csv"
 }
 
-strsplit(args[1], "/")[[1]][[3]]
-thandle <- strsplit(strsplit(args[1], "/")[[1]][[3]], "_(?=[^_]+$)", perl=TRUE)[[1]][[1]]
+thandle <- args[1]
 
 f2si2 <- function (number, rounding=F, sep=" ") {
   sign = ""
@@ -35,7 +34,7 @@ f2si2 <- function (number, rounding=F, sep=" ") {
 }
 
 
-ifile <- paste(args[1], ".csv", sep="")
+ifile <- paste("output/followerCSV/", args[1], "_analysis",".csv", sep="")
 data_set <- read.csv(ifile, header=TRUE, as.is=TRUE)
 
 print("CSV File found and loaded")
