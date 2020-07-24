@@ -52,7 +52,7 @@ options("scipen" = 10)
 ###
 
 
-jpeg(file=paste("fch/graphs/", thandle,"-follower-count.jpg", sep=""), height=625, width=875)
+jpeg(file=paste("output/graphs/", thandle,"-follower-count.jpg", sep=""), height=625, width=875)
 y_pos <- pretty(data_set$FollowerCount, n=5)
 y_pretty <- lapply(y_pos, f2si2, rounding=T, sep="")
 titletext <- paste('@', thandle,'\'s Twitter Follower Growth Over Time', sep='')
@@ -69,7 +69,7 @@ mtext(side=2, text="Follower Count", line = 4, cex=1.2)
 ###
 
 # Code for Relative Follower Growth
-jpeg(file=paste("fch/graphs/", thandle, "-follower-growth.jpg", sep=""), height=625, width=875)
+jpeg(file=paste("output/graphs/", thandle, "-follower-growth.jpg", sep=""), height=625, width=875)
 y_pos <- pretty(data_set$AbsRelative, n=5)
 y_pretty <- lapply(y_pos, f2si2, rounding=T, sep="")
 y_right_pos <- pretty(data_set$PerRelative, n=5)
@@ -98,7 +98,7 @@ legend("topleft",legend=c("Follower Count Increase","Percentage Change"),
 ###
 
 
-jpeg(file=paste("fch/graphs/", thandle, "-follower-growth-relative.jpg",sep=''), height=625, width=875)
+jpeg(file=paste("output/graphs/", thandle, "-follower-growth-relative.jpg",sep=''), height=625, width=875)
 y_pos <- pretty(data_set$AbsPrevRelative, n=5)
 y_pretty <- lapply(y_pos, f2si2, rounding=T, sep="")
 titletext <- paste('@', thandle,'\'s Increase in Follower Count Over Time w.r.t. Previous Memento', sep='')
@@ -115,7 +115,7 @@ mtext(side = 2, text = "Increase in Follower Count", line = 4, cex=1.2)
 ###
 
 
-jpeg(file=paste("fch/graphs/", thandle, "-follower-perc-growth-relative.jpg",sep=''), height=625, width=875)
+jpeg(file=paste("output/graphs/", thandle, "-follower-perc-growth-relative.jpg",sep=''), height=625, width=875)
 y_pos <- pretty(data_set$PerPrevRelative, n=5)
 par(mar=c(5.1, 6.1, 4.1, 2.1))
 titletext <- paste('@', thandle,'\'s % Change in Follower Count Over Time w.r.t. Previous Memento', sep='')
@@ -135,7 +135,7 @@ data_set$RateRelative <- data_set$RateRelative * 24 * 3600
 ###
 
 
-jpeg(file=paste("fch/graphs/", thandle, "-follower-rate.jpg", sep=''), height=625, width=875)
+jpeg(file=paste("output/graphs/", thandle, "-follower-rate.jpg", sep=''), height=625, width=875)
 y_pos <- pretty(data_set$RateRelative, n=5)
 titletext <- paste('@', thandle,'\'s New Followers Increase in Over Time w.r.t First Memento', sep='')
 par(mar=c(5.1, 6.1, 4.1, 2.1))
@@ -155,7 +155,7 @@ data_set$RatePrevRelative <- data_set$RatePrevRelative * 24 * 3600
 ###
 
 
-jpeg(file=paste("fch/graphs/", thandle, "-follower-rate-relative.jpg", sep=''), height=625, width=875)
+jpeg(file=paste("output/graphs/", thandle, "-follower-rate-relative.jpg", sep=''), height=625, width=875)
 y_pos <- pretty(data_set$RatePrevRelative, n=5)
 y_pretty <- lapply(y_pos, f2si2, rounding=T, sep="")
 titletext <- paste('@', thandle,'\'s New Followers Increase Over Time w.r.t. Previous Memento', sep='')

@@ -24,7 +24,7 @@ class FollowerAnalysis:
         if not self.__conf_reader.out:
             return
 
-        fpath = os.path.join(os.getcwd(), "followerOutput")
+        fpath = os.path.join(os.getcwd(), "output", "followerCSV")
         with open(os.path.join(fpath, self.__thandle + ".csv"), "r") as csv_file:
             reader = csv.DictReader(csv_file)
             for entry in reader:
@@ -34,9 +34,9 @@ class FollowerAnalysis:
         if self.__conf_reader.debug: sys.stdout.write("Relative Analysis: CSV File Read" + "\n")
         fieldnames = ["MementoTimestamp", "URI-M", "FollowerCount", "DateTime", "AbsRelative", "AbsPrevRelative",
                       "PerRelative", "PerPrevRelative", "RateRelative", "RatePrevRelative"]
+
         if self.__conf_reader.out:
-            if self.__conf_reader.out:
-                fpath = os.path.join(os.getcwd(), "followerOutput")
+            fpath = os.path.join(os.getcwd(), "output", "followerCSV")
         with open(os.path.join(fpath, self.__thandle + "_analysis.csv"), "w") as \
                 csv_file:
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -60,7 +60,3 @@ class FollowerAnalysis:
                        "PerPrevRelative": round((rpabs / int(lrows[i - 1]["FollowerCount"])) * 100, 2),
                        "RateRelative": round(rabs / tdiff, 5), "RatePrevRelative": round(rpabs / tpdiff, 5)}
                 writer.writerow(row)
-
-    def write_follower_output(self):
-
-        print("writeFollowrOutput")

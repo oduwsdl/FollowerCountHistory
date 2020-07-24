@@ -2,3 +2,6 @@ fch/graphs/*
 fch/followerOutput/*
 fch/follower/data/mementos.txt
 fch/follower/data/NonParsedMementos.txt
+*/__pycache__
+*/*/__pycache__
+output/

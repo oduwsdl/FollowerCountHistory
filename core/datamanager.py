@@ -249,11 +249,14 @@ class DataManager:
         """
         try:
             if self.__config.out:
-                fpath = os.path.join(os.getcwd(), "followerOutput")
+                fpath = os.path.join(os.getcwd(), "output")
                 if not os.path.exists(fpath):
                     os.mkdir(fpath)
-                if not os.path.exists(os.path.join(os.getcwd(), "graphs")):
-                    os.mkdir(os.path.join(os.getcwd(), "graphs"))
+                fpath = os.path.join(fpath, "followerCSV")
+                if not os.path.exists(fpath):
+                    os.mkdir(fpath)  
+                if not os.path.exists(os.path.join(os.getcwd(), "output", "graphs")):
+                    os.mkdir(os.path.join(os.getcwd(), "output", "graphs"))
                 csv_file = open(os.path.join(fpath, thandle + ".csv"), "w")
                 fieldnames = ["MementoTimestamp", "URI-M", "FollowerCount", "DateTime"]
                 writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -284,7 +287,7 @@ class DataManager:
             (bool): Dictionary of Follower Count on Success and None on Failure
         """
         if self.__config.out:
-            fpath = os.path.join(os.getcwd(), "followerOutput")
+            fpath = os.path.join(os.getcwd(), "output", "followerCSV")
             if os.path.exists(os.path.join(fpath, thandle + ".csv")):
                 return True
         return False
