@@ -31,16 +31,14 @@ class ConfigurationReader:
             self.db_config = "followercount"
         with open(os.path.join(os.path.dirname(__file__), "data", self.db_config), "rb") as self.__ofile:
             self.__conf_record = pickle.load(self.__ofile)
-            self.mode = self.__conf_record["Mode"]
             self.start_time = self.__conf_record["Start_Timestamp"]
             self.end_time = self.__conf_record["End_Timestamp"]
-            self.out_dir = self.__conf_record["Output_Dir"]
-            self.log_dir = self.__conf_record["Log_Dir"]
+            self.out = self.__conf_record["Output_Dir"]
             self.debug = self.__conf_record["Debug_Mode"]
             self.tlangs = self.__conf_record["Twitter_Languages"]
             self.dbname = self.__conf_record["Database"]
             self.tdomain = self.__conf_record["Twitter_Domain"]
             self.tpath = self.__conf_record["Twitter_Path"]
             self.turl = self.__conf_record["Twitter_Url"]
-            self.backup_logs = self.__conf_record["Backup_Logs"]
             self.frequency = self.__conf_record["Frequency"]
+            self.intermediate = self.__conf_record["Internediary_Dir"]

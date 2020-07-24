@@ -15,7 +15,6 @@ class DataManager:
         This class is for Data Management.
 
         Attributes:
-            __data_dir (str): Default Output Directory
             __config (ConfigurationReader): Configuration object
             __constants (Constants): For constants
             __memento_dir (str): Memento Directory
@@ -35,13 +34,12 @@ class DataManager:
                 constants (Constants): For constants
         """
         self.__config = config
-        self.__data_dir = config.out_dir
         self.__constants = constants
-        self.__memento_dir = os.path.join(self.__data_dir, "Mementos")
-        self.__timemap_dir = os.path.join(self.__data_dir, "TimeMap")
-        self.__pmemento_dir = os.path.join(self.__data_dir, "ParsedMementos")
-        self.__dtweet_dir = os.path.join(self.__data_dir, "DeletedTweets")
-        self.__json_dir = os.path.join(self.__data_dir, "JsonOutputs")
+        self.__memento_dir = os.path.join(self.__config.intermediate, "Mementos")
+        self.__timemap_dir = os.path.join(self.__config.intermediate, "TimeMap")
+        self.__pmemento_dir = os.path.join(self.__config.intermediate, "ParsedMementos")
+        self.__dtweet_dir = os.path.join(self.__config.intermediate, "DeletedTweets")
+        self.__json_dir = os.path.join(self.__config.intermediate, "JsonOutputs")
 
     def set_twitter_handle(self, thandle):
         """
@@ -250,27 +248,29 @@ class DataManager:
             (bool): True on Success and False on Failure
         """
         try:
-            if not self.lookup_follower_count(thandle, fcontent["URI-M"]):
-                fpath = self.__data_dir
+            if self.__config.out:
+                fpath = os.path.join(os.getcwd(), "followerOutput")
                 if not os.path.exists(fpath):
                     os.mkdir(fpath)
-                if os.path.exists(os.path.join(self.__data_dir, thandle + ".csv")):
-                    csv_file = open(os.path.join(self.__data_dir, thandle + ".csv"), "a+")
-                    fieldnames = ["MementoTimestamp", "URI-M", "FollowerCount", "DateTime"]
-                    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-                else:
-                    csv_file = open(os.path.join(self.__data_dir, thandle + ".csv"), "w")
-                    fieldnames = ["MementoTimestamp", "URI-M", "FollowerCount", "DateTime"]
-                    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-                    writer.writeheader()
-                writer.writerow(fcontent)
+                if not os.path.exists(os.path.join(os.getcwd(), "graphs")):
+                    os.mkdir(os.path.join(os.getcwd(), "graphs"))
+                csv_file = open(os.path.join(fpath, thandle + ".csv"), "w")
+                fieldnames = ["MementoTimestamp", "URI-M", "FollowerCount", "DateTime"]
+                writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+                writer.writeheader()
+                for row in fcontent:
+                    writer.writerow(row)
                 csv_file.close()
+            else:
+                fcontent = json.dumps(fcontent)
+                sys.stdout.write(str(fcontent))
             return True
+                
         except Exception as e:
             sys.stderr.write("write_follower_count: " + str(e) + "\n")
         return False
 
-    def lookup_follower_count(self, thandle="john", urim=None):
+    def lookup_follower_count(self, thandle="john"):
         """
         This function looks up for a Follower Count.
 
@@ -281,10 +281,8 @@ class DataManager:
         Returns:
             (bool): Dictionary of Follower Count on Success and None on Failure
         """
-        if os.path.exists(os.path.join(self.__data_dir, thandle + ".csv")):
-            with open(os.path.join(self.__data_dir, thandle + ".csv"), "r") as csv_file:
-                reader = csv.DictReader(csv_file)
-                for row in reader:
-                    if row["URI-M"] == urim:
-                        return row["FollowerCount"]
-        return None
+        if self.__config.out:
+            fpath = os.path.join(os.getcwd(), "followerOutput")
+            if os.path.exists(os.path.join(fpath, thandle + ".csv")):
+                return True
+        return False

@@ -2,6 +2,7 @@ import ast
 import csv
 import os
 import sys
+import json
 from datetime import datetime
 from core.utils.util_functions import Utils
 
@@ -12,64 +13,6 @@ class FollowerAnalysis:
         self.__constants = constants
         self.__dmanager = dmanager
         self.__conf_reader = conf_reader
-    
-    '''
-    Analyze TimeMap for distribution of archives
-    '''
-    def timemap_analysis(self):
-        turl = self.__constants.TWITTER_URL + self.__thandle
-        tcontent = self.__dmanager.read_timemap(turl)
-        larchive_2018 = []
-        larchive_2019 = []
-        lacount = [[], []]
-        for entry in tcontent.split("\n"):
-            entry = entry.rstrip()
-            if entry:
-                if not entry.startswith("@"):
-                    entry = entry.split(" ", 1)
-                    if 20180101000000 <= int(entry[0]) <= self.__conf_reader.start_time:
-                        entry = ast.literal_eval(entry[1])
-                        archive, mtimestamp, thandle, url_lang, with_replies = \
-                            self.__dmanager.get_murl_info(entry["uri"])
-                        if mtimestamp:
-                            if archive not in larchive_2018:
-                                larchive_2018.append(archive)
-                                lacount[0].append(1)
-                            else:
-                                index = larchive_2018.index(archive)
-                                lacount[0][index] += 1
-                    elif self.__conf_reader.start_time <= int(entry[0]) <= self.__conf_reader.end_time:
-                        entry = ast.literal_eval(entry[1])
-                        archive, mtimestamp, thandle, url_lang, with_replies = \
-                            self.__dmanager.get_murl_info(entry["uri"])
-                        if mtimestamp:
-                            if archive not in larchive_2019:
-                                larchive_2019.append(archive)
-                                lacount[1].append(1)
-                            else:
-                                index = larchive_2019.index(archive)
-                                lacount[1][index] += 1
-
-        with open("/data/Nauman/MementoDump/FollowerCount/" + self.__thandle + "_analysis.csv", "w") as csv_file:
-            larchives = list(set(larchive_2018) | set(larchive_2019))
-            irow = {}
-            writer = csv.DictWriter(csv_file, fieldnames=larchives)
-            writer.writeheader()
-            for archive in larchives:
-                if archive in larchive_2018:
-                    index = larchive_2018.index(archive)
-                    irow[archive] = lacount[0][index]
-                else:
-                    irow[archive] = 0
-            writer.writerow(irow)
-            for archive in larchives:
-                if archive in larchive_2019:
-                    index = larchive_2018.index(archive)
-                    irow[archive] = lacount[1][index]
-                else:
-                    irow[archive] = 0
-            writer.writerow(irow)
-            csv_file.close()
 
     '''
     Function to create daily and original sampled mementos for Follower Count  analysis
@@ -78,7 +21,11 @@ class FollowerAnalysis:
     def relative_analysis(self):
         lrows = []
         mtimestamp = []
-        with open(os.path.join(self.__conf_reader.out_dir, self.__thandle + ".csv"), "r") as csv_file:
+        if not self.__conf_reader.out:
+            return
+
+        fpath = os.path.join(os.getcwd(), "followerOutput")
+        with open(os.path.join(fpath, self.__thandle + ".csv"), "r") as csv_file:
             reader = csv.DictReader(csv_file)
             for entry in reader:
                 lrows.append(entry)
@@ -87,7 +34,10 @@ class FollowerAnalysis:
         if self.__conf_reader.debug: sys.stdout.write("Relative Analysis: CSV File Read" + "\n")
         fieldnames = ["MementoTimestamp", "URI-M", "FollowerCount", "DateTime", "AbsRelative", "AbsPrevRelative",
                       "PerRelative", "PerPrevRelative", "RateRelative", "RatePrevRelative"]
-        with open(os.path.join(self.__conf_reader.out_dir, self.__thandle + "_analysis.csv"), "w") as \
+        if self.__conf_reader.out:
+            if self.__conf_reader.out:
+                fpath = os.path.join(os.getcwd(), "followerOutput")
+        with open(os.path.join(fpath, self.__thandle + "_analysis.csv"), "w") as \
                 csv_file:
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             writer.writeheader()
@@ -110,3 +60,7 @@ class FollowerAnalysis:
                        "PerPrevRelative": round((rpabs / int(lrows[i - 1]["FollowerCount"])) * 100, 2),
                        "RateRelative": round(rabs / tdiff, 5), "RatePrevRelative": round(rpabs / tpdiff, 5)}
                 writer.writerow(row)
+
+    def write_follower_output(self):
+
+        print("writeFollowrOutput")

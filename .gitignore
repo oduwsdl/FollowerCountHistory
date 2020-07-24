@@ -1,2 +1,4 @@
-phonedude_mln/phonedude_mln.csv
-weiglemc/weiglemc.csv
+fch/graphs/*
+fch/followerOutput/*
+fch/follower/data/mementos.txt
+fch/follower/data/NonParsedMementos.txt

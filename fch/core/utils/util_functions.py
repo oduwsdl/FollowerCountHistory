@@ -90,27 +90,17 @@ class Utils:
             (int): Minimum Timestamp
             (int): maximum Timestamp
         """
-        if config.mode == 1:
-            min_time = config.start_time
-            max_time = config.end_time
-            if not min_time and not max_time:
-                min_time = constants.TWITTER_FOUND_DATE
-                cur_time = datetime.datetime.now()
-                max_time = cur_time.strftime("%Y%m%d%H%M%S")
-            elif not min_time and max_time:
-                min_time = constants.TWITTER_FOUND_DATE
-            elif min_time and not max_time:
-                cur_time = datetime.datetime.now()
-                max_time = cur_time.strftime("%Y%m%d%H%M%S")
-        else:
-            tstamps = []
-            cursor = db_live.find()
-            for row in cursor:
-                tstamps.append(int(row["TweetTimestamp"]))
-            min_time = min(tstamps)
-            max_time = max(tstamps)
-            min_time = datetime.datetime.fromtimestamp(min_time).strftime('%Y%m%d%H%M%S')
-            max_time = datetime.datetime.fromtimestamp(max_time).strftime('%Y%m%d%H%M%S')
+        min_time = str(config.start_time)
+        max_time = str(config.end_time)
+        if not Utils.memento_to_epochtime(min_time) and not Utils.memento_to_epochtime(max_time):
+            min_time = constants.TWITTER_FOUND_DATE
+            cur_time = datetime.datetime.now()
+            max_time = cur_time.strftime("%Y%m%d%H%M%S")
+        elif not Utils.memento_to_epochtime(min_time) and Utils.memento_to_epochtime(max_time):
+            min_time = constants.TWITTER_FOUND_DATE
+        elif Utils.memento_to_epochtime(min_time) and not Utils.memento_to_epochtime(max_time):
+            cur_time = datetime.datetime.now()
+            max_time = cur_time.strftime("%Y%m%d%H%M%S")
         return int(min_time), int(max_time)
 
     @staticmethod

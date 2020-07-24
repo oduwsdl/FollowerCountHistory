@@ -40,21 +40,19 @@ def run_follower(**kw):
         fcount.get_follower_count()
         if config_reader.debug: sys.stdout.write("follower count successfully completed for : " + kw["thandle"] + "\n")
     else:
-        if config_reader.debug: sys.stdout.write("Enter valid Memento DateTime in 14 digits format (yyyymmddHHMMSS)" + "\n")
+        if config_reader.debug: sys.stdout.write("Enter valid Memento Datetime in 14 digits format (yyyymmddHHMMSS)" + "\n")
 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Follower Count History (fch)", prog="fch")
 
-    # follower_parser = subparsers.add_parser("follower", help="Get follower count for a Twitter handle")
     parser.add_argument("thandle", help="Enter a Twitter handle")
-    parser.add_argument("--st", type=int, metavar="", default=20190101000000, help="Start timestamp (in "
-                                                                                            "Memento datetime format)")
-    parser.add_argument("--et", type=int, metavar="", default=20200419235959, help="End timestamp (in "
-                                                                                            "Memento datetime format)")
+    parser.add_argument("--st", type=int, metavar="", default=-1, help="Memento start datetime format (in RFC 1123 datetime format)")
+    parser.add_argument("--et", type=int, metavar="", default=-1, help="Memento end datetime (in RFC 1123 datetime format)")
     parser.add_argument("--freq", metavar="", default="all", help="Sampling frequency of mementos(in seconds)")
-    parser.add_argument("--debug", action='store_true', default=False, help="Debug Mode")
-    # parser.add_argument("--out", action='store_true', default=False, help="Returns csv file output")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--out", action='store_true', default=False, help="Path for follower count output in CSV format")
+    group.add_argument("--debug", action='store_true', default=False, help="Debug Mode")
     parser.set_defaults(func=run_follower)
     args = parser.parse_args()
     try:

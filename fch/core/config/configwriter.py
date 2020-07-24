@@ -26,17 +26,15 @@ class ConfigurationWriter:
             self.__config.read(os.path.join(self.__conf_path, "config.ini"))
         self.__conf_record = dict(Start_Timestamp=kwargs.get('st', int(self.__config['SETUP']['START_TIMESTAMP'])),
                                   End_Timestamp=kwargs.get('et', int(self.__config['SETUP']['END_TIMESTAMP'])),
-                                  Mode=kwargs.get('mode', int(self.__config['SETUP']['MODE'])),
-                                  Output_Dir=kwargs.get('out', self.__config['SETUP']['OUTPUT_DIR']),
-                                  Log_Dir=kwargs.get('log_dir', self.__config['SETUP']['LOG_DIR']),
-                                  Frequency=kwargs.get('frequency', self.__config['SETUP']['FREQUENCY']),
+                                  Output_Dir=kwargs.get('out', True if self.__config['SETUP']['OUTPUT'] == "True" else False),
+                                  Internediary_Dir=self.__config['SETUP']['INTERMIDIARY_DIR'],
+                                  Frequency=kwargs.get('freq', self.__config['SETUP']['FREQUENCY']),
                                   Database=kwargs.get("db_conf", "followercount"),
                                   Debug_Mode=kwargs.get("debug", True if self.__config['SETUP']['DEBUG_MODE'] == "True"
                                   else False),
                                   Twitter_Languages=self.__config['TWITTER']['LANGUAGES'].split(" "),
                                   Twitter_Domain=self.__config['TWITTER']['DOMAIN'].split(" "),
                                   Twitter_Path=self.__config['TWITTER']['PATH'],
-                                  Twitter_Url=self.__config['TWITTER']['URL'],
-                                  Backup_Logs=self.__config['SETUP']['BACKUP_LOGS'])
+                                  Twitter_Url=self.__config['TWITTER']['URL'])
         with open(os.path.join(self.__conf_path, self.__conf_record["Database"]), "wb") as ofile:
             pickle.dump(self.__conf_record, ofile)

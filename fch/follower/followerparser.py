@@ -14,6 +14,7 @@ class FollowerParser:
         self.__constants = constants
         self.__dmanager = dmanager
         self.__conf_reader = conf_reader
+        self.__lfollower = []
 
     '''
     Function to get list of URIM-s between a timerange
@@ -43,6 +44,7 @@ class FollowerParser:
                     else:
                         if self.__conf_reader.debug: sys.stdout.write("parse_mementos: read_memento:  " + str(urim) + "   True" + "\n") 
                         self.__parse_memento(mcontent, urim)
+            self.__dmanager.write_follower_count(self.__thandle, self.__lfollower)
 
     '''    
     Function to fetch Followers, Tweet Count, Likes, Replies. retweets from each memento
@@ -103,13 +105,9 @@ class FollowerParser:
                                                 return
                     if self.__conf_reader.debug: sys.stdout.write("URIM: {} Converted: {}".format(murl, tcount) + "\n")
                     response = Utils.get_murl_info(urim, self.__thandle.lower())
-                    self.__dmanager.write_follower_count(self.__thandle.lower(), {"MementoTimestamp":
-                                                                                      response["timestamp"],
-                                                                          "URI-M": murl, "FollowerCount":
-                                                                                      tcount,
-                                                          "DateTime": datetime.strptime(response["timestamp"],
-                                                                                        "%Y%m%d%H%M%S")
-                                                                                  })
+                    self.__lfollower.append({"MementoTimestamp": response["timestamp"],
+                                                "URI-M": murl, "FollowerCount":tcount,
+                                                "DateTime": datetime.strptime(response["timestamp"], "%Y%m%d%H%M%S")})
             else:
                 with open(os.path.join(os.path.dirname(__file__), "data", "NonParsedMementos.txt"), "a+") as \
                         ofile:
