@@ -75,22 +75,21 @@ JSON Output
 ```
 ### Output to files
 
-Command to return csv files as output
+**Command to return csv files as output**
 
 ```shell
 $ ./fch --st=20200101000000 --et=20200331000000  --freq=2592000 --out joebiden
 ```
-
-* `<TwitterHandle>.csv`: CSV file with fields, MementoTimestamp (dateTime of the memento), URI-M (link to the memento), FollowerCount(follower count from URI-M), and DateTime (memento datetime in [RFC 1123](http://www.csgnetwork.com/timerfc1123calc.html) format).
+* `<TwitterHandle>.csv`: CSV file with fields, MementoTimestamp (dateTime of the memento), URI-M (link to the memento), FollowerCount(follower count from URI-M), and	 DateTime (memento datetime in [RFC 1123](http://www.csgnetwork.com/timerfc1123calc.html) format).
 * `<TwitterHandle>_analysis.csv`: CSV file with fields, MementoTimestamp (datetime of the memento), URI-M (link to the memento), FollowerCount(follower count from the URI-M), DateTime (memento datetime in [RFC 1123](http://www.csgnetwork.com/timerfc1123calc.html) format), AbsRelative (follower count increase/decrease w.r.t the first memento), AbsPrevRelative (follower Count increase/decrease w.r.t the previous memento), PerRelative (pecentage increase/decrease in follower count w.r.t the first memento), PerPrevRelative (pecentage increase/decrease in follower count w.r.t the previous memento), RateRelative (daily Twitter follower growth rate w.r.t the first memento), and RatePrevRelative (daily Twitter follower growth rate w.r.t the previous memento). 
 
-Command to create graphs for each handle
+**Command to create graphs for each handle**
 
 ```shell
 $ Rscript --vanilla twitterFollowerCount.R <twitter-username-without-@>
 ```
 
-(List of Graphs for each Twitter handle):
+* (List of Graphs for each Twitter handle):
 
 File Name| Description
 ---------|------------
