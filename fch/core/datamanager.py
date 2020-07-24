@@ -262,6 +262,8 @@ class DataManager:
                     writer.writerow(row)
                 csv_file.close()
             else:
+                for row in fcontent:
+                    row.pop("DateTime")  
                 fcontent = json.dumps(fcontent)
                 sys.stdout.write(str(fcontent))
             return True

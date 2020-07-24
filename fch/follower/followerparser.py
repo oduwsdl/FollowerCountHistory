@@ -5,7 +5,7 @@ import ast
 from datetime import datetime
 import os
 import sys
-
+from functools import partial
 
 class FollowerParser:
     
@@ -57,52 +57,18 @@ class FollowerParser:
             if soup.find("html").has_attr("lang"):
                 mcode = soup.find("html")["lang"]
                 if mcode:
-                    follower_tags = soup.select("li.ProfileNav-item.ProfileNav-item--followers")
-                    if follower_tags:
-                        if self.__conf_reader.debug: sys.stdout.write("__parse_case1: " + str(murl) + "\n")
-                        tcount = self.__parse_case1(follower_tags)
-                        if self.__conf_reader.debug: sys.stdout.write("__parse_case1: " + str(murl) + "  " + str(tcount) + "\n")
-                    else:
-                        follower_tags = soup.select("ul.user-stats.clearfix")
-                        if follower_tags:
-                            if self.__conf_reader.debug: sys.stdout.write("__parse_case2: " + str(murl) + "\n")
-                            tcount = self.__parse_case2(follower_tags)
-                            if self.__conf_reader.debug: sys.stdout.write("__parse_case2: " + str(murl) + "  " + str(tcount) + "\n")
-                        else:
-                            follower_tags = soup.select("table.stats.js-mini-profile-stats")
-                            if follower_tags:
-                                if self.__conf_reader.debug: sys.stdout.write("__parse_case3: " + str(murl) + "\n")
-                                tcount = self.__parse_case3(follower_tags)
-                                if self.__conf_reader.debug: sys.stdout.write("__parse_case3: " + str(murl) + "  " + str(tcount) + "\n")
-                            else:
-                                follower_tags = soup.select("ul.stats.js-mini-profile-stats")
-                                if follower_tags:
-                                    if self.__conf_reader.debug: sys.stdout.write("__parse_case4: " + str(murl) + "\n")
-                                    tcount = self.__parse_case4(follower_tags)
-                                    if self.__conf_reader.debug: sys.stdout.write("__parse_case4: " + str(murl) + "  " + str(tcount) + "\n")
-                                else:
-                                    follower_tags = soup.select("div.stats")
-                                    if follower_tags:
-                                        if self.__conf_reader.debug: sys.stdout.write("__parse_case5: " + str(murl) + "\n")
-                                        tcount = self.__parse_case5(follower_tags)
-                                        if self.__conf_reader.debug: sys.stdout.write("__parse_case5: " + str(murl) + "  " + str(tcount) + "\n")
-                                    else:
-                                        follower_tags = soup.select("div#section" + "\n")
-                                        if follower_tags:
-                                            if self.__conf_reader.debug: sys.stdout.write("__parse_case6: " + str(murl) + "\n")
-                                            tcount = self.__parse_case6(follower_tags)
-                                            if self.__conf_reader.debug: sys.stdout.write("__parse_case6: " + str(murl) + "  " + str(tcount) + "\n")   
-                                        else:
-                                            follower_tags = soup.select("table.stats")
-                                            if follower_tags:
-                                                if self.__conf_reader.debug: sys.stdout.write("__parse_case5: " + str(murl) + "\n")
-                                                tcount = self.__parse_case5(follower_tags)
-                                                if self.__conf_reader.debug: sys.stdout.write("__parse_case5: " + str(murl) + "  " + str(tcount) + "\n") 
-                                            else:
-                                                with open(os.path.join(os.path.dirname(__file__), "data", "NonParsedMementos.txt"), "a+") as \
-                                                    ofile:
-                                                    ofile.write("Non parsed due to selector problem: " + murl + "\n")
-                                                return
+                    lselector = ["li.ProfileNav-item.ProfileNav-item--followers", "ul.user-stats.clearfix", 
+                                    "table.stats.js-mini-profile-stats", "ul.stats.js-mini-profile-stats",
+                                    "div.stats", "div#section", "table.stats"]
+                    
+                    lfollower_tags = list(filter(lambda x: soup.select(x), lselector))
+
+                    lfunctions = [partial(self.__parse_case1, soup), partial(self.__parse_case2, soup), 
+                                    partial(self.__parse_case3, soup), partial(self.__parse_case4, soup), 
+                                    partial(self.__parse_case5, soup), partial(self.__parse_case6, soup), 
+                                    partial(self.__parse_case5, soup)]
+                    x = lambda lfollower_tags, lfunctions, lselector: lfunctions[lselector.index(lfollower_tags[0])]() 
+                    tcount = x(lfollower_tags, lfunctions, lselector) 
                     if self.__conf_reader.debug: sys.stdout.write("URIM: {} Converted: {}".format(murl, tcount) + "\n")
                     response = Utils.get_murl_info(urim, self.__thandle.lower())
                     self.__lfollower.append({"MementoTimestamp": response["timestamp"],
@@ -115,7 +81,9 @@ class FollowerParser:
         except Exception as e:
             sys.stderr.write("parse_memento: URL: {}: Error: {}".format(murl, e) + "\n")
 
-    def __parse_case1(self, follower_tags):
+
+    def __parse_case1(self, soup):
+        follower_tags = soup.select("li.ProfileNav-item.ProfileNav-item--followers")
         for tags in follower_tags:
             if self.__conf_reader.debug: sys.stdout.write(str(tags) + "\n")
             fcount_temp = None
