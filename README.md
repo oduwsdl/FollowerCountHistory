@@ -46,6 +46,10 @@ optional arguments:
   --freq      Sampling frequency of mementos(in seconds)
   --out       output in CSV format
 ```
+* --st: Default is set to Twitter birth date (2006-03-21 12:00:00)
+* --et: Default is set to the current datetime
+* --freq: Default is set to download all the mementos
+* --out: If True returns output as CSV files in the output/followerCSV folder, else returns JSON output to stdout 
 
 ## Output
 
@@ -102,4 +106,33 @@ File Name| Description
 
 ## Examples
 
-###
+* Command to find Twitter follower count for a Twitter handle from all the mementos since the account creation up until today
+  * Output to stdout as JSON
+  ```shell
+  $  ./fch joebiden
+  ```
+  * Output as CSV files
+  ```shell
+  $  ./fch --out joebiden
+  ```
+* Command to find Twitter follower count for a Twitter handle with a monthly sampling of the the mementos since the account creation up until today
+  ```
+  Frequency = 3600*24*30 
+  Frequency = 2592000
+  ```
+* Output to stdout as JSON
+  ```shell
+  $  ./fch --freq=2592000 joebiden
+  ```
+  * Output as CSV files
+  ```shell
+  $  ./fch --out --freq=2592000 joebiden
+  ```
+* Command to find Twitter follower count for a Twitter handle with a monthly sampling of the the mementos within a specified start and end timestamp
+  * Output to stdout as JSON
+  ```shell
+  $  ./fch --st=20200101000000 --et=20200331000000 --freq=2592000 joebiden
+  ```
+  * Output as CSV files
+  ```shell
+  $  ./fch --out --st=20200101000000 --et=20200331000000 --freq=2592000 joebiden
