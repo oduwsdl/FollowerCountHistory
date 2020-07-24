@@ -14,7 +14,7 @@ This is a Python module that collects Twitter follower count from the web archiv
 $ git clone https://github.com/oduwsdl/FollowerCountHistory.git
 $ cd FollowerCountHistory
 $ pip install -r requirements.txt
-$  fch [-h] [--st] [--et] [--freq] [--out | --debug] <twitter-username-without-@>
+$  ./fch [-h] [--st] [--et] [--freq] [--out | --debug] <twitter-username-without-@>
 ```
 
 To just create the graph from a csv file
