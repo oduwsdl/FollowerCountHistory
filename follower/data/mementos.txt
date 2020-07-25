@@ -1,0 +1,3 @@
+{'rel': 'memento', 'datetime': 'Wed, 01 Jan 2020 00:19:59 GMT', 'uri': 'https://web.archive.org/web/20200101001959/https://twitter.com/JoeBiden'}
+{'rel': 'memento', 'datetime': 'Fri, 31 Jan 2020 12:00:28 GMT', 'uri': 'https://web.archive.org/web/20200131120028/https://twitter.com/joebiden'}
+{'rel': 'memento', 'datetime': 'Sun, 01 Mar 2020 00:12:10 GMT', 'uri': 'https://web.archive.org/web/20200301001210/https://twitter.com/JoeBiden/'}

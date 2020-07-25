@@ -30,7 +30,7 @@ class ConfigurationWriter:
                                   Internediary_Dir=self.__config['SETUP']['INTERMIDIARY_DIR'],
                                   Frequency=kwargs.get('freq', self.__config['SETUP']['FREQUENCY']),
                                   Database=kwargs.get("db_conf", "followercount"),
-                                  Debug_Mode=kwargs.get("debug", self.__config['SETUP']['DEBUG_MODE']),
+                                  Debug_Mode=kwargs.get("debug", True if self.__config['SETUP']['DEBUG_MODE'] == "True" else False),
                                   Twitter_Languages=self.__config['TWITTER']['LANGUAGES'].split(" "),
                                   Twitter_Domain=self.__config['TWITTER']['DOMAIN'].split(" "),
                                   Twitter_Path=self.__config['TWITTER']['PATH'],
