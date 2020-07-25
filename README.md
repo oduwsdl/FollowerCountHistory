@@ -29,7 +29,13 @@ $ Rscript --vanilla twitterFollowerCount.R <twitter-username-without-@>
 We have published a docker image at [oduwsdl/fch](https://hub.docker.com/r/oduwsdl/fch), which can be used to run this tool as following:
 
 ```
-$ docker container run --rm -it -v </OUTPUT/DIR>:/app/<TWITTER_HANDLE> oduwsdl/fch [OPTIONS] <TWITTER_HANDLE>
+$  docker container run --rm -it   -v <Output Directory>:/app  -u $(id -u):$(id -g)  oduwsdl/fch:2.0 [options] <Twitter Handle>
+```
+
+Example of output being mapped to the current directory
+
+```
+$  docker container run --rm -it -v $PWD:/app -u $(id -u):$(id -g) oduwsdl/fch:2.0 --out  --st=20200101000000 --et=20200331000000 --freq=2592000  joebiden
 ```
 
 ### Options
