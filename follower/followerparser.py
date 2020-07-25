@@ -108,13 +108,15 @@ class FollowerParser:
                 tcount = tcount * 1000000000
         return tcount
 
-    def __parse_case2(self, follower_tags):
+    def __parse_case2(self, soup):
+        follower_tags = soup.select("ul.user-stats.clearfix")
         if self.__conf_reader.debug: sys.stdout.write(follower_tags[0] + "\n")
         tags = follower_tags[0].select("a.user-stats-count.user-stats-followers")[0].text
         tcount = re.sub("\D", '', tags)
         return tcount
 
-    def __parse_case3(self, follower_tags):
+    def __parse_case3(self, soup):
+        follower_tags = soup.select("table.stats.js-mini-profile-stats")
         # for i in follower_tags[0].select("a.js-nav"):
         #    self.__write_logs(i)
         if self.__conf_reader.debug: sys.stdout.write(follower_tags[0].select("a.js-nav")[2] + "\n")
@@ -126,10 +128,9 @@ class FollowerParser:
         tcount = re.sub("\D", '', tcount)
         return tcount 
 
-    def __parse_case4(self, follower_tags):
-        for i in follower_tags[0].select("a.js-nav"):
-            if self.__conf_reader.debug: sys.stdout.write(i + "\n")
-        if self.__conf_reader.debug: sys.stdout.write(follower_tags[0].select("a")[2] + "\n")
+    def __parse_case4(self, soup):
+        follower_tags = soup.select("ul.stats.js-mini-profile-stats")
+        if self.__conf_reader.debug: sys.stdout.write(str(follower_tags[0]) + "\n")
         tags = follower_tags[0].select("a")[2].select("strong")
         if tags[0].has_attr("title"):
             tcount = tags[0]["title"]
@@ -138,20 +139,23 @@ class FollowerParser:
         tcount = re.sub("\D", '', tcount)
         return tcount
 
-    def __parse_case5(self, follower_tags):
-        if self.__conf_reader.debug: sys.stdout.write(follower_tags[0] + "\n")
+    def __parse_case5(self, soup):
+        follower_tags = soup.select("div.stats")
+        if self.__conf_reader.debug: sys.stdout.write(str(follower_tags[0]) + "\n")
         tags = follower_tags[0].select("span.stats_count.numeric")[1].text
         tcount = re.sub("\D", '', tags)
         return tcount
 
-    def __parse_case6(self, follower_tags):
-        if self.__conf_reader.debug: sys.stdout.write(follower_tags[0] + "\n")
+    def __parse_case6(self, soup):
+        follower_tags = soup.select("div#section")
+        if self.__conf_reader.debug: sys.stdout.write(str(follower_tags[0]) + "\n")
         tags = follower_tags[0].select("table.stats")[0].select("a#follower_count_link")[0].select("span.stats_count.numeric")[0].text
         tcount = re.sub("\D", '', tags)
         return tcount
 
-    def __parse_case7(self, follower_tags):
-        if self.__conf_reader.debug: sys.stdout.write(follower_tags[0] + "\n")
+    def __parse_case7(self, soup):
+        follower_tags = soup.select("table.stats")
+        if self.__conf_reader.debug: sys.stdout.write(str(follower_tags[0]) + "\n")
         tags = follower_tags[0].select("span.stats_count.numeric")[1].text
         tcount = re.sub("\D", '', tags)
         return tcount
