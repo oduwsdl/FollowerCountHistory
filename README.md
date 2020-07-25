@@ -1,6 +1,9 @@
 # Twitter Follower Count History via Web Archives
 This is a Python module that collects Twitter follower count from the web archives using [MemGator](https://github.com/oduwsdl/MemGator) for a given Twitter handle. The module parses the follower count by identifying various CSS Selectors that match the follower count element on the historical Twitter pages for almost every major overhaul their page layout has gone through. The program collects all of the memento data points by default.
 
+[1] Miranda Smith. 2018. Twitter Follower Count History via the Internet Archive. (March 2018). Retrieved July 25, 2020 from https://ws-dl.blogspot.com/2018/03/2018-03-14-twitter-follower-count.html
+
+
 ## Installation and Usage
 ### Dependencies
 * Python 3
@@ -21,7 +24,7 @@ To just create the graph from a csv file
 ```shell
 $ git clone https://github.com/oduwsdl/FollowerCountHistory.git
 $ cd FollowerCountHistory
-$ Rscript --vanilla twitterFollowerCount.R <twitter-username-without-@>
+$ Rscript twitterFollowerCount.R <twitter-username-without-@>
 ```
 
 ### Docker
