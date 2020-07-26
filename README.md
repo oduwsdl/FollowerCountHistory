@@ -1,5 +1,5 @@
 # Twitter Follower Count History via Web Archives
-This is a Python module that collects Twitter follower count from the web archives using [MemGator](https://github.com/oduwsdl/MemGator) for a given Twitter handle. The module parses the follower count by identifying various CSS Selectors that match the follower count element on the historical Twitter pages for almost every major overhaul their page layout has gone through. The program collects all of the memento data points by default.
+Follower Count History is a Python module that collects Twitter follower count from the web archives using [MemGator](https://github.com/oduwsdl/MemGator) for a given Twitter handle. The module parses the follower count by identifying various CSS Selectors that match the follower count element on the historical Twitter pages for almost every major overhaul their page layout has gone through. The program collects all of the memento data points by default.
 
 [1] Miranda Smith. 2018. Twitter Follower Count History via the Internet Archive. (March 2018). Retrieved July 25, 2020 from https://ws-dl.blogspot.com/2018/03/2018-03-14-twitter-follower-count.html
 
@@ -29,7 +29,7 @@ $ Rscript twitterFollowerCount.R <twitter-username-without-@>
 
 ### Docker
 
-We have published a docker image at [oduwsdl/fch](https://hub.docker.com/r/oduwsdl/fch) with 2.0 tag, which can be used to run this tool as following:
+We have published a docker image at [oduwsdl/fch](https://hub.docker.com/r/oduwsdl/fch) with the tag <b>2.0</b>, which can be used to run this tool as following:
 
 ```
 $  docker container run --rm -it   -v <Output Directory>:/app  -u $(id -u):$(id -g)  oduwsdl/fch:2.0 [options] <Twitter Handle>
@@ -50,13 +50,13 @@ positional arguments:
 
 optional arguments:
   -h, --help  show this help message and exit
-  --st        Memento start datetime (in RFC 1123 datetime format)
-  --et        Memento end datetime (in RFC 1123 datetime format)
+  --st        Memento start datetime (YYYYMMDDHHMMSS)
+  --et        Memento end datetime (YYYYMMDDHHMMSS)
   --freq      Sampling frequency of mementos(in seconds)
   --out       output in CSV format
 ```
-* --st: Default is set to Twitter birth date (2006-03-21 12:00:00)
-* --et: Default is set to the current datetime
+* --st: Default is set to Twitter birth date (2006-03-21 12:00:00). It accepts the memento datetime in [RFC 8601](https://www.iso.org/iso-8601-date-and-time-format.html) fourteen digit variation.
+* --et: Default is set to the current datetime. It accepts the memento datetime in [RFC 8601](https://www.iso.org/iso-8601-date-and-time-format.html) fourteen digit variation.
 * --freq: Default is set to download all the mementos
 * --out: If True returns output as CSV files in the output/followerCSV folder, else returns JSON output to stdout 
 
