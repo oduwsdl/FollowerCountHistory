@@ -1,7 +1,6 @@
-fch/graphs/*
-fch/followerOutput/*
-fch/follower/data/mementos.txt
-fch/follower/data/NonParsedMementos.txt
+follower/data/mementos.txt
+follower/data/NonParsedMementos.txt
+core/config/data/followercount
 */__pycache__
 */*/__pycache__
 output/
