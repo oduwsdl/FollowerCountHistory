@@ -47,7 +47,7 @@ if __name__ == "__main__":
     parser.add_argument("thandle", help="Enter a Twitter handle")
     parser.add_argument("--st", type=int, metavar="", default=-1, help="Memento start datetime (in RFC 1123 datetime format)")
     parser.add_argument("--et", type=int, metavar="", default=-1, help="Memento end datetime (in RFC 1123 datetime format)")
-    parser.add_argument("--freq", metavar="", default="all", help="Sampling frequency of mementos (in seconds)")
+    parser.add_argument("--freq", type=int, metavar="", default=0, help="Sampling frequency of mementos (in seconds)")
     parser.add_argument("--out", action='store_true', default=False, help="Output in CSV format")
     parser.set_defaults(func=run_follower)
     args = parser.parse_args()
