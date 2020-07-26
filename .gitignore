@@ -1,2 +1,6 @@
-phonedude_mln/phonedude_mln.csv
-weiglemc/weiglemc.csv
+follower/data/mementos.txt
+follower/data/NonParsedMementos.txt
+core/config/data/followercount
+*/__pycache__
+*/*/__pycache__
+output/
