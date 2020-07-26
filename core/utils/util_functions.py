@@ -38,7 +38,8 @@ class Utils:
             mepoch = int((mdate - epoch).total_seconds())
             return mepoch
         except Exception as e:
-            sys.stderr.write("memento_to_epochtime: " + str(mtime) + "   " + str(e) + "\n")
+            if mtime != "-1":
+                sys.stderr.write("memento_to_epochtime: " + str(mtime) + "   " + str(e) + "\n")
         return None
 
     @staticmethod
@@ -141,7 +142,7 @@ class Utils:
                         mtime = line_split[0]
                         if config_reader.debug: sys.stdout.write("parse_timemap: " + str(mtime) + "\n")
                         if stime <= int(mtime) <= etime:
-                            if config_reader.frequency == "all":
+                            if config_reader.frequency == 0:
                                 lurims.append(memento)
                             else:
                                 mtime = Utils.memento_to_epochtime(mtime)

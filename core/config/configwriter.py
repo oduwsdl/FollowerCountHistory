@@ -28,7 +28,7 @@ class ConfigurationWriter:
                                   End_Timestamp=kwargs.get('et', int(self.__config['SETUP']['END_TIMESTAMP'])),
                                   Output_Dir=kwargs.get('out', True if self.__config['SETUP']['OUTPUT'] == "True" else False),
                                   Internediary_Dir=self.__config['SETUP']['INTERMIDIARY_DIR'],
-                                  Frequency=kwargs.get('freq', self.__config['SETUP']['FREQUENCY']),
+                                  Frequency=kwargs.get('freq', int(self.__config['SETUP']['FREQUENCY'])),
                                   Database=kwargs.get("db_conf", "followercount"),
                                   Debug_Mode=kwargs.get("debug", True if self.__config['SETUP']['DEBUG_MODE'] == "True" else False),
                                   Twitter_Languages=self.__config['TWITTER']['LANGUAGES'].split(" "),
