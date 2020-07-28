@@ -40,7 +40,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Follower Count History (fch)", prog="fch")
     parser.add_argument("thandle", help="Enter a Twitter handle/ URL")
     parser.add_argument("--st", type=int, metavar="", default=-1, help="Memento start datetime (in RFC 1123 datetime format)")
-    parser.add_argument("-et", type=int, metavar="", default=-1, help="Memento end datetime (in RFC 1123 datetime format)")
+    parser.add_argument("--et", type=int, metavar="", default=-1, help="Memento end datetime (in RFC 1123 datetime format)")
     parser.add_argument("--freq", type=int, metavar="", default=0, help="Sampling frequency of mementos (in seconds)")
     parser.add_argument("-f", metavar="", help="Output file path (Supported Extensions: JSON and CSV)")
     parser.set_defaults(func=run_follower)

@@ -5,3 +5,4 @@ core/config/data/followercount
 */*/__pycache__
 *.pyc
 output/
+.RData
