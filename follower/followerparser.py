@@ -44,7 +44,7 @@ class FollowerParser:
                     else:
                         if self.__conf_reader.debug: sys.stdout.write("parse_mementos: read_memento:  " + str(urim) + "   True" + "\n") 
                         self.__parse_memento(mcontent, urim)
-            self.__dmanager.write_follower_count(self.__thandle, self.__lfollower)
+        return self.__lfollower    
 
     '''    
     Function to fetch Followers, Tweet Count, Likes, Replies. retweets from each memento
@@ -72,8 +72,7 @@ class FollowerParser:
                     if self.__conf_reader.debug: sys.stdout.write("URIM: {} Converted: {}".format(murl, tcount) + "\n")
                     response = Utils.get_murl_info(urim, self.__thandle.lower())
                     self.__lfollower.append({"MementoTimestamp": response["timestamp"],
-                                                "URI-M": murl, "FollowerCount":tcount,
-                                                "DateTime": datetime.strptime(response["timestamp"], "%Y%m%d%H%M%S")})
+                                                "URI-M": murl, "FollowerCount":tcount})
             else:
                 with open(os.path.join(os.path.dirname(__file__), "data", "NonParsedMementos.txt"), "a+") as \
                         ofile:

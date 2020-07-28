@@ -18,24 +18,59 @@ class FollowerAnalysis:
     Function to create daily and original sampled mementos for Follower Count  analysis
     '''
 
-    def relative_analysis(self):
-        lrows = []
-        mtimestamp = []
-        if not self.__conf_reader.out:
-            return
-
-        fpath = os.path.join(os.getcwd(), "output", "followerCSV")
-        with open(os.path.join(fpath, self.__thandle + ".csv"), "r") as csv_file:
-            reader = csv.DictReader(csv_file)
-            for entry in reader:
-                lrows.append(entry)
-
-        lrows = sorted(lrows, key=lambda i: i['MementoTimestamp'])
-        if self.__conf_reader.debug: sys.stdout.write("Relative Analysis: CSV File Read" + "\n")
-        fieldnames = ["MementoTimestamp", "URI-M", "FollowerCount", "DateTime", "AbsRelative", "AbsPrevRelative",
-                      "PerRelative", "PerPrevRelative", "RateRelative", "RatePrevRelative"]
-
+    def relative_analysis(self, lfollower):
+        lfollower = sorted(lfollower, key=lambda i: i['MementoTimestamp'])
+        for i in range (0, len(lfollower)):
+          if i == 0:
+            lfollower[i]["AbsGrowth"] = 0
+            lfollower[i]["RelGrowth"] = 0
+            lfollower[i]["AbsPerGrowth"] = 0
+            lfollower[i]["RelPerGrowth"] = 0
+            lfollower[i]["AbsFolRate"] = 0
+            lfollower[i]["RelFolRate"] = 0
+          else:
+            tpdiff = int(datetime.strptime(lfollower[i]["MementoTimestamp"], "%Y%m%d%H%M%S").timestamp() -
+                         datetime.strptime(lfollower[i - 1]["MementoTimestamp"], "%Y%m%d%H%M%S").timestamp())
+            tdiff = int(datetime.strptime(lfollower[i]["MementoTimestamp"], "%Y%m%d%H%M%S").timestamp() -
+                        datetime.strptime(lfollower[0]["MementoTimestamp"], "%Y%m%d%H%M%S").timestamp())
+            abs_growth = int(lfollower[i]["FollowerCount"]) - int(lfollower[0]["FollowerCount"])
+            rel_gowth = int(lfollower[i]["FollowerCount"]) - int(lfollower[i - 1]["FollowerCount"])
+            lfollower[i]["AbsGrowth"] = abs_growth
+            lfollower[i]["RelGrowth"] = rel_gowth
+            lfollower[i]["AbsPerGrowth"] = round((abs_growth / int(lfollower[0]["FollowerCount"])) * 100, 2)
+            lfollower[i]["RelPerGrowth"] = round((rel_gowth / int(lfollower[i -1]["FollowerCount"])) * 100, 2)
+            lfollower[i]["AbsFolRate"] = round(abs_growth / tdiff, 5)
+            lfollower[i]["RelFolRate"] = round(rel_gowth / tpdiff, 5)
         if self.__conf_reader.out:
+          ext = self.__conf_reader.out.split(".")[1].lower()
+        else:
+          ext = None
+        if not self.__conf_reader.out or ext == "csv":
+          fieldnames = ["MementoTimestamp", "URI-M", "FollowerCount", "AbsGrowth", "RelGrowth",
+              "AbsPerGrowth", "RelPerGrowth", "AbsFolRate", "RelFolRate"]
+          if not self.__conf_reader.out:
+            writer = csv.DictWriter(sys.stdout, fieldnames=fieldnames)
+            fobj = None
+          elif ext == "csv":
+            fobj = open(self.__conf_reader.out, "w")
+            writer = csv.DictWriter(fobj, fieldnames=fieldnames)
+          writer.writeheader()
+          writer.writerows(lfollower)
+          if fobj:
+            fobj.close()
+        elif ext == "json":
+          fobj = open(self.__conf_reader.out, "w") 
+          json.dump(lfollower, fobj)
+          fobj.close()
+        else:
+          sys.stderr.write("Unsupported file type \n")
+        '''
+        exit()
+        if self.__conf_reader.debug: sys.stdout.write("Relative Analysis: parsed json received" + "\n")
+
+
+
+        if self.__conf_reader.out and ext in ("csv", "json"):
             fpath = os.path.join(os.getcwd(), "output", "followerCSV")
         with open(os.path.join(fpath, self.__thandle + "_analysis.csv"), "w") as \
                 csv_file:
@@ -60,3 +95,4 @@ class FollowerAnalysis:
                        "PerPrevRelative": round((rpabs / int(lrows[i - 1]["FollowerCount"])) * 100, 2),
                        "RateRelative": round(rabs / tdiff, 5), "RatePrevRelative": round(rpabs / tpdiff, 5)}
                 writer.writerow(row)
+'''

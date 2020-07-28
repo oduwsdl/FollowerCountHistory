@@ -3,4 +3,5 @@ follower/data/NonParsedMementos.txt
 core/config/data/followercount
 */__pycache__
 */*/__pycache__
+*.pyc
 output/
