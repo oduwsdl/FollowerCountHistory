@@ -39,6 +39,12 @@ Example of output being mapped to the current directory
 $  docker container run --rm -it -v $PWD:/app -u $(id -u):$(id -g) oduwsdl/fch:2.0 --out  --st=20200101000000 --et=20200331000000 --freq=2592000  joebiden
 ```
 
+Example of docker command for generating follower graph
+
+```
+$ docker container run --rm -it -v $PWD:/app -u $(id -u):$(id -g) --entrypoint /bin/bash oduwsdl/fch:2.0
+I have no name!@736a209b64d6:/app$ ./fch.py --freq=2592000 joebiden| Rscript twitterFollowerCount.R
+```
 ### Options
 ```
 Follower Count History (fch)
