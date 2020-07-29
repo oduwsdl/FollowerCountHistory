@@ -54,8 +54,8 @@ positional arguments:
 
 optional arguments:
   -h, --help  show this help message and exit
-  --st        Memento start datetime (in RFC 1123 datetime format)
-  -et         Memento end datetime (in RFC 1123 datetime format)
+  --st        Memento start datetime (YYYYMMDDHHMMSS)
+  -et         Memento end datetime (YYYYMMDDHHMMSS)
   --freq      Sampling frequency of mementos (in seconds)
   -f          Output file path (Supported Extensions: JSON and CSV)
 ```
