@@ -4,8 +4,6 @@ args = commandArgs(trailingOnly=TRUE)
 if (length(args)==0) {
   input<-file('stdin', 'r')
   data_set <- read.csv(input, header=TRUE, as.is=TRUE)
-  path = ""
-  thandle = "abc"
   # stop("At least one argument must be supplied (input file).n", call.=FALSE)
 } else if (length(args)==1) {
   ext = unlist(strsplit(args[1], "\\."))[-1]
@@ -17,6 +15,14 @@ if (length(args)==0) {
 	print("Unsupported file type")
 	quit("yes")
   }
+}
+
+for(urim in data_set$URIM){
+	splitter = unlist(strsplit(urim, "\\/"))
+	if(all(splitter[3] == "web.archive.org") || all(splitter[3] == "wayback.archive-it.org")){
+		thandle = splitter[9]
+		filepath = thandle
+	}
 }
 
 f2si2 <- function (number, rounding=F, sep=" ") {
@@ -54,7 +60,7 @@ options("scipen" = 10)
 ###
 
 
-jpeg(file=paste(path, "/", thandle,"-follower-count.jpg", sep=""), height=625, width=875)
+jpeg(file=paste(filepath,"-follower-count.jpg", sep=""), height=625, width=875)
 y_pos <- pretty(data_set$FollowerCount, n=5)
 y_pretty <- lapply(y_pos, f2si2, rounding=T, sep="")
 titletext <- paste('@', thandle,'\'s Twitter Follower Growth Over Time', sep='')
@@ -71,7 +77,7 @@ mtext(side=2, text="Follower Count", line = 4, cex=1.2)
 ###
 
 # Code for Relative Follower Growth
-jpeg(file=paste(path, "/", thandle, "-follower-growth.jpg", sep=""), height=625, width=875)
+jpeg(file=paste(filepath, "-follower-growth.jpg", sep=""), height=625, width=875)
 y_pos <- pretty(data_set$AbsGrowth, n=5)
 y_pretty <- lapply(y_pos, f2si2, rounding=T, sep="")
 y_right_pos <- pretty(data_set$AbsPerGrowth, n=5)
@@ -98,7 +104,7 @@ legend("topleft",legend=c("Follower Count Increase","Percentage Change"),
 # Absolute to Prev. Memento Follower Count
 ###
 
-jpeg(file=paste(path, "/", thandle, "-follower-growth-relative.jpg",sep=''), height=625, width=875)
+jpeg(file=paste(filepath, "-follower-growth-relative.jpg",sep=''), height=625, width=875)
 y_pos <- pretty(data_set$RelGrowth, n=5)
 y_pretty <- lapply(y_pos, f2si2, rounding=T, sep="")
 titletext <- paste('@', thandle,'\'s Increase in Follower Count Over Time w.r.t. Previous Memento', sep='')
@@ -115,7 +121,7 @@ mtext(side = 2, text = "Increase in Follower Count", line = 4, cex=1.2)
 ###
 
 
-jpeg(file=paste(path, "/", thandle, "-follower-perc-growth-relative.jpg",sep=''), height=625, width=875)
+jpeg(file=paste(filepath, "-follower-perc-growth-relative.jpg",sep=''), height=625, width=875)
 y_pos <- pretty(data_set$RelPerGrowth, n=5)
 par(mar=c(5.1, 6.1, 4.1, 2.1))
 titletext <- paste('@', thandle,'\'s % Change in Follower Count Over Time w.r.t. Previous Memento', sep='')
@@ -135,7 +141,7 @@ data_set$AbsFolRate <- data_set$AbsFolRate * 24 * 3600
 ###
 
 
-jpeg(file=paste(path, "/", thandle, "-follower-rate.jpg", sep=''), height=625, width=875)
+jpeg(file=paste(filepath, "-follower-rate.jpg", sep=''), height=625, width=875)
 y_pos <- pretty(data_set$AbsFolRate, n=5)
 titletext <- paste('@', thandle,'\'s New Followers Increase in Over Time w.r.t. First Memento', sep='')
 par(mar=c(5.1, 6.1, 4.1, 2.1))
@@ -155,7 +161,7 @@ data_set$RelFolRate <- data_set$RelFolRate * 24 * 3600
 ###
 
 
-jpeg(file=paste(path, "/", thandle, "-follower-rate-relative.jpg", sep=''), height=625, width=875)
+jpeg(file=paste(filepath, "-follower-rate-relative.jpg", sep=''), height=625, width=875)
 y_pos <- pretty(data_set$RelFolRate, n=5)
 y_pretty <- lapply(y_pos, f2si2, rounding=T, sep="")
 titletext <- paste('@', thandle,'\'s New Followers Increase Over Time w.r.t. Previous Memento', sep='')

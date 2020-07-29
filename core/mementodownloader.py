@@ -24,7 +24,7 @@ class MementoDownloader:
         todo_frontier = self.__parse_timemap()
         if self.__conf_reader.debug: sys.stdout.write("fetch_mementos:  Frontier: " + str(todo_frontier) + "\n")
         if todo_frontier:
-            with concurrent.futures.ThreadPoolExecutor(max_workers=len(todo_frontier)) as executor:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
                 for frontier_list in todo_frontier:
                     future_result = {executor.submit(self.__download_memento, url):
                                          url for url in frontier_list["urims"]}
@@ -48,12 +48,12 @@ class MementoDownloader:
         '''
         mcount = [0, 0, 0]
         mintime, maxtime = Utils.get_timerange(self.__constants, self.__conf_reader)
-        if self.__conf_reader.debug: sys.stdout.write("fetch_mementos:  Minimum Live Timestamp: {} Maximum Live Timestamp: {}".format
+        if self.__conf_reader.debug: sys.stdout.write("__parse_timemap:  Minimum Live Timestamp: {} Maximum Live Timestamp: {}".format
                                (mintime, maxtime) + "\n")
         timemap_content = Utils.parse_timemap(self.__dmanager, self.__constants, self.__turl, self.__conf_reader, mintime, maxtime)
-        if self.__conf_reader.debug: sys.stdout.write("fetch_mementos: " + str(timemap_content) + "\n")
+        if self.__conf_reader.debug: sys.stdout.write("__parse_timemap: " + str(timemap_content) + "\n")
         for memento in timemap_content:
-            response = Utils.get_murl_info(memento["uri"], self.__thandle)
+            response = Utils.get_murl_info(memento, self.__thandle)
             # If archive.is mementos then skip it, as we do not parse them
             # Added to remove wayback.archive.it
             if response["archive"] not in ["archive.is", "archive.md"]:
@@ -61,7 +61,7 @@ class MementoDownloader:
                     if mintime <= int(response["timestamp"]) <= maxtime:
                         # Count total number of mementos for twitter handle within the time range
                         mcount[0] += 1 
-                        memento_present = self.__dmanager.lookup_memento(memento["uri"])
+                        memento_present = self.__dmanager.lookup_memento(memento)
                         if memento_present:
                             mcount[1] += 1
                         else:
@@ -94,6 +94,6 @@ class MementoDownloader:
         try:
             self.__dmanager.write_memento(murl)
         except requests.exceptions.ConnectionError as err:
-            sys.stderr.write("make_network_request: ConnectionError: " + murl + " " + str(err) + "\n")
+            sys.stderr.write("__download_memento: ConnectionError: " + murl + " " + str(err) + "\n")
         except Exception as err:
-            sys.stderr.write("make_network_request: " + murl + " " + str(err) + "\n")
+            sys.stderr.write("__download_memento: " + murl + " " + str(err) + "\n")

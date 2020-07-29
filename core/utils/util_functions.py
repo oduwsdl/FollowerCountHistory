@@ -138,7 +138,9 @@ class Utils:
                     line_split = line.rstrip().split(" ", 1)
                     memento = ast.literal_eval(line_split[1])
                     if config_reader.debug: sys.stdout.write("parse_timemap: " + str(memento) + "\n")
-                    if memento["uri"].split("/")[2]  not in ["archive.is", "archive.today", "perma.cc", "webarchive.loc.gov"]:
+                    response = Utils.get_turl_info(turl)
+                    response = Utils.get_murl_info(memento, response["handle"])
+                    if response["archive"] not in ["archive.is", "archive.today", "perma.cc", "webarchive.loc.gov", "web.archive.bibalex.org"]:
                         mtime = line_split[0]
                         if config_reader.debug: sys.stdout.write("parse_timemap: " + str(mtime) + "\n")
                         if stime <= int(mtime) <= etime:

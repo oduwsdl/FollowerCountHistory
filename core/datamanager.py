@@ -62,50 +62,50 @@ class DataManager:
         Returns:
             (bool): True on Success and False on Failure
         """
-        if self.lookup_memento(murl):
-            return True
-        else:
-            response = Utils.get_murl_info(murl, self.__thandle)
-            mpath = self.__memento_dir
-            if not os.path.exists(mpath):
-                os.mkdir(mpath)
-            mpath = os.path.join(mpath, response["handle"].lower())
-            if not os.path.exists(mpath):
-                os.mkdir(mpath)
-            mpath = os.path.join(mpath, response["domain"])
-            if not os.path.exists(mpath):
-                os.mkdir(mpath)
-            mpath = os.path.join(mpath, response["archive"])
-            if not os.path.exists(mpath):
-                os.mkdir(mpath)
-            mpath = os.path.join(mpath, response["wrep"] + response["lang"])
-            if not os.path.exists(mpath):
-                os.mkdir(mpath)
-            try:
-                mpath = os.path.join(mpath, str(response["timestamp"]) + self.__constants.WARC_EXT)
-                with open(mpath, "wb") as output:
-                    writer = WARCWriter(output, gzip=True)
-                    resp = requests.get(murl,
-                                        headers={'Accept-Encoding': 'identity'},
-                                        stream=True, timeout=120)
-
-                    # get raw headers from urllib3
-                    headers_list = resp.raw.headers.items()
-                    http_headers = StatusAndHeaders('200 OK', headers_list, protocol='HTTP/1.1')
-                    record = writer.create_warc_record(mpath, 'response',
-                                                       payload=resp.raw,
-                                                       http_headers=http_headers)
-                    writer.write_record(record)
+        try:
+            if self.lookup_memento(murl):
                 return True
-            except requests.exceptions.TooManyRedirects as err:
-                with open("/home/msiddique/WSDL_Work/CongressionalTweetsAnalysis/TooMany.txt", "a+") as fobj:
-                    fobj.write(murl + "\n")
-            except requests.exceptions.ConnectTimeout as err:
-                sys.stderr.write(murl + "Connection Timeout" + "\n")
-                with open("/home/msiddique/WSDL_Work/CongressionalTweetsAnalysis/TooMany.txt", "a+") as fobj:
-                    fobj.write(murl + "\n")
-            except Exception as e:
-                sys.stderr.write("Memento Write Error: " + str(e) + "URL:" + murl + "\n")
+            else:
+                response = Utils.get_murl_info(murl, self.__thandle)
+                mpath = self.__memento_dir
+                if not os.path.exists(mpath):
+                    os.mkdir(mpath)
+                mpath = os.path.join(mpath, response["handle"].lower())
+                if not os.path.exists(mpath):
+                    os.mkdir(mpath)
+                mpath = os.path.join(mpath, response["domain"])
+                if not os.path.exists(mpath):
+                    os.mkdir(mpath)
+                mpath = os.path.join(mpath, response["archive"])
+                if not os.path.exists(mpath):
+                    os.mkdir(mpath)
+                mpath = os.path.join(mpath, response["wrep"] + response["lang"])
+                if not os.path.exists(mpath):
+                    os.mkdir(mpath)
+                try:
+                    mpath = os.path.join(mpath, str(response["timestamp"]) + self.__constants.WARC_EXT)
+                    with open(mpath, "wb") as output:
+                        writer = WARCWriter(output, gzip=True)
+                        resp = requests.get(murl,
+                                            headers={'Accept-Encoding': 'identity'},
+                                            stream=True, timeout=120)
+
+                        # get raw headers from urllib3
+                        headers_list = resp.raw.headers.items()
+                        http_headers = StatusAndHeaders('200 OK', headers_list, protocol='HTTP/1.1')
+                        record = writer.create_warc_record(mpath, 'response',
+                                                           payload=resp.raw,
+                                                           http_headers=http_headers)
+                        writer.write_record(record)
+                    return True
+                except requests.exceptions.TooManyRedirects as err:
+                    sys.stderr.write(murl + "Too Many redirects" + "\n")
+                except requests.exceptions.ConnectTimeout as err:
+                    sys.stderr.write(murl + "Connection Timeout" + "\n")
+                except Exception as e:
+                    sys.stderr.write("Memento Write Error: " + str(e) + "URL:" + murl + "\n")
+        except Exception as e:
+            sys.stderr.write("Memento Write Error: " + murl + " " + str(e) + "\n")            
         return False
 
     def read_memento(self, murl=None):
@@ -119,13 +119,20 @@ class DataManager:
             (str): Content on Success and None on Failure
         """
         mpath = self.lookup_memento(murl)
+        response = Utils.get_murl_info(murl, self.__thandle)
         if mpath:
             if self.__constants.WARC_EXT in mpath:
                 try:
                     with open(mpath, 'rb') as stream:
                         for record in ArchiveIterator(stream):
                             if record.rec_type == 'response':
-                                return record.content_stream().read()
+                                if self.__config.debug: sys.stdout.write(str(murl["uri"]) + " Content Size: " + str(record.rec_headers.get_header('Content-Length')) + "\n")
+                                if (int(response["timestamp"]) < 20090101000000 and int(record.rec_headers.get_header('Content-Length')) < 1000) or (int(response["timestamp"]) > 20200101000000 and int(record.rec_headers.get_header('Content-Length')) < 100000):
+                                    return None
+                                else:              
+                                    return record.content_stream().read()
+
+
                 except Exception as e:
                     sys.stderr.write("Memento Read Error: " + str(e) + "\n")
             elif ".html" in mpath:
@@ -146,17 +153,20 @@ class DataManager:
         Returns:
             (str): Path of Memento on Success and None on Failure
         """
-        response = Utils.get_murl_info(murl, self.__thandle)
-        mpath = os.path.join(self.__memento_dir, response["handle"].lower(), response["domain"], response["archive"],
-                             response["wrep"], response["lang"], response["timestamp"] + self.__constants.WARC_EXT)
-        if os.path.exists(mpath) and os.stat(mpath).st_size > 0:
-            return mpath
-        else:
-            mpath = os.path.join(self.__memento_dir, response["handle"].lower(), response["archive"],
-                                 response["wrep"], response["lang"], response["timestamp"] + ".html")
-            if os.path.exists(mpath):
+        try:
+            response = Utils.get_murl_info(murl, self.__thandle)
+            mpath = os.path.join(self.__memento_dir, response["handle"].lower(), response["domain"], response["archive"],
+                                 response["wrep"], response["lang"], response["timestamp"] + self.__constants.WARC_EXT)
+            if os.path.exists(mpath) and os.stat(mpath).st_size > 0:
                 return mpath
-        return None
+            else:
+                mpath = os.path.join(self.__memento_dir, response["handle"].lower(), response["archive"],
+                                     response["wrep"], response["lang"], response["timestamp"] + ".html")
+                if os.path.exists(mpath):
+                    return mpath
+            return None
+        except Exception as e:
+            sys.stderr.write("Memento Lookup Error: " + str(murl) + "  " + str(e) + "\n")
 
     def write_timemap(self, turl=None, tm_content=None):
         """
@@ -229,13 +239,16 @@ class DataManager:
         Returns:
             (bool): True on Success and False on Failure
         """
-        tmpath = self.__timemap_dir
-        tresponse = Utils.get_turl_info(turl)
-        tmpath = os.path.join(tmpath, tresponse["handle"].lower())
-        tmpath = os.path.join(tmpath, tresponse["domain"], tresponse["wrep"] + tresponse["lang"])
-        if os.path.exists(tmpath) and len(os.listdir(tmpath)) > 0:
-            return True
-        return False
+        try:
+            tmpath = self.__timemap_dir
+            tresponse = Utils.get_turl_info(turl)
+            tmpath = os.path.join(tmpath, tresponse["handle"].lower())
+            tmpath = os.path.join(tmpath, tresponse["domain"], tresponse["wrep"] + tresponse["lang"])
+            if os.path.exists(tmpath) and len(os.listdir(tmpath)) > 0:
+                return True
+            return False
+        except Exception as e:
+            self.stderr.write("LookUp TimeMap: " + str(turl) + "  " + str(e) + "\n")
 
     def write_follower_count(self, thandle="john", fcontent=None):
         """

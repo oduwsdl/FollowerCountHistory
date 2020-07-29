@@ -19,8 +19,11 @@ class FollowerAnalysis:
     '''
 
     def relative_analysis(self, lfollower):
+      try:
         lfollower = sorted(lfollower, key=lambda i: i['MementoTimestamp'])
+        if self.__conf_reader.debug: sys.stdout.write(str(lfollower) + "\n")
         for i in range (0, len(lfollower)):
+          if self.__conf_reader.debug: sys.stdout.write(str(lfollower[i]) + "\n")
           if i == 0:
             lfollower[i]["AbsGrowth"] = 0
             lfollower[i]["RelGrowth"] = 0
@@ -33,6 +36,10 @@ class FollowerAnalysis:
                          datetime.strptime(lfollower[i - 1]["MementoTimestamp"], "%Y%m%d%H%M%S").timestamp())
             tdiff = int(datetime.strptime(lfollower[i]["MementoTimestamp"], "%Y%m%d%H%M%S").timestamp() -
                         datetime.strptime(lfollower[0]["MementoTimestamp"], "%Y%m%d%H%M%S").timestamp())
+            if tpdiff == 0:
+              tpdiff = 1
+            if tdiff == 0:
+              tdiff = 1
             abs_growth = int(lfollower[i]["FollowerCount"]) - int(lfollower[0]["FollowerCount"])
             rel_gowth = int(lfollower[i]["FollowerCount"]) - int(lfollower[i - 1]["FollowerCount"])
             lfollower[i]["AbsGrowth"] = abs_growth
@@ -41,12 +48,13 @@ class FollowerAnalysis:
             lfollower[i]["RelPerGrowth"] = round((rel_gowth / int(lfollower[i -1]["FollowerCount"])) * 100, 2)
             lfollower[i]["AbsFolRate"] = round(abs_growth / tdiff, 5)
             lfollower[i]["RelFolRate"] = round(rel_gowth / tpdiff, 5)
+        if self.__conf_reader.debug: sys.stdout.write("Analysis done on follower JSON goig for writing" + "\n")
         if self.__conf_reader.out:
           ext = self.__conf_reader.out.split(".")[1].lower()
         else:
           ext = None
         if not self.__conf_reader.out or ext == "csv":
-          fieldnames = ["MementoTimestamp", "URI-M", "FollowerCount", "AbsGrowth", "RelGrowth",
+          fieldnames = ["MementoTimestamp", "URIM", "FollowerCount", "AbsGrowth", "RelGrowth",
               "AbsPerGrowth", "RelPerGrowth", "AbsFolRate", "RelFolRate"]
           if not self.__conf_reader.out:
             writer = csv.DictWriter(sys.stdout, fieldnames=fieldnames)
@@ -64,35 +72,6 @@ class FollowerAnalysis:
           fobj.close()
         else:
           sys.stderr.write("Unsupported file type \n")
-        '''
-        exit()
-        if self.__conf_reader.debug: sys.stdout.write("Relative Analysis: parsed json received" + "\n")
-
-
-
-        if self.__conf_reader.out and ext in ("csv", "json"):
-            fpath = os.path.join(os.getcwd(), "output", "followerCSV")
-        with open(os.path.join(fpath, self.__thandle + "_analysis.csv"), "w") as \
-                csv_file:
-            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-            writer.writeheader()
-            row = {"MementoTimestamp": lrows[0]["MementoTimestamp"], "URI-M": lrows[0]["URI-M"],
-                   "FollowerCount": lrows[0]["FollowerCount"], "DateTime": lrows[0]["DateTime"],
-                   "AbsRelative": 0, "AbsPrevRelative": 0, "PerRelative": 0, "PerPrevRelative": 0,
-                   "RateRelative": 0, "RatePrevRelative": 0}
-            writer.writerow(row)
-            for i in range(1, len(lrows)):
-                tpdiff = int(datetime.strptime(lrows[i]["DateTime"], "%Y-%m-%d %H:%M:%S").timestamp() -
-                             datetime.strptime(lrows[i - 1]["DateTime"], "%Y-%m-%d %H:%M:%S").timestamp())
-                tdiff = int(datetime.strptime(lrows[i]["DateTime"], "%Y-%m-%d %H:%M:%S").timestamp() -
-                            datetime.strptime(lrows[0]["DateTime"], "%Y-%m-%d %H:%M:%S").timestamp())
-                rabs = int(lrows[i]["FollowerCount"]) - int(lrows[0]["FollowerCount"])
-                rpabs = int(lrows[i]["FollowerCount"]) - int(lrows[i - 1]["FollowerCount"])
-                row = {"MementoTimestamp": lrows[i]["MementoTimestamp"], "URI-M": lrows[i]["URI-M"],
-                       "FollowerCount": lrows[i]["FollowerCount"], "DateTime": lrows[i]["DateTime"],
-                       "AbsRelative": rabs, "AbsPrevRelative": rpabs,
-                       "PerRelative": round((rabs / int(lrows[0]["FollowerCount"])) * 100, 2),
-                       "PerPrevRelative": round((rpabs / int(lrows[i - 1]["FollowerCount"])) * 100, 2),
-                       "RateRelative": round(rabs / tdiff, 5), "RatePrevRelative": round(rpabs / tpdiff, 5)}
-                writer.writerow(row)
-'''
+      except Exception as e:
+        sys.stderr.write("FollowerAnalysis: " + str(e) + "\n") 
+ 
