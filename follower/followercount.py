@@ -27,10 +27,10 @@ class FollowerCount:
             mobject.get_memento()
             if self.__conf_reader.debug: sys.stdout.write("Start: (main): Fetching mementos" + "\n")
             fparser = FollowerParser(self.__thandle, self.__constants, self.__dmanager, self.__conf_reader)
-            fparser.parse_mementos(turl)
+            lfollower = fparser.parse_mementos(turl)
             if self.__conf_reader.debug: sys.stdout.write("Start: (main): Parsing mementos" + "\n")
             fanalysis = FollowerAnalysis(self.__thandle, self.__conf_reader, self.__constants, self.__dmanager)
-            fanalysis.relative_analysis()
+            fanalysis.relative_analysis(lfollower)
             if self.__conf_reader.debug: sys.stdout.write("Start: (main): Follower Analysis" + "\n")
 
     def __cleanup_files(self):

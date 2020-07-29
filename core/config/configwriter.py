@@ -26,7 +26,7 @@ class ConfigurationWriter:
             self.__config.read(os.path.join(self.__conf_path, "config.ini"))
         self.__conf_record = dict(Start_Timestamp=kwargs.get('st', int(self.__config['SETUP']['START_TIMESTAMP'])),
                                   End_Timestamp=kwargs.get('et', int(self.__config['SETUP']['END_TIMESTAMP'])),
-                                  Output_Dir=kwargs.get('out', True if self.__config['SETUP']['OUTPUT'] == "True" else False),
+                                  Output_Dir=kwargs.get('f', None),
                                   Internediary_Dir=self.__config['SETUP']['INTERMIDIARY_DIR'],
                                   Frequency=kwargs.get('freq', int(self.__config['SETUP']['FREQUENCY'])),
                                   Database=kwargs.get("db_conf", "followercount"),

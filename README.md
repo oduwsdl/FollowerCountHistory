@@ -7,24 +7,22 @@ Follower Count History is a Python module that collects Twitter follower count f
 ## Installation and Usage
 ### Dependencies
 * Python 3
-* R* (to create graph)
 * bs4
 * warcio
 * requests
+* R* (Optional: to create graph)
 
 ### Usage
 ```shell
 $ git clone https://github.com/oduwsdl/FollowerCountHistory.git
 $ cd FollowerCountHistory
 $ pip install -r requirements.txt
-$  ./fch.py [-h] [--st] [--et] [--freq] [--out] <twitter-username-without-@>
+$  ./fch.py [-h] [--st] [--et] [--freq] [--out] <Twitter handle/ Twitter URL> 
 ```
 
 To just create the graph from a csv file
 ```shell
-$ git clone https://github.com/oduwsdl/FollowerCountHistory.git
-$ cd FollowerCountHistory
-$ Rscript twitterFollowerCount.R <twitter-username-without-@>
+$ Rscript twitterFollowerCount.R <CSV file path>
 ```
 
 ### Docker
@@ -41,35 +39,50 @@ Example of output being mapped to the current directory
 $  docker container run --rm -it -v $PWD:/app -u $(id -u):$(id -g) oduwsdl/fch:2.0 --out  --st=20200101000000 --et=20200331000000 --freq=2592000  joebiden
 ```
 
+Example of docker command for generating follower graph
+
+```
+$ docker container run --rm -it -v $PWD:/app -u $(id -u):$(id -g) --entrypoint /bin/bash oduwsdl/fch:2.0
+I have no name!@736a209b64d6:/app$ ./fch.py --freq=2592000 joebiden| Rscript twitterFollowerCount.R
+```
 ### Options
 ```
 Follower Count History (fch)
 
 positional arguments:
-  thandle     Enter a Twitter handle
+  thandle     Enter a Twitter handle/ URL
 
 optional arguments:
   -h, --help  show this help message and exit
   --st        Memento start datetime (YYYYMMDDHHMMSS)
-  --et        Memento end datetime (YYYYMMDDHHMMSS)
-  --freq      Sampling frequency of mementos(in seconds)
-  --out       output in CSV format
+  -et         Memento end datetime (YYYYMMDDHHMMSS)
+  --freq      Sampling frequency of mementos (in seconds)
+  -f          Output file path (Supported Extensions: JSON and CSV)
 ```
 * --st: Default is set to Twitter birth date (2006-03-21 12:00:00). It accepts the memento datetime in [RFC 8601](https://www.iso.org/iso-8601-date-and-time-format.html) fourteen digit variation.
 * --et: Default is set to the current datetime. It accepts the memento datetime in [RFC 8601](https://www.iso.org/iso-8601-date-and-time-format.html) fourteen digit variation.
 * --freq: Default is set to download all the mementos
-* --out: If True returns output as CSV files in the output/followerCSV folder, else returns JSON output to stdout 
+* -f: Accepts JSON and CSV file paths for output. If no value is provided, output is returned to stdout in CSV format. 
 
 ## Output
 
-The program can generate output in two formats: firstly, JSON Object to stdout and secondly, CSV files and follower graphs in the output folder.
+The program can generate output in JSON and CSV format. The -f option directs the output of CSV or JSON files to the supplied file path. By default, the module returns the outut in CSV format to the stdout.  
 
-### Output to stdout 
+### Output Fields
 
-Command to return JSON object as output 
-```shell
-$ ./fch.py --st=20200101000000 --et=20200331000000  --freq=2592000 joebiden
-```
+Field| Description
+---------|------------
+MementoTimestamp |         memento datetime in [RFC 8601](https://www.iso.org/iso-8601-date-and-time-format.html) fourteen digit variation
+URI-M            |         link to the memento 
+FollowerCount    |         follower count from the URI-M
+AbsGrowth        |         follower count increase/decrease w.r.t. the first memento
+RelGrowth	 | 	   follower Count increase/decrease w.r.t. the previous memento 
+AbsPerGrowth 	 |	   pecentage increase/decrease in follower count w.r.t. the first memento
+RelPerGrowth	 | 	   pecentage increase/decrease in follower count w.r.t. the previous memento
+AbsFolRate 	 |	   daily Twitter follower growth rate w.r.t. the first memento
+RelFolRate	 | 	   daily Twitter follower growth rate w.r.t. the previous memento 
+
+### Sample Outputs
 JSON Output
 ```json
 [{
@@ -86,29 +99,42 @@ JSON Output
 	"FollowerCount": 4202148
 }]
 ```
-### Output to files
 
-**Command to return csv files as output**
+CSV Output
+```csv
+MementoTimestamp,URI-M,FollowerCount,AbsGrowth,RelGrowth,AbsPerGrowth,RelPerGrowth,AbsFolRate,RelFolRate
+20200101001959,https://web.archive.org/web/20200101001959/https://twitter.com/JoeBiden,4048208,0,0,0,0,0,0
+20200131120028,https://web.archive.org/web/20200131120028/https://twitter.com/joebiden,4142510,94302,94302,2.33,2.33,0.0358,0.0358
+20200301001210,https://web.archive.org/web/20200301001210/https://twitter.com/JoeBiden/,4202148,153940,59638,3.8,1.44,0.0297,0.02339
+```
+### Output to stdout 
 
 ```shell
-$ ./fch.py --st=20200101000000 --et=20200331000000  --freq=2592000 --out joebiden
+$ ./fch.py --st=20200101000000 --et=20200331000000  --freq=2592000 joebiden
 ```
-* `<TwitterHandle>.csv`: CSV file with fields, MementoTimestamp (dateTime of the memento), URI-M (link to the memento), FollowerCount(follower count from URI-M), and	 DateTime (memento datetime in [RFC 1123](http://www.csgnetwork.com/timerfc1123calc.html) format).
-* `<TwitterHandle>_analysis.csv`: CSV file with fields, MementoTimestamp (datetime of the memento), URI-M (link to the memento), FollowerCount(follower count from the URI-M), DateTime (memento datetime in [RFC 1123](http://www.csgnetwork.com/timerfc1123calc.html) format), AbsRelative (follower count increase/decrease w.r.t the first memento), AbsPrevRelative (follower Count increase/decrease w.r.t the previous memento), PerRelative (pecentage increase/decrease in follower count w.r.t the first memento), PerPrevRelative (pecentage increase/decrease in follower count w.r.t the previous memento), RateRelative (daily Twitter follower growth rate w.r.t the first memento), and RatePrevRelative (daily Twitter follower growth rate w.r.t the previous memento). 
+
+### Output to files
+
+**Command to return output to the file path**
+
+```shell
+$ ./fch.py --st=20200101000000 --et=20200331000000  --freq=2592000 -f=output/joebiden.csv joebiden
+$ ./fch.py --st=20200101000000 --et=20200331000000  --freq=2592000 -f=output/joebiden.json joebiden
+```
 
 **Command to create graphs for each handle**
 
 ```shell
-$ Rscript --vanilla twitterFollowerCount.R <twitter-username-without-@>
+$ Rscript twitterFollowerCount.R <file path>
 ```
 
-* (List of Graphs for each Twitter handle):
+* List of Graphs for each Twitter handle:
 
 File Name| Description
 ---------|------------
 `<Twitterhandle>`-follower-count.jpg|                shows Twitter follower growth over time
 `<Twitterhandle>`-follower-growth-relative.jpg|      shows Twitter follower growth w.r.t. previous memento
-`<Twitterhandle>`-follower-growth.jpg|               shows absolute number and pecentage Twitter follower growth w.r.t to first memento
+`<Twitterhandle>`-follower-growth.jpg|               shows absolute number and pecentage Twitter follower growth w.r.t. to first memento
 `<Twitterhandle>`-follower-perc-growth-relative.jpg| shows Twitter follower growth over time w.r.t. previous memento in percentage
 `<Twitterhandle>`-follower-rate-relative.jpg|        shows new followers added per day w.r.t. previous memento
 `<Twitterhandle>`-follower-rate.jpg|                 shows new followers added per day w.r.t. first memento
@@ -116,32 +142,32 @@ File Name| Description
 ## Examples
 
 * Command to find Twitter follower count for a Twitter handle from all the mementos since the account creation up until today
-  * Output to stdout as JSON
+  * Output to stdout as CSV
   ```shell
   $  ./fch.py joebiden
   ```
-  * Output as CSV files
+  * Output as CSV file
   ```shell
-  $  ./fch.py --out joebiden
+  $  ./fch.py -f=joebiden.csv joebiden
   ```
 * Command to find Twitter follower count for a Twitter handle with a monthly sampling of the the mementos since the account creation up until today
   ```
   Frequency = 3600*24*30 
   Frequency = 2592000
   ```
-* Output to stdout as JSON
+* Output to stdout as CSV
   ```shell
   $  ./fch.py --freq=2592000 joebiden
   ```
-  * Output as CSV files
+  * Output as CSV file
   ```shell
-  $  ./fch.py --out --freq=2592000 joebiden
+  $  ./fch.py -f=joebiden.csv --freq=2592000 joebiden
   ```
 * Command to find Twitter follower count for a Twitter handle with a monthly sampling of the the mementos within a specified start and end timestamp
-  * Output to stdout as JSON
+  * Output to stdout as CSV
   ```shell
   $  ./fch.py --st=20200101000000 --et=20200331000000 --freq=2592000 joebiden
   ```
-  * Output as CSV files
+  * Output as CSV file
   ```shell
-  $  ./fch.py --out --st=20200101000000 --et=20200331000000 --freq=2592000 joebiden
+  $  ./fch.py -f=joebiden.csv --st=20200101000000 --et=20200331000000 --freq=2592000 joebiden
