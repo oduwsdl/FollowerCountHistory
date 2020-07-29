@@ -7,10 +7,10 @@ Follower Count History is a Python module that collects Twitter follower count f
 ## Installation and Usage
 ### Dependencies
 * Python 3
-* R* (to create graph)
 * bs4
 * warcio
 * requests
+* R* (Optional: to create graph)
 
 ### Usage
 ```shell
@@ -39,6 +39,12 @@ Example of output being mapped to the current directory
 $  docker container run --rm -it -v $PWD:/app -u $(id -u):$(id -g) oduwsdl/fch:2.0 --out  --st=20200101000000 --et=20200331000000 --freq=2592000  joebiden
 ```
 
+Example of docker command for generating follower graph
+
+```
+$ docker container run --rm -it -v $PWD:/app -u $(id -u):$(id -g) --entrypoint /bin/bash oduwsdl/fch:2.0
+I have no name!@736a209b64d6:/app$ ./fch.py --freq=2592000 joebiden| Rscript twitterFollowerCount.R
+```
 ### Options
 ```
 Follower Count History (fch)
@@ -48,8 +54,8 @@ positional arguments:
 
 optional arguments:
   -h, --help  show this help message and exit
-  --st        Memento start datetime (in RFC 1123 datetime format)
-  -et         Memento end datetime (in RFC 1123 datetime format)
+  --st        Memento start datetime (YYYYMMDDHHMMSS)
+  -et         Memento end datetime (YYYYMMDDHHMMSS)
   --freq      Sampling frequency of mementos (in seconds)
   -f          Output file path (Supported Extensions: JSON and CSV)
 ```
