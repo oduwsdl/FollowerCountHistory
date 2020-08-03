@@ -44,7 +44,7 @@ class DataManager:
     def set_twitter_handle(self, thandle):
         """
             Function to set Twitter handle
-            
+
             Parameters:
                 thandle (str): Twitter handle
 
@@ -105,7 +105,7 @@ class DataManager:
                 except Exception as e:
                     sys.stderr.write("Memento Write Error: " + str(e) + "URL:" + murl + "\n")
         except Exception as e:
-            sys.stderr.write("Memento Write Error: " + murl + " " + str(e) + "\n")            
+            sys.stderr.write("Memento Write Error: " + murl + " " + str(e) + "\n")
         return False
 
     def read_memento(self, murl=None):
@@ -129,7 +129,7 @@ class DataManager:
                                 if self.__config.debug: sys.stdout.write(str(murl["uri"]) + " Content Size: " + str(record.rec_headers.get_header('Content-Length')) + "\n")
                                 if (int(response["timestamp"]) < 20090101000000 and int(record.rec_headers.get_header('Content-Length')) < 1000) or (int(response["timestamp"]) > 20200101000000 and int(record.rec_headers.get_header('Content-Length')) < 100000):
                                     return None
-                                else:              
+                                else:
                                     return record.content_stream().read()
 
 
@@ -267,7 +267,7 @@ class DataManager:
                     os.mkdir(fpath)
                 fpath = os.path.join(fpath, "followerCSV")
                 if not os.path.exists(fpath):
-                    os.mkdir(fpath)  
+                    os.mkdir(fpath)
                 if not os.path.exists(os.path.join(os.getcwd(), "output", "graphs")):
                     os.mkdir(os.path.join(os.getcwd(), "output", "graphs"))
                 csv_file = open(os.path.join(fpath, thandle + ".csv"), "w")
@@ -279,11 +279,11 @@ class DataManager:
                 csv_file.close()
             else:
                 for row in fcontent:
-                    row.pop("DateTime")  
+                    row.pop("DateTime")
                 fcontent = json.dumps(fcontent)
                 sys.stdout.write(str(fcontent))
             return True
-                
+
         except Exception as e:
             sys.stderr.write("write_follower_count: " + str(e) + "\n")
         return False

@@ -17,7 +17,7 @@ Follower Count History is a Python module that collects Twitter follower count f
 $ git clone https://github.com/oduwsdl/FollowerCountHistory.git
 $ cd FollowerCountHistory
 $ pip install -r requirements.txt
-$  ./fch.py [-h] [--st] [--et] [--freq] [--out] <Twitter handle/ Twitter URL> 
+$  ./fch.py [-h] [--st] [--et] [--freq] [--out] <Twitter handle/ Twitter URL>
 ```
 
 To just create the graph from a csv file
@@ -55,14 +55,14 @@ positional arguments:
 optional arguments:
   -h, --help  show this help message and exit
   --st        Memento start datetime (YYYYMMDDHHMMSS)
-  -et         Memento end datetime (YYYYMMDDHHMMSS)
+  --et         Memento end datetime (YYYYMMDDHHMMSS)
   --freq      Sampling frequency of mementos (in seconds)
   -f          Output file path (Supported Extensions: JSON and CSV)
 ```
 * --st: Default is set to Twitter birth date (2006-03-21 12:00:00). It accepts the memento datetime in [RFC 8601](https://www.iso.org/iso-8601-date-and-time-format.html) fourteen digit variation.
 * --et: Default is set to the current datetime. It accepts the memento datetime in [RFC 8601](https://www.iso.org/iso-8601-date-and-time-format.html) fourteen digit variation.
 * --freq: Default is set to download all the mementos
-* -f: Accepts JSON and CSV file paths for output. If no value is provided, output is returned to stdout in CSV format. 
+* -f: Accepts JSON and CSV file paths for output. If no value is provided, output is returned to stdout in CSV format.
 
 ## Output
 
@@ -73,14 +73,14 @@ The program can generate output in JSON and CSV format. The -f option directs th
 Field| Description
 ---------|------------
 MementoTimestamp |         memento datetime in [RFC 8601](https://www.iso.org/iso-8601-date-and-time-format.html) fourteen digit variation
-URI-M            |         link to the memento 
+URI-M            |         link to the memento
 FollowerCount    |         follower count from the URI-M
 AbsGrowth        |         follower count increase/decrease w.r.t. the first memento
-RelGrowth	 | 	   follower Count increase/decrease w.r.t. the previous memento 
+RelGrowth	 | 	   follower Count increase/decrease w.r.t. the previous memento
 AbsPerGrowth 	 |	   pecentage increase/decrease in follower count w.r.t. the first memento
 RelPerGrowth	 | 	   pecentage increase/decrease in follower count w.r.t. the previous memento
 AbsFolRate 	 |	   daily Twitter follower growth rate w.r.t. the first memento
-RelFolRate	 | 	   daily Twitter follower growth rate w.r.t. the previous memento 
+RelFolRate	 | 	   daily Twitter follower growth rate w.r.t. the previous memento
 
 ### Sample Outputs
 JSON Output
@@ -107,7 +107,7 @@ MementoTimestamp,URI-M,FollowerCount,AbsGrowth,RelGrowth,AbsPerGrowth,RelPerGrow
 20200131120028,https://web.archive.org/web/20200131120028/https://twitter.com/joebiden,4142510,94302,94302,2.33,2.33,0.0358,0.0358
 20200301001210,https://web.archive.org/web/20200301001210/https://twitter.com/JoeBiden/,4202148,153940,59638,3.8,1.44,0.0297,0.02339
 ```
-### Output to stdout 
+### Output to stdout
 
 ```shell
 $ ./fch.py --st=20200101000000 --et=20200331000000  --freq=2592000 joebiden
@@ -152,7 +152,7 @@ File Name| Description
   ```
 * Command to find Twitter follower count for a Twitter handle with a monthly sampling of the the mementos since the account creation up until today
   ```
-  Frequency = 3600*24*30 
+  Frequency = 3600*24*30
   Frequency = 2592000
   ```
 * Output to stdout as CSV
