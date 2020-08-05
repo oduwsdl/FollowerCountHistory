@@ -20,7 +20,7 @@ class FollowerAnalysis:
 
     def relative_analysis(self, lfollower):
       try:
-        lfollower = sorted(lfollower, key=lambda i: i['MementoTimestamp'])
+        lfollower = sorted(lfollower, key=lambda i: i['MementoDatetime'])
         if self.__conf_reader.debug: sys.stdout.write(str(lfollower) + "\n")
         for i in range (0, len(lfollower)):
           if self.__conf_reader.debug: sys.stdout.write(str(lfollower[i]) + "\n")
@@ -32,10 +32,10 @@ class FollowerAnalysis:
             lfollower[i]["AbsFolRate"] = 0
             lfollower[i]["RelFolRate"] = 0
           else:
-            tpdiff = int(datetime.strptime(lfollower[i]["MementoTimestamp"], "%Y%m%d%H%M%S").timestamp() -
-                         datetime.strptime(lfollower[i - 1]["MementoTimestamp"], "%Y%m%d%H%M%S").timestamp())
-            tdiff = int(datetime.strptime(lfollower[i]["MementoTimestamp"], "%Y%m%d%H%M%S").timestamp() -
-                        datetime.strptime(lfollower[0]["MementoTimestamp"], "%Y%m%d%H%M%S").timestamp())
+            tpdiff = int(datetime.strptime(lfollower[i]["MementoDatetime"], "%Y%m%d%H%M%S").timestamp() -
+                         datetime.strptime(lfollower[i - 1]["MementoDatetime"], "%Y%m%d%H%M%S").timestamp())
+            tdiff = int(datetime.strptime(lfollower[i]["MementoDatetime"], "%Y%m%d%H%M%S").timestamp() -
+                        datetime.strptime(lfollower[0]["MementoDatetime"], "%Y%m%d%H%M%S").timestamp())
             if tpdiff == 0:
               tpdiff = 1
             if tdiff == 0:
@@ -54,7 +54,7 @@ class FollowerAnalysis:
         else:
           ext = None
         if not self.__conf_reader.out or ext == "csv":
-          fieldnames = ["MementoTimestamp", "URIM", "FollowerCount", "AbsGrowth", "RelGrowth",
+          fieldnames = ["MementoDatetime", "URIM", "FollowerCount", "AbsGrowth", "RelGrowth",
               "AbsPerGrowth", "RelPerGrowth", "AbsFolRate", "RelFolRate"]
           if not self.__conf_reader.out:
             writer = csv.DictWriter(sys.stdout, fieldnames=fieldnames)
