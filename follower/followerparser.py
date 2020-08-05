@@ -70,7 +70,7 @@ class FollowerParser:
                 if tcount: 
                     if self.__conf_reader.debug: sys.stdout.write("URIM: {} Converted: {}".format(murl, tcount) + "\n")
                     response = Utils.get_murl_info(urim, self.__thandle.lower())
-                    self.__lfollower.append({"MementoTimestamp": response["timestamp"],
+                    self.__lfollower.append({"MementoDatetime": response["timestamp"],
                                                 "URIM": murl, "FollowerCount":tcount})
             else:
                 with open(os.path.join(os.path.dirname(__file__), "data", "NonParsedMementos.txt"), "a+") as \
