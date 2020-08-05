@@ -86,23 +86,23 @@ RelFolRate	 | 	   daily Twitter follower growth rate w.r.t. the previous memento
 JSON Output
 ```json
 [{
-	"MementoTimestamp": "20200101001959",
-	"URI-M": "https://web.archive.org/web/20200101001959/https://twitter.com/JoeBiden",
+	"MementoDatetime": "20200101001959",
+	"URIM": "https://web.archive.org/web/20200101001959/https://twitter.com/JoeBiden",
 	"FollowerCount": 4048208
 }, {
-	"MementoTimestamp": "20200131120028",
-	"URI-M": "https://web.archive.org/web/20200131120028/https://twitter.com/joebiden",
+	"MementoDatetime": "20200131120028",
+	"URIM": "https://web.archive.org/web/20200131120028/https://twitter.com/joebiden",
 	"FollowerCount": 4142510
 }, {
-	"MementoTimestamp": "20200301001210",
-	"URI-M": "https://web.archive.org/web/20200301001210/https://twitter.com/JoeBiden/",
+	"MementoDatetime": "20200301001210",
+	"URIM": "https://web.archive.org/web/20200301001210/https://twitter.com/JoeBiden/",
 	"FollowerCount": 4202148
 }]
 ```
 
 CSV Output
 ```csv
-MementoTimestamp,URI-M,FollowerCount,AbsGrowth,RelGrowth,AbsPerGrowth,RelPerGrowth,AbsFolRate,RelFolRate
+MementoDatetime,URIM,FollowerCount,AbsGrowth,RelGrowth,AbsPerGrowth,RelPerGrowth,AbsFolRate,RelFolRate
 20200101001959,https://web.archive.org/web/20200101001959/https://twitter.com/JoeBiden,4048208,0,0,0,0,0,0
 20200131120028,https://web.archive.org/web/20200131120028/https://twitter.com/joebiden,4142510,94302,94302,2.33,2.33,0.0358,0.0358
 20200301001210,https://web.archive.org/web/20200301001210/https://twitter.com/JoeBiden/,4202148,153940,59638,3.8,1.44,0.0297,0.02339
