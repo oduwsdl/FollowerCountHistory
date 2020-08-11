@@ -6,3 +6,9 @@ core/config/data/followercount
 *.pyc
 output/
 .RData
+dist/
+core/
+build/
+mementos.txt
+test.py
+fch.egg-info

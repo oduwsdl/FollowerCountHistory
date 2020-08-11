@@ -14,7 +14,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     author='Mohammed Nauman Siddique',
-    author_email='msidd003@.odu.edu',
+    author_email='msidd003@odu.edu',
     url='https://github.com/oduwsdl/FollowerCountHistory',
     packages=find_packages(),
     license="MIT",
@@ -28,9 +28,25 @@ setup(
         'Topic :: System :: Archiving',
         'Topic :: System :: Archiving :: Backup',
     ],
+    provides=[
+        "fch"
+    ],
+    package_dir={
+        'fch': 'fch'
+    },
     install_requires=[
         'warcio',
         'requests',
         'beautifulsoup4'
     ],
+    entry_points={
+        "console_scripts": [
+            "fch = fch.__main__:main"
+        ]
+    },
+    package_data={
+        'fch': [
+            'core/config/data/config.ini'
+          ]
+    },
 )

@@ -1,14 +1,14 @@
 import bs4
-import re
-from core.utils.util_functions import Utils
 import ast
 from datetime import datetime
 import os
 import sys
 from functools import partial
+import re
+from fch.core.utils.util_functions import Utils
 
 class FollowerParser:
-    
+
     def __init__(self, thandle, constants, dmanager, conf_reader):
         self.__thandle = thandle
         self.__constants = constants
@@ -42,11 +42,11 @@ class FollowerParser:
                     if mcontent is None:
                         if self.__conf_reader.debug: sys.stdout.write("parse_mementos: read_memento:  " + str(urim) + "   " + str(mcontent) + "\n")
                     else:
-                        if self.__conf_reader.debug: sys.stdout.write("parse_mementos: read_memento:  " + str(urim) + "   True" + "\n") 
+                        if self.__conf_reader.debug: sys.stdout.write("parse_mementos: read_memento:  " + str(urim) + "   True" + "\n")
                         self.__parse_memento(mcontent, urim)
-        return self.__lfollower    
+        return self.__lfollower
 
-    '''    
+    '''
     Function to fetch Followers, Tweet Count, Likes, Replies. retweets from each memento
     '''
 
@@ -54,31 +54,31 @@ class FollowerParser:
         murl = urim["uri"]
         soup = bs4.BeautifulSoup(mcontent, "html.parser")
         try:
-            lselector = ["li.ProfileNav-item.ProfileNav-item--followers", "ul.user-stats.clearfix", 
+            lselector = ["li.ProfileNav-item.ProfileNav-item--followers", "ul.user-stats.clearfix",
                             "table.stats.js-mini-profile-stats", "ul.stats.js-mini-profile-stats",
                             "div.stats", "div#section", "table.stats", "div#side"]
-                   
+
             lfollower_tags = list(filter(lambda x: soup.select(x), lselector))
             if lfollower_tags:
                 if self.__conf_reader.debug: sys.stdout.write(str(urim) + "  " + str(lfollower_tags[0]) + "\n")
-                lfunctions = [partial(self.__parse_case1, soup), partial(self.__parse_case2, soup), 
-                                partial(self.__parse_case3, soup), partial(self.__parse_case4, soup), 
-                                partial(self.__parse_case5, soup), partial(self.__parse_case6, soup), 
+                lfunctions = [partial(self.__parse_case1, soup), partial(self.__parse_case2, soup),
+                                partial(self.__parse_case3, soup), partial(self.__parse_case4, soup),
+                                partial(self.__parse_case5, soup), partial(self.__parse_case6, soup),
                                 partial(self.__parse_case7, soup), partial(self.__parse_case8, soup)]
-                x = lambda lfollower_tags, lfunctions, lselector: lfunctions[lselector.index(lfollower_tags[0])]() 
+                x = lambda lfollower_tags, lfunctions, lselector: lfunctions[lselector.index(lfollower_tags[0])]()
                 tcount = x(lfollower_tags, lfunctions, lselector)
-                if tcount: 
+                if tcount:
                     if self.__conf_reader.debug: sys.stdout.write("URIM: {} Converted: {}".format(murl, tcount) + "\n")
                     response = Utils.get_murl_info(urim, self.__thandle.lower())
                     self.__lfollower.append({"MementoDatetime": response["timestamp"],
                                                 "URIM": murl, "FollowerCount":tcount})
             else:
-                with open(os.path.join(os.path.dirname(__file__), "data", "NonParsedMementos.txt"), "a+") as \
+                with open(os.path.join(os.getcwd(), "NonParsedMementos.txt"), "a+") as \
                         ofile:
                     ofile.write("No selector found: " + murl + "\n")
         except Exception as e:
             sys.stderr.write("parse_memento: URL: {}: Error: {}".format(murl, e) + "\n")
-            with open(os.path.join(os.path.dirname(__file__), "data", "NonParsedMementos.txt"), "a+") as \
+            with open(os.path.join(os.getcwd(), "NonParsedMementos.txt"), "a+") as \
                 ofile:
                 ofile.write("Error: " + murl + "\n")
 
@@ -90,13 +90,13 @@ class FollowerParser:
             if self.__conf_reader.debug: sys.stdout.write(str(tags) + "\n")
             fcount_temp = None
             if tags.select("span.ProfileNav-value")[0].has_attr("data-count"):
-                fcount = tags.select("span.ProfileNav-value")[0]["data-count"] 
+                fcount = tags.select("span.ProfileNav-value")[0]["data-count"]
             else:
                 fcount = tags.select("a.ProfileNav-stat.ProfileNav-stat--link.u-borderUserColor")
                 if self.__conf_reader.debug: sys.stdout.write(str(fcount) + "\n")
                 if fcount:
                     fcount = re.sub("\D", '', fcount[0]["title"])
-                else:        
+                else:
                     fcount_temp = tags.select("span.ProfileNav-value")[0].text
                     fcount = re.sub("\D", '', fcount_temp)
         if self.__conf_reader.debug: sys.stdout.write("Follower Count: {}".format(fcount) + "\n")
@@ -130,7 +130,7 @@ class FollowerParser:
         else:
             tcount = tags[0].text
         tcount = re.sub("\D", '', tcount)
-        return tcount 
+        return tcount
 
     def __parse_case4(self, soup):
         if self.__conf_reader.debug: sys.stdout.write("__parse_case4" + "\n")
@@ -176,7 +176,7 @@ class FollowerParser:
             if self.__conf_reader.debug: sys.stdout.write(str(tags[0]) + "\n")
             tag = tags[0].select("span.stats_count.numeric")[1].text
             tcount = re.sub("\D", '', tag)
-        else: 
+        else:
             if self.__conf_reader.debug: sys.stdout.write(str(follower_tags[0]) + "\n")
             tags = follower_tags[0].select("ul")[1].select("li")[1]
             if "Followers" not in tags or "Followers:" not in tags:
