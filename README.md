@@ -176,4 +176,4 @@ File Name| Description
   ```
   * Output as CSV file
   ```shell
-  $  fch.py -f=joebiden.csv --st=20200101000000 --et=20200331000000 --freq=2592000 joebiden
+  $  fch -f=joebiden.csv --st=20200101000000 --et=20200331000000 --freq=2592000 joebiden
