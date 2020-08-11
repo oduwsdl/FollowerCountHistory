@@ -4,7 +4,7 @@ import os
 import sys
 import json
 from datetime import datetime
-from core.utils.util_functions import Utils
+from fch.core.utils.util_functions import Utils
 
 
 class FollowerAnalysis:
@@ -67,11 +67,10 @@ class FollowerAnalysis:
           if fobj:
             fobj.close()
         elif ext == "json":
-          fobj = open(self.__conf_reader.out, "w") 
+          fobj = open(self.__conf_reader.out, "w")
           json.dump(lfollower, fobj)
           fobj.close()
         else:
           sys.stderr.write("Unsupported file type \n")
       except Exception as e:
-        sys.stderr.write("FollowerAnalysis: " + str(e) + "\n") 
- 
+        sys.stderr.write("FollowerAnalysis: " + str(e) + "\n")

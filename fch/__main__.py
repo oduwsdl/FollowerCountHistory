@@ -3,14 +3,19 @@
 import argparse
 import sys
 import re
+import os
 
-from core.config.configreader import ConfigurationReader
-from core.config.configwriter import ConfigurationWriter
-from core.utils.constants import Constants
-from core.datamanager import DataManager
-from core.utils.util_functions import Utils
+if not __package__:
+    sys.path.insert(1, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
-from follower.followercount import FollowerCount
+from fch.core.config.configreader import ConfigurationReader
+from fch.core.config.configwriter import ConfigurationWriter
+from fch.core.utils.constants import Constants
+from fch.core.datamanager import DataManager
+from fch.core.utils.util_functions import Utils
+
+from fch import __version__
+from fch.follower.followercount import FollowerCount
 
 def init(**kwargs):
     ConfigurationWriter(**kwargs)
@@ -35,8 +40,7 @@ def run_follower(**kw):
     fcount.get_follower_count()
     if config_reader.debug: sys.stdout.write("follower count successfully completed for : " + kw["thandle"] + "\n")
 
-if __name__ == "__main__":
-
+def main():
     parser = argparse.ArgumentParser(description="Follower Count History (fch)", prog="fch")
     parser.add_argument("thandle", help="Enter a Twitter handle/ URL")
     parser.add_argument("--st", type=int, metavar="", default=-1, help="Memento start datetime (in RFC 1123 datetime format)")
@@ -50,3 +54,6 @@ if __name__ == "__main__":
     except Exception as e:
         sys.stderr.write(str(e) + "\n")
         parser.print_help()
+
+if __name__ == "__main__":
+    main()

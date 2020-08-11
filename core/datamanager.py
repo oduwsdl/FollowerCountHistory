@@ -5,7 +5,7 @@ from warcio.archiveiterator import ArchiveIterator
 import requests
 import json
 import csv
-from core.utils.util_functions import Utils
+from fch.core.utils.util_functions import Utils
 import time
 import sys
 
