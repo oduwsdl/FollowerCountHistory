@@ -8,8 +8,6 @@ COPY       requirements.txt ./
 RUN        pip install -r requirements.txt
 
 COPY 	   twitterFollowerCount.R ./
-COPY       fch.py ./
-COPY       core/  ./core
-COPY       follower ./follower
+COPY       fch/ ./fch
 
-ENTRYPOINT ["./fch.py"]
+ENTRYPOINT ["./fch/__main__.py"]
