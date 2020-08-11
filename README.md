@@ -18,7 +18,12 @@ Follower Count History is a Python module that collects Twitter follower count f
 $ git clone https://github.com/oduwsdl/FollowerCountHistory.git
 $ cd FollowerCountHistory
 $ pip install -r requirements.txt
-$  ./fch.py [-h] [--st] [--et] [--freq] [--out] <Twitter handle/ Twitter URL>
+$  ./__main__.py [-h] [--st] [--et] [--freq] [--out] <Twitter handle/ Twitter URL>
+```
+#### Install from pypi
+```shell
+$ pip install fch
+$  fch [-h] [--st] [--et] [--freq] [--out] <Twitter handle/ Twitter URL>
 ```
 
 To just create the graph from a csv file
@@ -44,7 +49,7 @@ Example of docker command for generating follower graph
 
 ```
 $ docker container run --rm -it -v $PWD:/app -u $(id -u):$(id -g) --entrypoint /bin/bash oduwsdl/fch:2.0
-I have no name!@736a209b64d6:/app$ ./fch.py --freq=2592000 joebiden| Rscript twitterFollowerCount.R
+I have no name!@736a209b64d6:/app$ ./__main__.py --freq=2592000 joebiden| Rscript twitterFollowerCount.R
 ```
 ### Options
 ```
@@ -111,7 +116,7 @@ MementoDatetime,URIM,FollowerCount,AbsGrowth,RelGrowth,AbsPerGrowth,RelPerGrowth
 ### Output to stdout
 
 ```shell
-$ ./fch.py --st=20200101000000 --et=20200331000000  --freq=2592000 joebiden
+$ fch --st=20200101000000 --et=20200331000000  --freq=2592000 joebiden
 ```
 
 ### Output to files
@@ -119,8 +124,8 @@ $ ./fch.py --st=20200101000000 --et=20200331000000  --freq=2592000 joebiden
 **Command to return output to the file path**
 
 ```shell
-$ ./fch.py --st=20200101000000 --et=20200331000000  --freq=2592000 -f=output/joebiden.csv joebiden
-$ ./fch.py --st=20200101000000 --et=20200331000000  --freq=2592000 -f=output/joebiden.json joebiden
+$ fch --st=20200101000000 --et=20200331000000  --freq=2592000 -f=output/joebiden.csv joebiden
+$ fch --st=20200101000000 --et=20200331000000  --freq=2592000 -f=output/joebiden.json joebiden
 ```
 
 **Command to create graphs for each handle**
@@ -145,11 +150,11 @@ File Name| Description
 * Command to find Twitter follower count for a Twitter handle from all the mementos since the account creation up until today
   * Output to stdout as CSV
   ```shell
-  $  ./fch.py joebiden
+  $  fch joebiden
   ```
   * Output as CSV file
   ```shell
-  $  ./fch.py -f=joebiden.csv joebiden
+  $  fch -f=joebiden.csv joebiden
   ```
 * Command to find Twitter follower count for a Twitter handle with a monthly sampling of the the mementos since the account creation up until today
   ```
@@ -158,17 +163,17 @@ File Name| Description
   ```
 * Output to stdout as CSV
   ```shell
-  $  ./fch.py --freq=2592000 joebiden
+  $  fch --freq=2592000 joebiden
   ```
   * Output as CSV file
   ```shell
-  $  ./fch.py -f=joebiden.csv --freq=2592000 joebiden
+  $  fch -f=joebiden.csv --freq=2592000 joebiden
   ```
 * Command to find Twitter follower count for a Twitter handle with a monthly sampling of the the mementos within a specified start and end timestamp
   * Output to stdout as CSV
   ```shell
-  $  ./fch.py --st=20200101000000 --et=20200331000000 --freq=2592000 joebiden
+  $  fch --st=20200101000000 --et=20200331000000 --freq=2592000 joebiden
   ```
   * Output as CSV file
   ```shell
-  $  ./fch.py -f=joebiden.csv --st=20200101000000 --et=20200331000000 --freq=2592000 joebiden
+  $  fch.py -f=joebiden.csv --st=20200101000000 --et=20200331000000 --freq=2592000 joebiden
