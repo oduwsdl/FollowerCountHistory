@@ -49,7 +49,7 @@ Example of docker command for generating follower graph
 
 ```
 $ docker container run --rm -it -v $PWD:/app -u $(id -u):$(id -g) --entrypoint /bin/bash oduwsdl/fch:2.0
-I have no name!@736a209b64d6:/app$ ./__main__.py --freq=2592000 joebiden| Rscript twitterFollowerCount.R
+I have no name!@736a209b64d6:/app$ ./fch/__main__.py --freq=2592000 joebiden| Rscript twitterFollowerCount.R
 ```
 ### Options
 ```
