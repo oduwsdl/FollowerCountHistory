@@ -59,11 +59,12 @@ positional arguments:
   thandle     Enter a Twitter handle/ URL
 
 optional arguments:
-  -h, --help  show this help message and exit
-  --st        Memento start datetime (YYYYMMDDHHMMSS)
-  --et         Memento end datetime (YYYYMMDDHHMMSS)
-  --freq      Sampling frequency of mementos (in seconds)
-  -f          Output file path (Supported Extensions: JSON and CSV)
+  -h, --help     show this help message and exit
+  --st           Memento start datetime (YYYYMMDDHHMMSS)
+  --et           Memento end datetime (YYYYMMDDHHMMSS)
+  --freq         Sampling frequency of mementos (in seconds)
+  -f             Output file path (Supported Extensions: JSON and CSV)
+  -v, --version  Report the version of fch
 ```
 * --st: Default is set to Twitter birth date (2006-03-21 12:00:00). It accepts the memento datetime in [RFC 8601](https://www.iso.org/iso-8601-date-and-time-format.html) fourteen digit variation.
 * --et: Default is set to the current datetime. It accepts the memento datetime in [RFC 8601](https://www.iso.org/iso-8601-date-and-time-format.html) fourteen digit variation.
