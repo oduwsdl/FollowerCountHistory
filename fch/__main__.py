@@ -14,7 +14,7 @@ from fch.core.utils.constants import Constants
 from fch.core.datamanager import DataManager
 from fch.core.utils.util_functions import Utils
 
-from fch import __version__
+from fch import __version__ as fch_version
 from fch.follower.followercount import FollowerCount
 
 def init(**kwargs):
@@ -47,6 +47,7 @@ def main():
     parser.add_argument("--et", type=int, metavar="", default=-1, help="Memento end datetime (in RFC 1123 datetime format)")
     parser.add_argument("--freq", type=int, metavar="", default=0, help="Sampling frequency of mementos (in seconds)")
     parser.add_argument("-f", metavar="", help="Output file path (Supported Extensions: JSON and CSV)")
+    parser.add_argument('-v', '--version', help='Report the version of fch', action='version', version= '%(prog)s {version}'.format(version=fch_version))
     parser.set_defaults(func=run_follower)
     args = parser.parse_args()
     try:

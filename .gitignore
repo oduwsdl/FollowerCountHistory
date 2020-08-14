@@ -12,3 +12,4 @@ build/
 mementos.txt
 test.py
 fch.egg-info
+*.nfs*
