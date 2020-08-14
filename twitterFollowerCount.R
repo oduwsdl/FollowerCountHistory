@@ -7,8 +7,9 @@ if (length(args)==0) {
   # stop("At least one argument must be supplied (input file).n", call.=FALSE)
 } else if (length(args)==1) {
   ext = unlist(strsplit(args[1], "\\."))[-1]
+  print(dirname(args[1]))
+  print(basename(args[1]))
   path = strsplit(args[1], "/\\s*(?=[^/]+$)", perl=TRUE)[[1]][1]
-  thandle <- unlist(strsplit(strsplit(args[1], "/\\s*(?=[^/]+$)", perl=TRUE)[[1]][2], "\\."))[1]
   if(ext == "csv"){
 	data_set <- read.csv(args[1], header=TRUE, as.is=TRUE)
   }else{
