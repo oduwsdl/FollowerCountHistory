@@ -1,13 +1,11 @@
 follower/data/mementos.txt
 follower/data/NonParsedMementos.txt
-core/config/data/followercount
 */__pycache__
 */*/__pycache__
 *.pyc
 output/
 .RData
 dist/
-core/
 build/
 mementos.txt
 test.py
