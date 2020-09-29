@@ -4,18 +4,19 @@ import argparse
 import sys
 import re
 import os
+import platform
 
 if not __package__:
     sys.path.insert(1, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+
+from fch import __version__ as fch_version
+from fch.follower.followercount import FollowerCount
 
 from fch.core.config.configreader import ConfigurationReader
 from fch.core.config.configwriter import ConfigurationWriter
 from fch.core.utils.constants import Constants
 from fch.core.datamanager import DataManager
 from fch.core.utils.util_functions import Utils
-
-from fch import __version__ as fch_version
-from fch.follower.followercount import FollowerCount
 
 def init(**kwargs):
     ConfigurationWriter(**kwargs)
@@ -30,6 +31,8 @@ def get_thandle(turl):
     return response.groupdict() ["handle"]
 
 def run_follower(**kw):
+	if platform.system().lower() != "linux":
+		kw["int_dir"] = os.getcwd()
     dmanager, config_reader, constants = init(**kw)
     thandle = get_thandle(kw["thandle"]).lower()
     if config_reader.debug: sys.stdout.write("Twitter Handle: " + thandle + "\n")
