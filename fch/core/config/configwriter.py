@@ -2,7 +2,6 @@ import pickle
 import configparser
 import os
 
-
 class ConfigurationWriter:
     """
     This class is for writing Configuration of the program
@@ -27,7 +26,7 @@ class ConfigurationWriter:
         self.__conf_record = dict(Start_Timestamp=kwargs.get('st', int(self.__config['SETUP']['START_TIMESTAMP'])),
                                   End_Timestamp=kwargs.get('et', int(self.__config['SETUP']['END_TIMESTAMP'])),
                                   Output_Dir=kwargs.get('f', None),
-                                  Internediary_Dir=self.__config['SETUP']['INTERMIDIARY_DIR'],
+                                  Internediary_Dir=kwargs.get('int_dir', self.__config['SETUP']['INTERMIDIARY_DIR']),
                                   Frequency=kwargs.get('freq', int(self.__config['SETUP']['FREQUENCY'])),
                                   Database=kwargs.get("db_conf", "followercount"),
                                   Debug_Mode=kwargs.get("debug", True if self.__config['SETUP']['DEBUG_MODE'] == "True" else False),
