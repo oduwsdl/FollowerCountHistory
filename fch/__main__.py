@@ -31,8 +31,8 @@ def get_thandle(turl):
     return response.groupdict() ["handle"]
 
 def run_follower(**kw):
-	if platform.system().lower() != "linux":
-		kw["int_dir"] = os.getcwd()
+    if platform.system().lower() != "linux":
+    	kw["int_dir"] = os.getcwd()
     dmanager, config_reader, constants = init(**kw)
     thandle = get_thandle(kw["thandle"]).lower()
     if config_reader.debug: sys.stdout.write("Twitter Handle: " + thandle + "\n")
