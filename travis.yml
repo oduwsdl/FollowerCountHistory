@@ -1,0 +1,18 @@
+sudo: required
+
+services:
+  - docker
+
+script:
+  - docker build -t oduwsdl/fch .
+  - docker images oduwsdl/fch:test
+
+before_deploy:
+  - docker login -u naumansiddiqui4 -p Ronaldo#1989
+
+deploy:
+  provider: script
+  script: docker push oduwsdl/fch
+  on:
+    branch: development
+
