@@ -1,5 +1,17 @@
 sudo: required
 
+# blocklist
+branches:
+  except:
+  - master
+  - version-1.0
+  - version-2.0
+
+# safelist
+branches:
+  only:
+  - development
+
 services:
   - docker
 
