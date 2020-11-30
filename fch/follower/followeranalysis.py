@@ -66,11 +66,15 @@ class FollowerAnalysis:
           writer.writerows(lfollower)
           if fobj:
             fobj.close()
+          return True
         elif ext == "json":
           fobj = open(self.__conf_reader.out, "w")
           json.dump(lfollower, fobj)
           fobj.close()
+          return True
         else:
           sys.stderr.write("Unsupported file type \n")
+          return False
       except Exception as e:
         sys.stderr.write("FollowerAnalysis: " + str(e) + "\n")
+      return False
