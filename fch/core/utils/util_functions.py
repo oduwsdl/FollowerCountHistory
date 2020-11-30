@@ -1,4 +1,5 @@
 import datetime
+import pytz
 import ast
 import re
 import bs4
@@ -34,7 +35,8 @@ class Utils:
         """
         try:
             mdate = datetime.datetime.strptime(mtime, "%Y%m%d%H%M%S")
-            epoch = datetime.datetime.utcfromtimestamp(0)
+            mdate = pytz.utc.localize(mdate)
+            epoch = datetime.datetime.fromtimestamp(0, tz=datetime.timezone.utc)
             mepoch = int((mdate - epoch).total_seconds())
             return mepoch
         except Exception as e:
@@ -53,9 +55,8 @@ class Utils:
         Returns:
             (int): Memento Datetime on success and None on Failure
         """
-
         try:
-            mdate = datetime.datetime.fromtimestamp(tmillis / 1000)
+            mdate = datetime.datetime.fromtimestamp(tmillis, tz=datetime.timezone.utc)
             mtime = str(mdate.year)
             if mdate.month < 10:
                 mtime += "0"
@@ -88,8 +89,7 @@ class Utils:
             db_live (collection): Live Tweets Collection
 
         Returns:
-            (int): Minimum Timestamp
-            (int): maximum Timestamp
+            dict{(int), (int)}: Minimum Timestamp, maximum Timestamp
         """
         min_time = str(config.start_time)
         max_time = str(config.end_time)
@@ -102,7 +102,7 @@ class Utils:
         elif Utils.memento_to_epochtime(min_time) and not Utils.memento_to_epochtime(max_time):
             cur_time = datetime.datetime.now()
             max_time = cur_time.strftime("%Y%m%d%H%M%S")
-        return int(min_time), int(max_time)
+        return {"mintime": int(min_time), "maxtime": int(max_time)}
 
     @staticmethod
     def parse_timemap(dmanager, constants, turl, config_reader=None, stime=None, etime=None):
@@ -214,10 +214,7 @@ class Utils:
             murl = args[0]
 
         if flag:
-            reg = re.compile(r'https?://(www\.)?(?P<archive>[\w\.\-]+)(:\d+)?(\/\w+)?(/archive)?/(?P<timestamp>\d+)([a-z]'
-                             r'{2}_)?/(?P<TwitterURL>https?://(www\.)?(?P<domain>mobile)?[\w\.\-]+(:\d+)?(\/)+(?P<handle>'
-                             r'\w+)'
-                             r'((\/(?P<wrep>with_replies))?\/?\?((lang|locale)=(?P<lang>[\w\-]+))?.*)?)', re.I)
+            reg = re.compile(r'https?://(www\.)?(?P<archive>[\w\.\-]+)(:\d+)?(\/\w+)?(/archive)?/(?P<timestamp>\d+)([a-z]{2}_)?/(?P<TwitterURL>https?://(www\.)?(?P<domain>mobile)?[\w\.\-]+(:\d+)?(\/)+(?P<handle>\w+)(\/)?((?P<wrep>with_replies)?(\?)?((lang|locale)=(?P<lang>[\w\-]+))?.*)?)', re.I)
             response = reg.match(murl)
             response = response.groupdict()
             response["lang"] = (response["lang"] if response["lang"] else "default")

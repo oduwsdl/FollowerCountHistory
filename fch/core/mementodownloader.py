@@ -47,10 +47,10 @@ class MementoDownloader:
         Index 2: To be downloaded mementos
         '''
         mcount = [0, 0, 0]
-        mintime, maxtime = Utils.get_timerange(self.__constants, self.__conf_reader)
+        timerange = Utils.get_timerange(self.__constants, self.__conf_reader)
         if self.__conf_reader.debug: sys.stdout.write("__parse_timemap:  Minimum Live Timestamp: {} Maximum Live Timestamp: {}".format
-                               (mintime, maxtime) + "\n")
-        timemap_content = Utils.parse_timemap(self.__dmanager, self.__constants, self.__turl, self.__conf_reader, mintime, maxtime)
+                               (timerange["mintime"], timerange["maxtime"]) + "\n")
+        timemap_content = Utils.parse_timemap(self.__dmanager, self.__constants, self.__turl, self.__conf_reader, timerange["mintime"], timerange["maxtime"])
         if self.__conf_reader.debug: sys.stdout.write("__parse_timemap: " + str(timemap_content) + "\n")
         for memento in timemap_content:
             response = Utils.get_murl_info(memento, self.__thandle)
@@ -58,7 +58,7 @@ class MementoDownloader:
             # Added to remove wayback.archive.it
             if response["archive"] not in ["archive.is", "archive.md"]:
                 if response["timestamp"].isdigit():
-                    if mintime <= int(response["timestamp"]) <= maxtime:
+                    if timerange["mintime"] <= int(response["timestamp"]) <= timerange["maxtime"]:
                         # Count total number of mementos for twitter handle within the time range
                         mcount[0] += 1
                         memento_present = self.__dmanager.lookup_memento(memento)

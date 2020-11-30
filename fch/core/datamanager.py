@@ -193,7 +193,7 @@ class DataManager:
         tmpath = os.path.join(tmpath, tresponse["wrep"] + tresponse["lang"])
         if not os.path.exists(tmpath):
             os.mkdir(tmpath)
-        millis = int(round(time.time() * 1000))
+        millis = int(round(time.time()))
         try:
             tmpath = os.path.join(tmpath, str(Utils.epochtime_to_memento(millis)) + self.__constants.TM_EXT)
             with open(tmpath, "w") as tm_ofile:
@@ -264,6 +264,7 @@ class DataManager:
         """
         try:
             if self.__config.out:
+
                 fpath = os.path.join(os.getcwd(), "output")
                 if not os.path.exists(fpath):
                     os.mkdir(fpath)
