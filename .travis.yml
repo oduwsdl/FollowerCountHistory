@@ -1,3 +1,11 @@
+language: python
+
+python:
+  - "3.5"
+  - "3.6"      # current default Python on Travis CI
+  - "3.7"
+  - "3.8"
+
 sudo: required
 
 # safelist
@@ -10,11 +18,14 @@ services:
   - docker
 
 script:
-  - docker build -t oduwsdl/fch .
-  - docker images oduwsdl/fch:test
+  - docker build --tag oduwsdl/fch .
+  - docker run oduwasl/fch
+
+after_script:
+  - docker images
 
 before_deploy:
-  - docker login -u naumansiddiqui4 -p Ronaldo#1989
+  - docker login -u "naumansiddiqui4" -p "Ronaldo#1989"
 
 deploy:
   provider: script
