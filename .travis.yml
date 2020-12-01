@@ -26,7 +26,7 @@ after_script:
   - docker images
 
 before_deploy:
-  - docker login -u naumansiddiqui4 --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 deploy:
   provider: script
