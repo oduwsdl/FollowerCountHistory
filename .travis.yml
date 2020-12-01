@@ -18,7 +18,7 @@ services:
   - docker
 
 script:
-  - docker build --tag fch .
+  - docker build fch .
   - docker run fch m_nsiddique
 
 after_script:
@@ -26,7 +26,7 @@ after_script:
   - docker images
 
 before_deploy:
-  - docker login -u naumansiddiqui4 -p Ronaldo#1989
+  - docker login -u naumansiddiqui4 --password-stdin
 
 deploy:
   provider: script
