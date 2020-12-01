@@ -18,11 +18,11 @@ services:
   - docker
 
 script:
-  - docker build -t fch .
-  - docker run fch m_nsiddique
+  - docker build -t oduwsdl/fch:test .
+  - docker run oduwsdl/fch:test m_nsiddique
 
 after_script:
-  - docker tag fch oduwsdl/fch:test 
+  - docker tag oduwsdl/fch:test oduwsdl/fch:test 
   - docker images
 
 before_deploy:
