@@ -9,6 +9,6 @@ RUN        pip install -r requirements.txt
 
 COPY 	   twitterFollowerCount.R ./
 COPY       fch/ ./fch
-COPY       tests/ ./
+COPY       tests/ ./tests
 
 ENTRYPOINT ["./fch/__main__.py"]

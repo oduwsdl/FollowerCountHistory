@@ -86,4 +86,4 @@ def test_parse_timemap():
 	constants = Constants()
 	configreader = ConfigurationReader()
 	dmanager = DataManager(configreader, constants)
-	assert Utils.parse_timemap(dmanager, constants, "https://twitter.com/m_nsiddique") == None
+	assert Utils.parse_timemap(dmanager, constants, "https://twitter.com/m_nsiddique") == [{'datetime': 'Mon, 28 May 2018 23:54:45 GMT',  'rel': 'first memento', 'uri': 'https://web.archive.org/web/20180528235445/https://twitter.com/m_nsiddique'}, {'datetime': 'Tue, 29 Oct 2019 18:25:06 GMT',  'rel': 'last memento',  'uri': 'https://web.archive.org/web/20191029182506/https://twitter.com/m_nsiddique'}]
