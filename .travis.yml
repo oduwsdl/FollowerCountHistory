@@ -19,7 +19,7 @@ services:
 
 script:
   - docker build --tag fch .
-  - docker run fch
+  - docker run fch m_nsiddique
 
 after_script:
   - docker tag fch oduwsdl/fch:test 
