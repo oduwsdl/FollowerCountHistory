@@ -18,10 +18,11 @@ services:
   - docker
 
 script:
-  - docker build --tag oduwsdl/fch .
-  - docker run oduwasl/fch
+  - docker build --tag fch .
+  - docker run fch
 
 after_script:
+  - docker tag fch oduwsdl/fch:test 
   - docker images
 
 before_deploy:
