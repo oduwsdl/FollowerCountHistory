@@ -26,7 +26,7 @@ after_script:
   - docker images
 
 before_deploy:
-  - docker login -u "naumansiddiqui4" -p "Ronaldo#1989"
+  - docker login -u naumansiddiqui4 -p Ronaldo#1989
 
 deploy:
   provider: script
