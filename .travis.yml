@@ -18,7 +18,7 @@ services:
   - docker
 
 script:
-  - docker build fch .
+  - docker build -t fch .
   - docker run fch m_nsiddique
 
 after_script:
