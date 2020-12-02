@@ -6,12 +6,7 @@ import datetime
 if not __package__:
 	sys.path.insert(1, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
-from fch.core.utils.constants import Constants
 from fch.core.utils.util_functions import Utils
-
-from fch.core.config.configreader import ConfigurationReader
-from fch.core.datamanager import DataManager
-
 
 '''
 Happy Case: Test memento_to_epochtime()
@@ -73,17 +68,14 @@ def test_get_murl_info():
 Happy Case: Test get_timerange
 '''
 
-def test_get_timerange():
-	constants = Constants()
-	configreader = ConfigurationReader()
+def test_get_timerange(datamager_connection):
+	dmanager, configreader, constants = datamager_connection(parameters=False)
 	assert Utils.get_timerange(constants, configreader) == {"mintime": 20060321120000, "maxtime": int(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))}
 
 '''
 Happy Case: Test parse_timemap
 '''
 
-def test_parse_timemap():
-	constants = Constants()
-	configreader = ConfigurationReader()
-	dmanager = DataManager(configreader, constants)
+def test_parse_timemap(datamager_connection):
+	dmanager, configreader, constants = datamager_connection(parameters=False)
 	assert Utils.parse_timemap(dmanager, constants, "https://twitter.com/m_nsiddique") == [{'datetime': 'Mon, 28 May 2018 23:54:45 GMT',  'rel': 'first memento', 'uri': 'https://web.archive.org/web/20180528235445/https://twitter.com/m_nsiddique'}, {'datetime': 'Tue, 29 Oct 2019 18:25:06 GMT',  'rel': 'last memento',  'uri': 'https://web.archive.org/web/20191029182506/https://twitter.com/m_nsiddique'}]
