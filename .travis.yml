@@ -34,9 +34,7 @@ before_deploy:
 
 deploy:
   provider: script
-  script: 
-    - docker push oduwsdl/fch
-    - bash testing.sh
+  script: bash testing.sh
   on:
     branch: development
 
