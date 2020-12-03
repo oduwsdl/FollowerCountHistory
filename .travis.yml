@@ -22,7 +22,6 @@ services:
   - docker
 
 script:
-  - testing.sh
   - docker build -t oduwsdl/fch:test .
   - docker run oduwsdl/fch:test m_nsiddique
 
@@ -35,7 +34,9 @@ before_deploy:
 
 deploy:
   provider: script
-  script: docker push oduwsdl/fch
+  script: 
+    - docker push oduwsdl/fch
+    - bash testing.sh
   on:
     branch: development
 
