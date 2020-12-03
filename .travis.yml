@@ -22,8 +22,7 @@ services:
   - docker
 
 script:
-  - pytest tests_system_testing.py
-  - pytest *.py
+  - testing.sh
   - docker build -t oduwsdl/fch:test .
   - docker run oduwsdl/fch:test m_nsiddique
 
