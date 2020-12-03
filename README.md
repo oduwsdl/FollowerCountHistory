@@ -11,6 +11,8 @@ Follower Count History is a Python module that collects Twitter follower count f
 * bs4
 * warcio
 * requests
+* pytest (used for testing purposes)
+* pytz (used for testing purposes)
 * R* (Optional: to create graph)
 
 ### Usage
