@@ -14,10 +14,16 @@ branches:
   - master
   - development
 
+cache: pip
+install:
+  - pip install -r requirements.txt
+
 services:
   - docker
 
 script:
+  - pytest tests_system_testing.py
+  - pytest *.py
   - docker build -t oduwsdl/fch:test .
   - docker run oduwsdl/fch:test m_nsiddique
 
