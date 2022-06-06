@@ -1,4 +1,4 @@
-# Twitter Follower Count History via Web Archives
+# Twitter Follower Count History via Web Archives     [![Build Status](https://travis-ci.org/oduwsdl/FollowerCountHistory.svg?branch=development)](https://travis-ci.org/oduwsdl/FollowerCountHistory)
 Follower Count History is a Python module that collects Twitter follower count from the web archives using [MemGator](https://github.com/oduwsdl/MemGator) for a given Twitter handle. The module parses the follower count by identifying various CSS Selectors that match the follower count element on the historical Twitter pages for almost every major overhaul their page layout has gone through. The program collects all of the memento data points by default.
 
 <b>Since PyPi version 1.0.14, the FCH package is now platform independent. Pre 1.0.14 versions of FCH on PyPi are only compatible with Linux systems.</b>
@@ -13,6 +13,8 @@ Follower Count History is a Python module that collects Twitter follower count f
 * bs4
 * warcio
 * requests
+* pytest (used for testing purposes)
+* pytz (used for testing purposes)
 * R* (Optional: to create graph)
 
 ### Usage

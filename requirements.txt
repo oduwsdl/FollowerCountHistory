@@ -1,3 +1,5 @@
 beautifulsoup4
 requests
 warcio
+pytest
+pytz

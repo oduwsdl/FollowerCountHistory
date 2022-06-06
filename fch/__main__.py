@@ -9,6 +9,7 @@ import platform
 if not __package__:
     sys.path.insert(1, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
+
 from fch import __version__ as fch_version
 from fch.follower.followercount import FollowerCount
 
@@ -52,6 +53,7 @@ def main():
     parser.add_argument("-f", metavar="", help="Output file path (Supported Extensions: JSON and CSV)")
     parser.add_argument('-v', '--version', help='Report the version of fch', action='version', version= '%(prog)s {version}'.format(version=fch_version))
     parser.set_defaults(func=run_follower)
+    
     args = parser.parse_args()
     try:
         args.func(**vars(args))

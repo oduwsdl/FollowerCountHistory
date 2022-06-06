@@ -30,8 +30,8 @@ class FollowerParser:
         return None
 
     def parse_mementos(self, turl):
-        mintime, maxtime = Utils.get_timerange(self.__constants, self.__conf_reader)
-        lurims = Utils.parse_timemap(self.__dmanager, self.__constants, turl, self.__conf_reader, mintime, maxtime)
+        response = Utils.get_timerange(self.__constants, self.__conf_reader)
+        lurims = Utils.parse_timemap(self.__dmanager, self.__constants, turl, self.__conf_reader, response["mintime"], response["maxtime"])
         if lurims:
             for urim in lurims:
                 response = Utils.get_murl_info(urim, self.__thandle)
