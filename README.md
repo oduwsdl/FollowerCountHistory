@@ -182,3 +182,5 @@ File Name| Description
   * Output as CSV file
   ```shell
   $  fch -f=joebiden.csv --st=20200101000000 --et=20200331000000 --freq=2592000 joebiden
+  ```
+  ## Fchgroup script

@@ -1,0 +1,84 @@
+<div class="graph">
+	<!-- style -->
+	<style>
+		.graph
+		{
+			background-color : #0A0A0A;
+			font-family : Arial, Helvetica, sans-serif; 
+			display : inline-flex;
+			flex-direction : column;
+			align-items : center;
+		}
+		.container__graph
+		{
+			background-color : #0A0A0A;
+			border-style : solid;
+			border-width : 1px;
+			border-color : #71767A;
+			width : 937px;
+			height : 562px;
+			height : 65vh;
+			color : #71767A;
+			display : inline-flex;
+			flex-direction : column;
+			align-items : center;
+		}
+
+		.container__graph g
+		{
+			color : #71767A !important;
+			stroke : #71767A !important;
+		}
+
+		.container__graph__title
+		{
+			background-color : #0A0A0A;
+			display : inline-flex;
+			flex-direction : column;
+			align-items : center;
+		}
+
+		.container__graph__title h2
+		{
+			font-size : 18px;
+			color : #71767A;
+		}
+
+		.container__graph__title input 
+		{
+			height : 32px;
+			width : 32px;
+		}
+
+		.axis path, .axis line 
+		{
+			fill : none;
+			stroke : #71767A;
+			stroke-width : 1;
+			shape-rendering : crispEdges;
+		}
+	</style>
+	<!-- graph container -->
+	<div class="container__graph" id="container__graph">
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://d3js.org/d3.v4.min.js"></script>	
+	</div>
+
+	<div class="container__graph__title" id="container__graph__title">
+		<h2 id="graph__title">To generate a graph, fetch data with the blue button</h2>
+		<form>
+		<script>
+			$(document).ready(function() {
+				$('input[type=radio][name="graph_change"]').on('change', function() {
+					generateGraph(parseInt(this.value));
+				});
+			});
+		</script>
+			<input type="radio" id="g1" name="graph_change" value="0" checked></input>
+			<input type="radio" id="g2" name="graph_change" value="1"></input>
+			<input type="radio" id="g3" name="graph_change" value="2"></input>
+		</form>
+	</div>
+</div>
+
+<script>
