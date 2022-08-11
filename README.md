@@ -22,7 +22,7 @@ Follower Count History is a Python module that collects Twitter follower count f
 $ git clone https://github.com/oduwsdl/FollowerCountHistory.git
 $ cd FollowerCountHistory
 $ pip install -r requirements.txt
-$  ./__main__.py [-h] [--st] [--et] [--freq] [--out] <Twitter handle/ Twitter URL>
+$  ./fch/__main__.py [-h] [--st] [--et] [--freq] [--out] <Twitter handle/ Twitter URL>
 ```
 #### Install from pypi
 ```shell
