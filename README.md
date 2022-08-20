@@ -199,6 +199,6 @@ File Name| Description
   
  * Usage: GenerateD3Stub functions by passing n number of csv filepaths as parameters. The file generated afterwards 'generatedGraphStub.html' will have the embeddable code for use.
   ```shell
-  $  python GenerateD3Stub.py csv1path csv2path ... csvnpath
+  $  cd html_generator; python generateD3stub.py csv1path csv2path ... csvnpath
   ```
  * By default, the GenerateD3Stub will print the data passed to it in the console, so the user can verify the correct data is being passed.
